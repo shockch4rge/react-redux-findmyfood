@@ -15,9 +15,7 @@ interface Props {
 
 const ReviewCard = (props: Props) => {
     const { id, title, content, rating, timestamp } = props.review;
-    const review = useAppSelector((state, id: string) =>
-        state.reviews.list.find(review => review.id === id)
-    );
+    const review = useAppSelector(state => state.reviews.list.find(review => review.id === id))
 
     return (
         <Card className="col-md-9 col-centered" body>
