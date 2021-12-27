@@ -1,10 +1,13 @@
+import { timestamp } from "../utilities/timestamp";
+import { uuid } from "../utilities/uuid";
+
 export default class Reply implements ReplyData {
-    public readonly id: string;
-    public readonly reviewId: string;
-    public readonly userId: string;
-    public readonly content: string;
-    public readonly timestamp: Date;
-    public readonly isEdited: boolean;
+    public id: string;
+    public reviewId: string;
+    public userId: string;
+    public content: string;
+    public timestamp: string;
+    public isEdited: boolean;
 
     public constructor(data: ReplyData) {
         this.id = data.id;
@@ -14,6 +17,17 @@ export default class Reply implements ReplyData {
         this.timestamp = data.timestamp;
         this.isEdited = data.isEdited;
     }
+
+    public static getMockReply() {
+        return new Reply({
+            id: uuid(),
+            reviewId: uuid(),
+            userId: uuid(),
+            content: "I agree with this great review!",
+            timestamp: timestamp(),
+            isEdited: false,
+        })
+    }
 }
 
 export interface ReplyData {
@@ -21,6 +35,6 @@ export interface ReplyData {
     reviewId: string;
     userId: string;
     content: string;
-    timestamp: Date;
+    timestamp: string;
     isEdited: boolean;
 }
