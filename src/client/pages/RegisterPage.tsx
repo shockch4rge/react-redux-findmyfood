@@ -1,18 +1,16 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {
-    Button,
-    Form,
-    FormFeedback,
-    FormGroup,
-    FormText,
-    Input,
-    Label,
-} from "reactstrap";
-import { UserData } from "../models/User";
-import { useAppDispatch } from "../store/hooks/useAppDispatch";
+import { useAppDispatch } from "../hooks/useAppDispatch";
 import { userRegistered } from "../store/slices/user";
+import {
+    hasDigits,
+    hasLength,
+    hasLowerCaseLetters,
+    hasSpecialCaseLetter,
+    hasUppercaseLetters,
+    isPassword,
+} from "../utilities/authHelper";
 import { uuid } from "../utilities/uuid";
 
 interface Props {
@@ -24,116 +22,76 @@ const Register = (props: Props) => {
     const [lastName, setLastName] = useState("");
     const [gender, setGender] = useState("");
     const [username, setUserName] = useState("");
+    const [password, setPassword] = useState("");
     const dispatch = useAppDispatch();
-    const navigateTo = useNavigate();
+    const navigate = useNavigate();
 
     return (
         <>
-            <Form inline>
-                <FormGroup floating inline>
-                    <Input
-                        onChange={e => setFirstName(e.target.value)}
-                        autoFocus
-                        id="firstNameInput"
-                        name="firstName"
-                        placeholder="First Name"
-                        type="text"
-                    />
-                    <Label for="firstNameInput">First Name</Label>
-                </FormGroup>
-
-                <FormGroup floating inline>
-                    <Input
-                        onChange={e => setLastName(e.target.value)}
-                        id="lastNameInput"
-                        name="lastName"
-                        placeholder="Last Name"
-                        type="text"
-                    />
-                    <Label for="lastNameInput">Last Name</Label>
-                </FormGroup>
-
-                <FormGroup floating inline>
-                    <Input
-                        onChange={e => setUserName(e.target.value)}
-                        id="usernameInput"
-                        name="username"
-                        placeholder="Username (Optional)"
-                        type="text"
-                        valid={isValidUsername(username)}
-                        invalid={!isValidUsername(username)}
-                    />
-                    <FormFeedback valid>Your username is correct!</FormFeedback>
-                    <FormFeedback>Wrong username...</FormFeedback>
-                    <Label for="usernameInput">Username (Optional)</Label>
-                </FormGroup>
-
-                {renderGenderOptions(option => {
-                    setGender(option);
-                })}
-
-                <Button
-                    onClick={e => {
-                        e.preventDefault();
-                        dispatch(
-                            userRegistered({
-                                id: uuid(),
-                                firstName,
-                                lastName,
-                                gender,
-                                username,
-                            })
-                        );
-
-                        navigateTo("/page-not-found");
-                    }}
-                >
-                    Register
-                </Button>
-            </Form>
         </>
     );
 };
 
-function renderGenderOptions(onSelect: (value: string) => void) {
-    // WRONG!!!
+const renderPasswordCheckers = (input: string) => {
+    const upperCaseLetters = (
+        <h6
+            className={
+                hasUppercaseLetters(input, 1) ? "text-success" : "text-danger"
+            }
+        >
+            Has at least 1 uppercase letter
+        </h6>
+    );
+
+    const lowerCaseLetters = (
+        <h6
+            className={
+                hasLowerCaseLetters(input, 3) ? "text-success" : "text-danger"
+            }
+        >
+            Has at least 3 lowercase letters
+        </h6>
+    );
+
+    const specialCaseLetters = (
+        <h6
+            className={
+                hasSpecialCaseLetter(input, 1) ? "text-success" : "text-danger"
+            }
+        >
+            Has at least 1 special character
+        </h6>
+    );
+
+    const digits = (
+        <h6 className={hasDigits(input, 1) ? "text-success" : "text-danger"}>
+            Has at least 1 digit
+        </h6>
+    );
+
+    const length = (
+        <h6 className={hasLength(input, 8) ? "text-success" : "text-danger"}>
+            Has a length of 8
+        </h6>
+    );
+
+    const cases = [
+        upperCaseLetters,
+        lowerCaseLetters,
+        specialCaseLetters,
+        digits,
+        length,
+    ];
+
+    return <>{cases}</>;
+};
+
+const renderGenderOptions = (onSelect: (value: string) => void) => {
     return (
         <>
-            <Label for="genderInput">GENDER</Label>
-            <FormGroup id="genderInput" tag="fieldset">
-                <FormGroup inline check>
-                    <Label check>Male</Label>
-                    <Input
-                        onChange={e => onSelect(e.target.value)}
-                        name="radio1"
-                        value="Male"
-                        type="radio"
-                    />
-                </FormGroup>
-
-                <FormGroup inline check>
-                    <Label check>Female</Label>
-                    <Input
-                        onChange={e => onSelect(e.target.value)}
-                        name="radio1"
-                        value="Female"
-                        type="radio"
-                    />
-                </FormGroup>
-
-                <FormGroup inline check>
-                    <Label check>Other</Label>
-                    <Input
-                        onChange={e => onSelect(e.target.value)}
-                        name="radio1"
-                        value="Other"
-                        type="radio"
-                    />
-                </FormGroup>
-            </FormGroup>
         </>
     );
-}
+};
 
 function isValidUsername(value: string) {
     return value.length > 5;

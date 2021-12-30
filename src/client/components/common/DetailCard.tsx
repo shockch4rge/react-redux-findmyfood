@@ -1,54 +1,66 @@
-import { Card, CardBody, CardImg, CardText, CardTitle } from "reactstrap";
+import { Box, Flex, Image, Stack, Text, useDisclosure } from "@chakra-ui/react";
+import { uuid } from "../../utilities/uuid";
 
 interface Props {
+    header?: string;
     title?: string;
     description?: string;
     imageUrl?: string;
-    hasShadow?: boolean;
     fields?: { title: string; value: string }[];
+    others?: any[];
 }
 
 const DetailCard = (props: Props) => {
     const {
+        header = "",
         title = "",
         description = "",
-        imageUrl = "https://picsum.photos/318/180",
+        imageUrl = "https://picsum.photos/seed/picsum/536/354",
         fields = [],
-        hasShadow = true,
+        others = [],
     } = props;
 
-    const shadow =
-        "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)";
+    const { isOpen, onClose, onOpen, } = useDisclosure();
 
     return (
         <>
-            <Card
+            <Box
                 className="d-card"
-                style={hasShadow ? { boxShadow: shadow } : {}}
+                m="15"
+                maxW="md"
+                borderRadius="xl"
+                overflow="hidden"
             >
-                <CardImg className="d-card img" src={imageUrl} />
-                <CardBody className="">
-                    <CardTitle className="d-card title">{title}</CardTitle>
-                    <CardText className="d-card desc">{description}</CardText>
+                <Image className="d-card-img" src={imageUrl} marginBottom="5" />
+                <Stack paddingStart="6" paddingEnd="6" paddingBottom="6">
+                    <Text fontSize="sm" className="d-card-header">{header}</Text>
+                    <Text
 
+                        className="d-card-desc"
+                    >
+                        {description}
+                    </Text>
                     {fields.map(field => (
-                        <CardText
-                            className="d-card field"
-                            key={`id_${field.title}`}
+                        <Box
+
+                            key={uuid()}
+                            className="d-card-field"
                         >
-                            <span className="d-card field title">
-                                {field.title}
-                            </span>
-                            <span className="d-card field value">
-                                : {field.value}
-                            </span>
-                        </CardText>
+                            <Text key={uuid()} className="d-card-field title">
+                                {field.title}:
+                            </Text>
+                            <Text key={uuid()} className="d-card-field value">
+                                {field.value}
+                            </Text>
+                        </Box>
                     ))}
-                </CardBody>
-            </Card>
+                </Stack>
+                {others}
+            </Box>
         </>
     );
 };
+
 
 export const getMockDetailCard = () => {
     return (

@@ -1,0 +1,25 @@
+.r-nav-bar {
+    background: linear-gradient(70deg,rgb(133,226,65),rgb(108,235,165),rgb(153,244,92));
+}
+
+.r-nav-logo {
+    font-family: GalyonBold;
+}
+
+.r-details-row {
+    margin-bottom: 30px;
+}
+
+.r-thumbnail {
+    border-radius: 30px;
+}
+
+.r-nav-item {
+    font-weight: bolder;
+    color: #E9E9E9;
+    text-transform: uppercase;
+}
+
+.test-button {
+    color: var(--gradient);
+}

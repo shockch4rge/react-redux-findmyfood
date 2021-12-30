@@ -27,7 +27,8 @@ export default class Restaurant implements RestaurantData {
         return new Restaurant({
             id: uuidv4(),
             name: "Mock Dining",
-            description: "Dining is mocking!",
+            description:
+                "This is the restaurant's description, lengthened out to make for some boilerplate text that fills up some space on a screen or a box.",
             availableTimes: {
                 days: "MONDAY",
                 openingHours: "12:00",

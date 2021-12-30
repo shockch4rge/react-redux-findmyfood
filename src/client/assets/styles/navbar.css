@@ -1,0 +1,8 @@
+.navbar-logo {
+    font-family: GalyonBold;
+    font-weight: bold;
+    background: var(--gradient);
+    background-clip: content-box;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}

@@ -1,8 +1,7 @@
-import { Button, Card, CardBody, CardText, CardTitle } from "reactstrap";
 import Review from "../models/Review";
 
 import starFull from "../assets/images/star-full.svg";
-import { useAppSelector } from "../store/hooks/useAppSelector";
+import { useAppSelector } from "../hooks/useAppSelector";
 import { timestamp } from "../utilities/timestamp";
 
 interface Props {
@@ -18,20 +17,8 @@ const ReviewCard = (props: Props) => {
     const review = useAppSelector(state => state.reviews.list.find(review => review.id === id))
 
     return (
-        <Card className="col-md-9 col-centered" body>
-            <CardBody>
-                <CardTitle tag="h5" style={{ fontFamily: "GalyonBold" }}>
-                    {title}
-                </CardTitle>
-                <CardText>{content}</CardText>
-                <CardText>{renderStarIcons(props)}</CardText>
-                <CardText className=" col-centered">
-                    Timestamp: {timestamp}
-                </CardText>
-
-                {renderEditButtons(props)}
-            </CardBody>
-        </Card>
+        <>
+        </>
     );
 };
 
@@ -55,29 +42,7 @@ const renderEditButtons = (props: Props) => {
 
     return (
         <>
-            <Button onClick={() => onEdit()}>Edit Review</Button>
-            <Button onClick={() => onDelete()} color="danger">
-                Delete Review
-            </Button>
         </>
-    );
-};
-
-export const getMockReviewCard = () => {
-    return (
-        <ReviewCard
-            review={{
-                id: "1",
-                title: "Food was amazing!",
-                content:
-                    "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Possimus enim fuga molestias officiis tempore a quasi iusto optio natus nisi deserunt facere cumque ipsum beatae quam doloremque, quae eum dolor.",
-                restaurantId: "123",
-                userId: "321",
-                rating: 4,
-                timestamp: timestamp(),
-                isEdited: false,
-            }}
-        />
     );
 };
 
