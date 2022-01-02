@@ -1,5 +1,5 @@
 import { Provider } from "react-redux";
-import store from "./client/store/store";
+import store from "./client/store";
 import { Navigate, useNavigate, useRoutes } from "react-router-dom";
 import PageNotFound from "./client/pages/PageNotFound";
 import "./client/assets/styles/App.css";

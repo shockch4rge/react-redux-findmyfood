@@ -6,7 +6,7 @@ export default class Reply implements ReplyData {
     public reviewId: string;
     public userId: string;
     public content: string;
-    public timestamp: string;
+    public timestamp: Date;
     public isEdited: boolean;
 
     public constructor(data: ReplyData) {
@@ -20,11 +20,11 @@ export default class Reply implements ReplyData {
 
     public static getMockReply() {
         return new Reply({
-            id: uuid(),
-            reviewId: uuid(),
-            userId: uuid(),
+            id: "reply-id",
+            reviewId: "review-id",
+            userId: "user-id",
             content: "I agree with this great review!",
-            timestamp: timestamp(),
+            timestamp: new Date(Date.now()),
             isEdited: false,
         })
     }
@@ -35,6 +35,6 @@ export interface ReplyData {
     reviewId: string;
     userId: string;
     content: string;
-    timestamp: string;
+    timestamp: Date;
     isEdited: boolean;
 }

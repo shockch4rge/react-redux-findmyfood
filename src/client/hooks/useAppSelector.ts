@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { AppState } from "../store/store";
+import { AppState } from "../store";
 
 /**
  * An enhanced selector configured for the app's state.

@@ -1,36 +1,33 @@
-import { timestamp } from "../utilities/timestamp";
-import { uuid } from "../utilities/uuid";
-
 export default class Review implements ReviewData {
     public id: string;
     public restaurantId: string;
+    public rating: number;
     public userId: string;
     public title: string;
     public content: string;
-    public rating: number;
-    public timestamp: string;
+    public timestamp: Date;
     public isEdited: boolean;
 
     public constructor(data: ReviewData) {
         this.id = data.id;
         this.restaurantId = data.restaurantId;
         this.userId = data.userId;
+        this.rating = data.rating;
         this.title = data.title;
         this.content = data.content;
-        this.rating = data.rating;
         this.timestamp = data.timestamp;
         this.isEdited = data.isEdited;
     }
 
     public static getMockReview() {
         return new Review({
-            id: uuid(),
-            userId: uuid(),
-            restaurantId: uuid(),
+            id: "review-id",
+            restaurantId: "restaurant-id",
+            userId: "user-id",
+            rating: 4.4,
             title: "My review of this restaurant",
             content: "This restaurant is great!",
-            rating: 4,
-            timestamp: timestamp(),
+            timestamp: new Date(Date.now()),
             isEdited: false,
         })
     }
@@ -43,6 +40,6 @@ export interface ReviewData {
     title: string;
     content: string;
     rating: number;
-    timestamp: string;
+    timestamp: Date;
     isEdited: boolean;
 }

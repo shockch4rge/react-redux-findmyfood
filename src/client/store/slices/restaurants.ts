@@ -13,7 +13,7 @@ type AddRestaurant = Pick<
     | "cuisine"
     | "description"
     | "imageUrls"
-    | "location"
+    | "address"
     | "telephone"
 >;
 // #endregion

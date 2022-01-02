@@ -30,3 +30,4 @@ __tests__
 babel.config.json
 jest.config.js
 config.json
+server

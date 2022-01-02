@@ -9,11 +9,7 @@ type DeleteReview = Pick<ReviewData, "id">;
 
 type EditReview = Pick<ReviewData, "id" | "title" | "content" | "rating">;
 
-type RequestReviews = Pick<ReviewData, "restaurantId">;
-
-type ReceiveReviews = {
-    reviews: ReviewData[];
-};
+type AddReviews = ReviewData;
 
 type RequestUserReview = Pick<ReviewData, "id" | "userId">;
 // #endregion
@@ -28,17 +24,17 @@ const slice = createSlice({
     },
 
     reducers: {
-        reviewsRequestedFromRestaurant: (
-            reviews,
-            action: PayloadAction<RequestReviews>
-        ) => {
+        reviewsRequestedFromRestaurant: reviews => {
             reviews.loading = true;
         },
 
-        reviewsReceived: (reviews, action: PayloadAction<ReceiveReviews>) => {
+        reviewsReceived: reviews => {
             reviews.lastFetch = Date.now();
-            reviews.list = action.payload.reviews;
             reviews.loading = false;
+        },
+
+        reviewsAdded: (reviews, action: PayloadAction<AddReviews>) => {
+
         },
 
         reviewAdded: (reviews, action: PayloadAction<AddReview>) => {
@@ -66,13 +62,8 @@ const slice = createSlice({
             reviews.list[index].isEdited = true;
         },
 
-        requestedReviewFromUser: (
-            reviews,
-            action: PayloadAction<RequestUserReview>
-        ) => {
-            reviews.list.filter(
-                review => review.userId === action.payload.userId
-            );
+        requestedReviewFromUser: (reviews, action: PayloadAction<RequestUserReview>) => {
+            reviews.list.filter(review => review.userId === action.payload.userId);
         },
     },
 });
