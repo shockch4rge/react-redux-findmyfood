@@ -3,6 +3,7 @@ import { combineReducers } from "@reduxjs/toolkit";
 import reviewReducer from "./slices/reviews";
 import userReducer from "./slices/user";
 import restaurantReducer from "./slices/restaurants";
+import authReducer from "./slices/auth"
 import apiMiddleware, { apiCallBegan } from "./middleware/api";
 
 // Entities
@@ -14,6 +15,7 @@ const entityReducer = combineReducers({
 
 const rootReducer = combineReducers({
     entities: entityReducer,
+    auth: authReducer,
 });
 
 // Root state
@@ -27,7 +29,10 @@ export type AppDispatch = typeof store.dispatch;
 export type AppState = ReturnType<typeof store.getState>;
 export default store;
 
-store.dispatch(apiCallBegan({
-    url: "/test",
-    onSuccess: "Hey this actually worked!"
-}));
+store.dispatch(
+    apiCallBegan({
+        url: "/test",
+        method: "get",
+        onSuccess: "Hey this actually worked!",
+    })
+);

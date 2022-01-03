@@ -1,6 +1,12 @@
 .d-card {
     width: 350px;
     border: 0px;
+    box-shadow: var(--shadow-elevation-medium);
+    transition: box-shadow 0.3s, transform 0.3s ease-out;
+}
+
+.d-card:hover {
+    transform: translateY(-5px);
     box-shadow: var(--shadow-elevation-high);
 }
 

@@ -7,7 +7,7 @@ export default class ReviewRepository {
     public async get(id: string) {
         const query = `SELECT * FROM review WHERE id = ?`;
         const results = await db.query(query, [id]);
-        return (results[0] as RowDataPacket)[0];
+        return (results[0] as RowDataPacket[])[0];
     }
 
     public delete(id: string) {

@@ -53,11 +53,20 @@ export default class UserController {
         const password = request.body.password;
 
         try {
-            await this.userRepository.login(email, password);
-            response.status(200);
+            const result = await this.userRepository.login(email, password);
+            response.json()
         }
         catch (err) {
-            console.log("Got error");
+            response.json(err);
+        }
+    }
+
+    public async updateUser(request: Request, response: Response) {
+        try {
+            await this.userRepository.update(request.params.id, request.body)
+            response.json({ msg: "Successfully updated! "})
+        }
+        catch (err) {
             response.json(err);
         }
     }

@@ -8,11 +8,9 @@ type AddRestaurant = Pick<
     RestaurantData,
     | "id"
     | "name"
-    | "availableTimes"
     | "averageRating"
     | "cuisine"
     | "description"
-    | "imageUrls"
     | "address"
     | "telephone"
 >;

@@ -22,11 +22,11 @@ export default class ReviewController {
     }
 
     public async deleteReview(request: Request, response: Response) {
-        const id = request.params["id"];
+        const id = request.params.id;
 
         try {
             await this.reviewRepository.delete(id);
-            response.status(200);
+            response.json({ msg: "Deleted" });
         }
         catch (err) {
             response.json(err);
@@ -38,7 +38,7 @@ export default class ReviewController {
 
         try {
             await this.reviewRepository.update(id, { ...request.body })
-            response.status(200);
+            response.json({ msg: "Successfully updated!" });
         }
         catch (err) {
             response.json(err);

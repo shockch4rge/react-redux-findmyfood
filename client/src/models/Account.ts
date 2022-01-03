@@ -1,17 +1,17 @@
 export default class Account implements AccountData {
     public userId: string;
-    public password: string;
     public email: string;
-    public telephone: string;
+    public password: string;
     public address: string;
+    public telephone: string;
     public activated: boolean;
 
     public constructor(data: AccountData) {
         this.userId = data.userId;
-        this.password = data.password;
         this.email = data.email;
-        this.telephone = data.telephone;
+        this.password = data.password;
         this.address = data.address;
+        this.telephone = data.telephone;
         this.activated = data.activated;
     }
 
@@ -29,9 +29,9 @@ export default class Account implements AccountData {
 
 export interface AccountData {
     userId: string;
-    password: string;
     email: string;
-    telephone: string;
+    password: string;
     address: string;
+    telephone: string;
     activated: boolean;
 }

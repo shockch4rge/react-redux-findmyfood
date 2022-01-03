@@ -22,7 +22,7 @@ export async function getRestaurantReviews() {
 
 export type ApiCall = {
     url: string;
-    method?: Method;
+    method: Method;
     data?: any;
     onSuccess?: string;
     onError?: string;
@@ -31,11 +31,11 @@ export type ApiCall = {
 
 export const apiCallBegan = createAction<ApiCall>("api/callBegan");
 export const apiCallSuccess = createAction<any>("api/callSuccess");
-export const apiCallFailed = createAction<any>("api/callFailed");
+export const apiCallFailed = createAction<string>("api/callFailed");
 
 const api: Middleware<{}> = store => next => async (action: PayloadAction<ApiCall>) => {
     // pass this action to the next middleware available
-    if (action.type !== apiCallBegan.type) return next(action);
+    if (action.type !== apiCallBegan.type) return next(action);    
 
     next(action);
 
@@ -57,10 +57,11 @@ const api: Middleware<{}> = store => next => async (action: PayloadAction<ApiCal
             store.dispatch({ type: onSuccess, payload: response.data });
         }
     } catch (err) {
-        store.dispatch(apiCallFailed(err));
+        const error = (err as Error).message
+        store.dispatch(apiCallFailed(error));
 
         if (onError) {
-            store.dispatch({ type: onError, payload: err });
+            store.dispatch({ type: onError, payload: error });
         }
     }
 };

@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { Container, Flex, Image, Text } from "@chakra-ui/react";
 import NavBar from "../components/NavBar";
 import { apiCallBegan, getApiReview, getRestaurantReviews } from "../store/middleware/api";
+import { useAuth } from "../hooks/useAuth";
 
 interface Props {
     restaurant: Restaurant;
@@ -26,6 +27,7 @@ const RestaurantPage = (props: Props) => {
     const { userId, restaurant } = props;
 
     const dispatch = useAppDispatch();
+    const loggedIn = useAuth();
 
     useEffect(() => {
         getRestaurantReviews().then(reviews => {

@@ -1,15 +1,9 @@
 import User, { UserData } from "../../client/models/User";
 import db from "../db";
-import mysql2 from "mysql2/promise";
 import { AccountData } from "../../client/models/Account";
+import { RowDataPacket } from "mysql2";
 
 export default class UserRepository {
-    public readonly db: mysql2.Connection;
-
-    public constructor() {
-        this.db = db;
-    }
-
     public async create(user: User) {}
 
     public async update(id: string, user: User) {}
@@ -27,7 +21,8 @@ export default class UserRepository {
 
     public async login(email: string, password: string) {
         const query = `SELECT u.* FROM user u, account a WHERE a.email = ? AND a.password = ? AND u.id = a.user_id`;
-        return db.query(query, [email, password]);
+        const results = await db.query(query, [email, password]);
+        return (results[0] as RowDataPacket[])[0];
     }
 
     public async register(user: UserData, account: AccountData) {
