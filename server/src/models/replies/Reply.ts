@@ -1,6 +1,3 @@
-import { timestamp } from "../utilities/timestamp";
-import { uuid } from "../utilities/uuid";
-
 export default class Reply implements ReplyData {
     public id: string;
     public reviewId: string;

@@ -25,7 +25,7 @@ yarn-error.log*
 package-lock.json
 
 fonts
-images
+uploads
 __tests__
 babel.config.json
 jest.config.js

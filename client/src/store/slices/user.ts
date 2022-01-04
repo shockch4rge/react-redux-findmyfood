@@ -1,5 +1,5 @@
 import { createSlice, current, PayloadAction } from "@reduxjs/toolkit";
-import { UserData } from "../../models/User";
+import { UserData } from "../../../../server/src/models/users/User";
 
 // #region actions
 type RequestUser = Pick<UserData, "id">;

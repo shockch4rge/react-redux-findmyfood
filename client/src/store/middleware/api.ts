@@ -6,7 +6,7 @@ import {
 } from "@reduxjs/toolkit";
 import axios, { Method } from "axios";
 import { AppDispatch, AppState, Store } from "..";
-import { ReviewData } from "../../models/Review";
+import { ReviewData } from "../../../../server/src/models/reviews";
 import config from "../../../config.json";
 import { Dispatch } from "react";
 

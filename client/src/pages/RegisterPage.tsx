@@ -11,7 +11,7 @@ import {
     hasUppercaseLetters,
     isPassword,
 } from "../utilities/authHelper";
-import { uuid } from "../utilities/uuid";
+import { uuid } from "../../../server/src/utilities/uuid";
 
 interface Props {
     onSubmit: (email: string, password: string) => void;

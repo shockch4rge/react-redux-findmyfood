@@ -2,8 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import DetailCard from "../components/common/DetailCard";
 import ReviewCard from "../components/ReviewCard";
-import Restaurant from "../models/Restaurant";
-import Review, { ReviewData } from "../models/Review";
+import Restaurant from "../../../server/src/models/restaurants/Restaurant";
+import Review, { ReviewData } from "../../../server/src/models/reviews";
 import { useAppDispatch } from "../hooks/useAppDispatch";
 import { useAppSelector } from "../hooks/useAppSelector";
 import reviews, {

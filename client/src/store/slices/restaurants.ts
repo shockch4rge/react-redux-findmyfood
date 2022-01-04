@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RestaurantData } from "../../models/Restaurant";
+import { RestaurantData } from "../../../../server/src/models/restaurants/Restaurant";
 
 // #region actions
 type RequestRestaurant = Pick<RestaurantData, "id">;

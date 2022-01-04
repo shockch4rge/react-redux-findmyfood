@@ -1,14 +1,19 @@
 import express from "express";
-import router from "./routes";
 import cors from "cors";
+import RouterManager from "./RouteManager";
+import fileUpload from "express-fileupload";
 
 const PORT = 8080;
 const app = express();
+const routes = new RouterManager();
 
-app.use(express.static("../public"));
+routes.setup();
+
+app.use("/static", express.static("uploads"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-app.use(router);
+app.use(fileUpload())
+app.use(routes.router);
 
 app.listen(PORT, "localhost", () => console.info(`Listening on http://localhost:${PORT}`));

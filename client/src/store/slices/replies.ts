@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ReplyData } from "../../models/Reply";
+import { ReplyData } from "../../../../server/src/models/replies/Reply";
 import { PayloadAction } from "@reduxjs/toolkit";
 // #region actions
 type AddReply = ReplyData;

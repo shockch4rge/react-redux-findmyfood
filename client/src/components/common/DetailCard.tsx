@@ -1,5 +1,5 @@
 import { Box, Flex, Image, Stack, Text, useDisclosure } from "@chakra-ui/react";
-import { uuid } from "../../utilities/uuid";
+import { uuid } from "../../../../server/src/utilities/uuid";
 
 interface Props {
     header?: string;

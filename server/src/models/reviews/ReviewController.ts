@@ -1,19 +1,12 @@
-import ReviewRepository from "../repositories/ReviewRepository";
+import ReviewRepository from "./ReviewRepository";
 import { Request, Response } from "express";
 
 export default class ReviewController {
-    public readonly reviewRepository: ReviewRepository;
-
-    public constructor() {
-        this.reviewRepository = new ReviewRepository();
-    }
-
-    // TODO fix promise returns
-    public async getReview(request: Request, response: Response) {
+    public static async get(request: Request, response: Response) {
         const id = request.params.id;
 
         try {
-            const result = await this.reviewRepository.get(id);
+            const result = await ReviewRepository.get(id);
             response.json(result);
         }
         catch (err) {
@@ -21,11 +14,11 @@ export default class ReviewController {
         }
     }
 
-    public async deleteReview(request: Request, response: Response) {
+    public static async delete(request: Request, response: Response) {
         const id = request.params.id;
 
         try {
-            await this.reviewRepository.delete(id);
+            await ReviewRepository.delete(id);
             response.json({ msg: "Deleted" });
         }
         catch (err) {
@@ -33,11 +26,11 @@ export default class ReviewController {
         }
     }
 
-    public async updateReview(request: Request, response: Response) {
+    public static async update(request: Request, response: Response) {
         const id = request.body.id
 
         try {
-            await this.reviewRepository.update(id, { ...request.body })
+            await ReviewRepository.update(id, { ...request.body })
             response.json({ msg: "Successfully updated!" });
         }
         catch (err) {
@@ -45,9 +38,9 @@ export default class ReviewController {
         }
     }
 
-    public async addReview(request: Request, response: Response) {
+    public static async add(request: Request, response: Response) {
         try {
-            await this.reviewRepository.add({ ...request.body });
+            await ReviewRepository.add({ ...request.body });
             response.json({ message: "Added review!" });
         }
         catch (err) {
@@ -55,11 +48,11 @@ export default class ReviewController {
         }
     }
 
-    public async getRestaurantReviews(request: Request, response: Response) {
+    public static async getRestaurantReviews(request: Request, response: Response) {
         const id = request.params.id;
 
         try {
-            const reviews = await this.reviewRepository.getRestaurantReviews(id);
+            const reviews = await ReviewRepository.getRestaurantReviews(id);
             response.json(reviews);
         }
         catch (err) {
