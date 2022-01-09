@@ -15,10 +15,10 @@ export default class ReviewRepository {
         await db.query(query, [id]);
     }
 
-    public static async add(review: ReviewData) {
+    public static async add(review: Omit<ReviewData, "isEdited">) {
         const values = Object.values(review);
         const query = `INSERT INTO review VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
-        await db.query(query, [...values])
+        await db.query(query, [...values, false])
     }
 
     public static async update(id: string, review: Pick<ReviewData, "title" | "content" | "rating" | "timestamp"  | "isEdited">) {

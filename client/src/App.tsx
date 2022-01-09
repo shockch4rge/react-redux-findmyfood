@@ -1,19 +1,19 @@
 import { Provider } from "react-redux";
-import store from "./client/store";
-import { Navigate, useNavigate, useRoutes } from "react-router-dom";
-import PageNotFound from "./client/pages/PageNotFound";
+import store from "./store";
+import { useRoutes } from "react-router-dom";
+import PageNotFound from "./pages/PageNotFound";
 import "./client/assets/styles/App.css";
 import "./client/assets/styles/detail-card.css";
-import "./client/assets/styles/restaurant-page.css"
-import "./client/assets/styles/navbar.css"
-import { getMockDetailCard } from "./client/components/common/DetailCard";
-import Register from "./client/pages/RegisterPage";
-import RestaurantPage from "./client/pages/RestaurantPage";
-import Restaurant from "./client/models/Restaurant";
-import User from "./client/models/User";
-import ReviewCard from "./client/components/ReviewCard";
-import Review from "./client/models/Review";
-import { ChakraProvider }from "@chakra-ui/react"
+import "./client/assets/styles/restaurant-page.css";
+import "./client/assets/styles/navbar.css";
+import { getMockDetailCard } from "./components/common/DetailCard";
+import Register from "./pages/RegisterPage";
+import RestaurantPage from "./pages/RestaurantPage";
+import ReviewCard from "./components/ReviewCard";
+import Review from "../../server/src/models/reviews/Review";
+import User from "../../server/src/models/users/User";
+import Restaurant from "../../server/src/models/restaurants/Restaurant";
+import { ChakraProvider } from "@chakra-ui/react";
 
 const App = () => {
     const routes = useRoutes([

@@ -1,25 +1,25 @@
-import ReviewController from "../models/reviews/ReviewController";
+import reviews from "../models/reviews/ReviewController";
 import { RouteSchema } from "../RouteManager";
 
 module.exports = [
     {
         uri: "/review/:id",
         method: "get",
-        proc: ReviewController.get,
+        proc: reviews.get,
     },
     {
         uri: "/review",
         method: "post",
-        proc: ReviewController.add,
+        proc: reviews.add,
     },
     {
         uri: "/review/:id",
         method: "put",
-        proc: ReviewController.update,
+        proc: reviews.update,
     },
     {
         uri: "/review/:id",
         method: "delete",
-        proc: ReviewController.delete,
+        proc: reviews.delete,
     },
 ] as RouteSchema[];

@@ -1,8 +1,8 @@
 export default class Review implements ReviewData {
     public id: string;
     public restaurantId: string;
-    public rating: number;
     public userId: string;
+    public rating: number;
     public title: string;
     public content: string;
     public timestamp: Date;

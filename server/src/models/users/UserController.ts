@@ -16,21 +16,18 @@ export default class UserController {
         try {
             await UserRepository.delete(id);
             response.json();
-        } catch (err) {
+        } 
+        catch (err) {
             response.json(err);
         }
     }
 
     public static async registerUser(request: Request, response: Response) {
-        console.log(request.body);
-
-        const user = request.body.user;
-        const account = request.body.account;
-
         try {
-            await UserRepository.register({ ...user }, { ...account });
+            await UserRepository.register({ ...request.body.user });
             response.json({ message: "Registered user!" });
-        } catch (err) {
+        } 
+        catch (err) {
             response.json(err);
         }
     }
@@ -42,8 +39,9 @@ export default class UserController {
         try {
             const result = await UserRepository.login(email, password);
             response.json(result);
-        } catch (err) {
-            response.json(err);
+        } 
+        catch (err) {
+            response.json({ msg: (err as Error).message });
         }
     }
 
@@ -51,7 +49,8 @@ export default class UserController {
         try {
             await UserRepository.update(request.params.userId, request.body);
             response.json({ msg: "Successfully updated! " });
-        } catch (err) {
+        } 
+        catch (err) {
             response.json(err);
         }
     }
@@ -60,7 +59,8 @@ export default class UserController {
         try {
             const bookmarks = await UserRepository.getAllUserBookmarks(request.params.userId);
             response.json(bookmarks);
-        } catch (err) {
+        } 
+        catch (err) {
             response.json(err);
         }
     }
@@ -72,7 +72,8 @@ export default class UserController {
                 request.params.id
             );
             response.json(bookmark);
-        } catch (err) {
+        } 
+        catch (err) {
             response.json(err);
         }
     }
@@ -81,7 +82,8 @@ export default class UserController {
         try {
             await UserRepository.addBookmark(request.body);
             response.json({ msg: "Success adding bookmark!" });
-        } catch (err) {
+        } 
+        catch (err) {
             response.json(err);
         }
     }
@@ -89,7 +91,8 @@ export default class UserController {
     public static async deleteBookmark(request: Request, response: Response) {
         try {
             await UserRepository.deleteBookmark(request.params.bookmarkId);
-        } catch (err) {
+        } 
+        catch (err) {
             response.json(err);
         }
     }

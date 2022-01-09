@@ -1,25 +1,25 @@
-import ReplyController from "../models/replies/ReplyController";
+import replies from "../models/replies/ReplyController";
 import { RouteSchema } from "../RouteManager";
 
 module.exports = [
     {
         uri: "/reply/:id",
         method: "get",
-        proc: ReplyController.get,
+        proc: replies.get,
     },
     {
         uri: "/reply",
         method: "post",
-        proc: ReplyController.add,
+        proc: replies.add,
     },
     {
         uri: "/reply/:id",
         method: "put",
-        proc: ReplyController.update,
+        proc: replies.update,
     },
     {
         uri: "/reply/:id",
         method: "delete",
-        proc: ReplyController.delete,
+        proc: replies.delete,
     },
 ] as RouteSchema[];

@@ -1,11 +1,13 @@
 export default class Restaurant implements RestaurantData {
-    public readonly id: string;
-    public readonly name: string;
-    public readonly description: string;
-    public readonly averageRating: number;
-    public readonly cuisine: string;
-    public readonly telephone: string;
-    public readonly address: string;
+    public id: string;
+    public name: string;
+    public description: string;
+    public averageRating: number;
+    public cuisine: string;
+    public telephone: string;
+    public address: string;
+    public availableTimes: AvailableTimesData;
+    public imageUrl: string;
 
     public constructor(data: RestaurantData) {
         this.id = data.id;
@@ -15,6 +17,8 @@ export default class Restaurant implements RestaurantData {
         this.cuisine = data.cuisine;
         this.telephone = data.telephone;
         this.address = data.address;
+        this.availableTimes = data.availableTimes;
+        this.imageUrl = data.imageUrl;
     }
 
     public static getMockRestaurant() {
@@ -27,6 +31,12 @@ export default class Restaurant implements RestaurantData {
             cuisine: "Mock Food",
             address: "Mock Street 42",
             telephone: "91234567",
+            availableTimes: {
+                openingHours: "12:00",
+                closingHours: "23:59",
+                days: ["Monday", "Tuesday"],
+            },
+            imageUrl: "https://restaurant_url.com",
         });
     }
 }
@@ -39,28 +49,12 @@ export interface RestaurantData {
     telephone: string;
     averageRating: number;
     cuisine: string;
-}
-
-export interface ImageData {
-    restaurantId: string;
-    url: string;
+    availableTimes: AvailableTimesData;
+    imageUrl: string;
 }
 
 export interface AvailableTimesData {
-    restaurantId: string;
-    days: Days[];
+    days: string[];
     openingHours: string;
     closingHours: string;
 }
-
-export type Days = keyof typeof Day;
-
-const Day = {
-    MONDAY: "Monday",
-    TUESDAY: "Tuesday",
-    WEDNESDAY: "Wednesday",
-    THURSDAY: "Thursday",
-    FRIDAY: "Friday",
-    SATURDAY: "Saturday",
-    SUNDAY: "Sunday",
-} as const;

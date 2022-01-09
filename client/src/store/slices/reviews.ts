@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ReviewData } from "../../../../server/src/models/reviews";
+import { ReviewData } from "../../../../server/src/models/reviews/Review";
 import { timestamp } from "../../utilities/timestamp";
 
 // #region actions
@@ -9,7 +9,7 @@ type DeleteReview = Pick<ReviewData, "id">;
 
 type EditReview = Pick<ReviewData, "id" | "title" | "content" | "rating">;
 
-type AddReviews = ReviewData;
+type AddReviews = ReviewData[];
 
 type RequestUserReview = Pick<ReviewData, "id" | "userId">;
 // #endregion
@@ -34,15 +34,15 @@ const slice = createSlice({
         },
 
         reviewsAdded: (reviews, action: PayloadAction<AddReviews>) => {
-
+            reviews.list.push(...action.payload)
         },
 
         reviewAdded: (reviews, action: PayloadAction<AddReview>) => {
-            reviews.list.push({ ...action.payload } as ReviewData);
+            reviews.list.push(action.payload);
         },
 
         reviewDeleted: (reviews, action: PayloadAction<DeleteReview>) => {
-            const { id } = action.payload;
+            const id = action.payload.id
             const index = reviews.list.findIndex(review => review.id === id);
 
             if (index !== -1) {

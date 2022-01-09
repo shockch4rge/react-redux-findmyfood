@@ -1,8 +1,6 @@
-import Review from "../../../server/src/models/reviews";
-
+import Review from "../../../server/src/models/reviews/Review";
 import starFull from "../assets/images/star-full.svg";
 import { useAppSelector } from "../hooks/useAppSelector";
-import { timestamp } from "../utilities/timestamp";
 
 interface Props {
     review: Review;

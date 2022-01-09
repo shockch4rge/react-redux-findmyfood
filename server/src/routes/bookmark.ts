@@ -1,20 +1,20 @@
-import BookmarkController from "../models/bookmarks/BookmarkController";
+import bookmarks from "../models/bookmarks/BookmarkController";
 import { RouteSchema } from "../RouteManager";
 
 module.exports = [
     {
         uri: "/bookmark/:id",
         method: "get",
-        proc: BookmarkController.getBookmark,
+        proc: bookmarks.getBookmark,
     },
     {
         uri: "/bookmark",
         method: "post",
-        proc: BookmarkController.addBookmark,
+        proc: bookmarks.addBookmark,
     },
     {
         uri: "/bookmark/:id",
         method: "delete",
-        proc: BookmarkController.deleteBookmark,
+        proc: bookmarks.deleteBookmark,
     },
 ] as RouteSchema[];

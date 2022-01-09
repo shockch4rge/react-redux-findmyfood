@@ -1,14 +1,7 @@
-import {
-    ActionCreatorWithPayload,
-    createAction,
-    Middleware,
-    PayloadAction,
-} from "@reduxjs/toolkit";
+import { createAction, Middleware, PayloadAction } from "@reduxjs/toolkit";
 import axios, { Method } from "axios";
-import { AppDispatch, AppState, Store } from "..";
-import { ReviewData } from "../../../../server/src/models/reviews";
-import config from "../../../config.json";
-import { Dispatch } from "react";
+import { ReviewData } from "../../../../server/src/models/reviews/Review";
+import config from "../../../../config.json";
 
 //#region action and types
 export async function getApiReview() {
@@ -35,7 +28,7 @@ export const apiCallFailed = createAction<string>("api/callFailed");
 
 const api: Middleware<{}> = store => next => async (action: PayloadAction<ApiCall>) => {
     // pass this action to the next middleware available
-    if (action.type !== apiCallBegan.type) return next(action);    
+    if (action.type !== apiCallBegan.type) return next(action);
 
     next(action);
 
@@ -56,8 +49,9 @@ const api: Middleware<{}> = store => next => async (action: PayloadAction<ApiCal
         if (onSuccess) {
             store.dispatch({ type: onSuccess, payload: response.data });
         }
-    } catch (err) {
-        const error = (err as Error).message
+    }
+    catch (err) {
+        const error = (err as Error).message;
         store.dispatch(apiCallFailed(error));
 
         if (onError) {

@@ -1,25 +1,30 @@
-import UserController from "../models/users/UserController";
+import users from "../models/users/UserController";
 import { RouteSchema } from "../RouteManager";
 
 module.exports = [
     {
         uri: "/user/:id",
         method: "get",
-        proc: UserController.getUser,
+        proc: users.getUser,
     },
     {
         uri: "/user",
         method: "post",
-        proc: UserController.registerUser,
+        proc: users.registerUser,
+    },
+    {
+        uri: "/login",
+        method: "get",
+        proc: users.loginUser,
     },
     {
         uri: "/user/:id",
         method: "put",
-        proc: UserController.updateUser,
+        proc: users.updateUser,
     },
     {
         uri: "/user/:id",
         method: "delete",
-        proc: UserController.deleteUser,
+        proc: users.deleteUser,
     },
 ] as RouteSchema[];
