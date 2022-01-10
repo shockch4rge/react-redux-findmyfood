@@ -1,4 +1,4 @@
-import Review from "../../../server/src/models/reviews/Review";
+import Review from "../models/Review";
 import starFull from "../assets/images/star-full.svg";
 import { useAppSelector } from "../hooks/useAppSelector";
 

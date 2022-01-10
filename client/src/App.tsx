@@ -1,21 +1,19 @@
+import store from "./store"
 import { Provider } from "react-redux";
-import store from "./store";
 import { useRoutes } from "react-router-dom";
 import PageNotFound from "./pages/PageNotFound";
-import "./client/assets/styles/App.css";
-import "./client/assets/styles/detail-card.css";
-import "./client/assets/styles/restaurant-page.css";
-import "./client/assets/styles/navbar.css";
+import "./assets/styles/App.css";
+import "./assets/styles/detail-card.css";
+import "./assets/styles/restaurant-page.css";
 import { getMockDetailCard } from "./components/common/DetailCard";
 import Register from "./pages/RegisterPage";
 import RestaurantPage from "./pages/RestaurantPage";
 import ReviewCard from "./components/ReviewCard";
-import Review from "../../server/src/models/reviews/Review";
-import User from "../../server/src/models/users/User";
-import Restaurant from "../../server/src/models/restaurants/Restaurant";
+import Review from "./models/Review";
+import Restaurant from "./models/Restaurant";
 import { ChakraProvider } from "@chakra-ui/react";
 
-const App = () => {
+function App() {
     const routes = useRoutes([
         {
             path: "register",
@@ -27,7 +25,7 @@ const App = () => {
             caseSensitive: true,
             element: (
                 <RestaurantPage
-                    userId={User.getMockUser().id}
+                    userId={"userId"}
                     restaurant={Restaurant.getMockRestaurant()}
                 />
             ),

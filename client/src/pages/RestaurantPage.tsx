@@ -1,10 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import DetailCard from "../components/common/DetailCard";
 import ReviewCard from "../components/ReviewCard";
-import Restaurant from "../../../server/src/models/restaurants/Restaurant";
-import { ReviewData } from "../../../server/src/models/reviews/Review";
-import { useAppDispatch } from "../hooks/useAppDispatch";
+import Restaurant from "../models/Restaurant";
 import { useAppSelector } from "../hooks/useAppSelector";
 import reviews, {
     reviewAdded,
@@ -14,9 +11,10 @@ import reviews, {
 import "../assets/styles/restaurant-page.css";
 import { useNavigate } from "react-router-dom";
 import { Container, Flex, Image, Text } from "@chakra-ui/react";
-import NavBar from "../components/NavBar";
+import NavigationBar from "../components/NavBar";
 import { apiCallBegan, getApiReview, getRestaurantReviews } from "../store/middleware/api";
 import { useAuth } from "../hooks/useAuth";
+import { useAppDispatch } from "../hooks/useAppDispatch";
 
 interface Props {
     restaurant: Restaurant;
@@ -52,8 +50,7 @@ const RestaurantPage = (props: Props) => {
 
     return (
         <>
-            <NavBar />
-            <Image src="" />
+            <NavigationBar />
             <Container maxW="fit-content">
                 <Flex className="" justify="space-evenly">
                     <DetailCard

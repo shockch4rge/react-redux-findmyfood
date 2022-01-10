@@ -1,7 +1,7 @@
 import { createAction, Middleware, PayloadAction } from "@reduxjs/toolkit";
 import axios, { Method } from "axios";
-import { ReviewData } from "../../../../server/src/models/reviews/Review";
-import config from "../../../../config.json";
+import { ReviewData } from "../../../../server/src/models/Review";
+import config from "../../config.json"
 
 //#region action and types
 export async function getApiReview() {

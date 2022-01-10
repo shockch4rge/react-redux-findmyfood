@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ReplyData } from "../../../../server/src/models/replies/Reply";
+import ReplyData from "../../../../server/src/models/Reply";
 import { PayloadAction } from "@reduxjs/toolkit";
 // #region actions
 type AddReply = ReplyData;
 
-type DeleteReply = Pick<ReplyData, "id">
+type DeleteReply = Pick<ReplyData, "id">;
 // #endregion
 
 const slice = createSlice({
@@ -19,7 +19,7 @@ const slice = createSlice({
             const index = replies.findIndex(reply => reply.id === action.payload.id);
 
             replies.splice(index, 1);
-        }
+        },
     },
 });
 

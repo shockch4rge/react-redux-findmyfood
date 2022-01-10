@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ReviewData } from "../../../../server/src/models/reviews/Review";
+import { ReviewData } from "../../../../server/src/models/Review";
 import { timestamp } from "../../utilities/timestamp";
 
 // #region actions
@@ -42,7 +42,7 @@ const slice = createSlice({
         },
 
         reviewDeleted: (reviews, action: PayloadAction<DeleteReview>) => {
-            const id = action.payload.id
+            const id = action.payload.id;
             const index = reviews.list.findIndex(review => review.id === id);
 
             if (index !== -1) {
