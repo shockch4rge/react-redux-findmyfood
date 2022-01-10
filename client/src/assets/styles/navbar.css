@@ -1,3 +1,9 @@
+.navbar {
+    border-bottom: medium solid;
+    border-image-slice: 1;
+    border-image-source: var(--gradient);
+}
+
 .navbar-logo {
     font-family: GalyonBold;
     font-weight: bold;
@@ -5,4 +11,22 @@
     background-clip: content-box;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+
+.navbar-text {
+    font-family: GalyonBold;
+    transition: transform 0.2s ease-in;
+}
+
+.navbar-text:hover {
+    transform: translateY(-10);
+}
+
+.navbar-signup {
+    background: var(--gradient);
+    transition: background 0.2s ease-in;
+}
+
+.navbar-signup:hover {
+    background: var(--reverse-gradient);
 }

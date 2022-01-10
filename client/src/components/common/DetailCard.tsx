@@ -20,14 +20,12 @@ const DetailCard = (props: Props) => {
         others = [],
     } = props;
 
-    const { isOpen, onClose, onOpen, } = useDisclosure();
-
     return (
         <>
             <Box
                 className="d-card"
                 m="15"
-                maxW="md"
+                maxW="lg"
                 borderRadius="xl"
                 overflow="hidden"
             >
