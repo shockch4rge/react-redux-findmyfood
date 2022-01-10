@@ -17,4 +17,9 @@ module.exports = [
         method: "get",
         proc: images.getImage,
     },
+    {
+        uri: "/image/user/:userId",
+        method: "put",
+        proc: images.update,
+    },
 ] as RouteSchema[];

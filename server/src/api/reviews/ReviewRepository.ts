@@ -1,5 +1,5 @@
 import { RowDataPacket } from "mysql2";
-import { ReviewData } from "./Review";
+import { ReviewData } from "../../models/Review";
 import db from "../../db"
 
 export default class ReviewRepository {
@@ -30,6 +30,6 @@ export default class ReviewRepository {
     public static async getRestaurantReviews(restaurantId: string) {
         const query = `SELECT * FROM review WHERE restaurant_id = ?`;
         const reviews = await db.query(query, [restaurantId]);
-        return reviews;
+        return reviews[0];
     }
 }

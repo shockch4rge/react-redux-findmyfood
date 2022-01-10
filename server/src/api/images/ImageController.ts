@@ -56,11 +56,37 @@ export default class ImageController {
             await ImageRepository.delete(userId);
         } 
         catch (err) {
-            console.error("Could not delete file!");
             response.status(500).json(err);
             return;
         }
 
         response.json({ msg: "Deleted image!" });
+    }
+
+    public static async update(request: Request, response: Response) {
+        const userId = request.params.userId;
+        const file = request.files?.avatar as fileUpload.UploadedFile;
+        let fileName: string;
+
+        try {
+            fileName = (await ImageRepository.get(userId))["avatar_path"];
+        }
+        catch (err) {
+            response.json(err);
+            return;
+        }
+
+        const filePath = path.join(__dirname, "../../uploads", fileName);
+
+        try {
+            fs.unlink(filePath, err => console.error(err));
+            file.mv(filePath, err => console.error(err))
+        }
+        catch (err) {
+            response.status(500).json(err)
+            return;
+        }
+
+        response.status(200).json({ msg: "Avatar updated!"})
     }
 }

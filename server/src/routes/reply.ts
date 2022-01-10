@@ -22,4 +22,9 @@ module.exports = [
         method: "delete",
         proc: replies.delete,
     },
+    {
+        uri: "/replies/:reviewId",
+        method: "get",
+        proc: replies.getReviewReplies,
+    }
 ] as RouteSchema[];

@@ -49,7 +49,7 @@ export default class ReviewController {
     }
 
     public static async getRestaurantReviews(request: Request, response: Response) {
-        const id = request.params.id;
+        const id = request.params.restaurantId;
 
         try {
             const reviews = await ReviewRepository.getRestaurantReviews(id);

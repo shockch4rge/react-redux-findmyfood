@@ -1,13 +1,30 @@
-import { UserData } from "./User";
+import { UserData } from "../../models/User";
 import db from "../../db";
 import { RowDataPacket } from "mysql2";
-import { BookmarkData } from "../bookmarks/Bookmark";
 import { uuid } from "../../utilities/uuid";
 import bcrypt from "bcrypt";
 
 export default class UserRepository {
-    public static async update(id: string, data: UserData) {
-        const query = `UPDATE user SET first_name = ?, last_name, `;
+    public static async update(id: string, data: Omit<UserData, "id">) {
+        const values = Object.values(data);
+
+        const query = `
+        UPDATE user u
+        JOIN account a
+            ON a.user_id = u.id
+        SET 
+            u.username = ?,
+            u.first_name = ?,
+            u.last_name = ?,
+            u.gender = ?,
+            a.email = ?,
+            a.password = ?,
+            a.address = ?,
+            a.telephone = ?,
+            a.activated = ?
+        WHERE u.id = ?    
+        `;
+        await db.query(query, [values, id]);
     }
 
     public static async delete(id: string) {
@@ -81,28 +98,5 @@ export default class UserRepository {
         } catch (err) {
             console.error(err);
         }
-    }
-
-    public static async getAllUserBookmarks(userId: string) {
-        const query = `SELECT * FROM bookmark WHERE user_id = ?`;
-        const results = await db.query(query, [userId]);
-        return results[0] as RowDataPacket[];
-    }
-
-    public static async getUserBookmark(userId: string, bookmarkId: string) {
-        const query = `SELECT * FROM bookmark WHERE user_id = ? AND id = ?`;
-        const results = await db.query(query, [userId, bookmarkId]);
-        return (results[0] as RowDataPacket[])[0];
-    }
-
-    public static async addBookmark(data: BookmarkData) {
-        const values = Object.values(data);
-        const query = `INSERT INTO bookmark VALUES (?, ?, ?)`;
-        await db.query(query, [...values]);
-    }
-
-    public static async deleteBookmark(id: string) {
-        const query = `DELETE FROM bookmark WHERE id = ?`;
-        await db.query(query, [id]);
     }
 }

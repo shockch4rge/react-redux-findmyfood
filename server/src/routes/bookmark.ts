@@ -1,4 +1,4 @@
-import bookmarks from "../models/bookmarks/BookmarkController";
+import bookmarks from "../api/bookmarks/BookmarkController";
 import { RouteSchema } from "../RouteManager";
 
 module.exports = [

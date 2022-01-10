@@ -15,7 +15,7 @@ export default class ReplyController {
     public static async update(request: Request, response: Response) {
         try {
             await ReplyRepository.update(request.params.replyId, { ...request.body });
-            response.json({ msg: "Successfully updated!" });
+            response.json({ msg: "Reply updated!" });
         }
         catch (err) {
             response.json(err);
@@ -25,7 +25,7 @@ export default class ReplyController {
     public static async add(request: Request, response: Response) {
         try {
             await ReplyRepository.add(request.body);
-            response.json({ msg: "Successfully added reply!" });
+            response.json({ msg: "Reply added!" });
         }
         catch (err) {
             response.json(err);
@@ -45,7 +45,7 @@ export default class ReplyController {
     public static async delete(request: Request, response: Response) {
         try {
             await ReplyRepository.delete(request.params.id);
-            response.json({ msg: "Successfully deleted!" })
+            response.json({ msg: "Reply deleted!" })
         }
         catch (err) {
             response.json(err);

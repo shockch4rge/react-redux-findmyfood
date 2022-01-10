@@ -1,5 +1,5 @@
 import { RowDataPacket } from "mysql2";
-import { ReplyData } from "./Reply";
+import { ReplyData } from "../../models/Reply";
 import db from "../../db";
 
 export default class ReplyRepository {
@@ -9,11 +9,13 @@ export default class ReplyRepository {
         return results[0];
     }
 
-    public static async update(id: string, data: Pick<ReplyData, "content" | "timestamp" | "isEdited">) {
+    public static async update(
+        id: string,
+        data: Pick<ReplyData, "content" | "timestamp" | "isEdited">
+    ) {
         const values = Object.values(data);
         const query = `UPDATE reply SET content = ?, timestamp = ?, is_edited = ? WHERE id = ?`;
-        const results = await db.query(query, [...values, id]);
-        return (results[0] as RowDataPacket[])[0];
+        await db.query(query, [...values, id]);
     }
 
     public static async add(reply: ReplyData) {
