@@ -1,4 +1,4 @@
-import reviews from "../models/reviews/ReviewController";
+import reviews from "../api/reviews/ReviewController";
 import { RouteSchema } from "../RouteManager";
 
 module.exports = [
@@ -26,5 +26,5 @@ module.exports = [
         uri: "/reviews/:restaurantId",
         method: "get",
         proc: reviews.getRestaurantReviews,
-    }
+    },
 ] as RouteSchema[];

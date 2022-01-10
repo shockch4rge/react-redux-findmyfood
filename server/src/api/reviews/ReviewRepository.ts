@@ -1,6 +1,7 @@
 import { RowDataPacket } from "mysql2";
 import { ReviewData } from "../../models/Review";
 import db from "../../db"
+import { uuid } from "../../utilities/uuid";
 
 export default class ReviewRepository {
 
@@ -15,10 +16,11 @@ export default class ReviewRepository {
         await db.query(query, [id]);
     }
 
-    public static async add(review: Omit<ReviewData, "isEdited">) {
+    public static async add(review: Omit<ReviewData, "id" | "isEdited">) {
         const values = Object.values(review);
+        const id = uuid();
         const query = `INSERT INTO review VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
-        await db.query(query, [...values, false])
+        await db.query(query, [id, ...values, false])
     }
 
     public static async update(id: string, review: Pick<ReviewData, "title" | "content" | "rating" | "timestamp"  | "isEdited">) {

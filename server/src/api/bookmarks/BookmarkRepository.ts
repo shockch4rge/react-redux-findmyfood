@@ -1,6 +1,7 @@
 import db from "../../db";
 import { RowDataPacket } from "mysql2";
 import { BookmarkData } from "../../models/Bookmark";
+import { uuid } from "../../utilities/uuid";
 
 export default class BookmarkRepository {
     public static async getAllUserBookmarks(userId: string) {
@@ -17,8 +18,9 @@ export default class BookmarkRepository {
 
     public static async add(data: BookmarkData) {
         const values = Object.values(data);
+        const id = uuid()
         const query = `INSERT INTO bookmark VALUES (?, ?, ?)`;
-        await db.query(query, [...values]);
+        await db.query(query, [id, ...values]);
     }
 
     public static async delete(id: string) {

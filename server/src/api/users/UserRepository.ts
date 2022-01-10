@@ -83,20 +83,35 @@ export default class UserRepository {
         const salt = await bcrypt.genSalt();
         const hash = await bcrypt.hash(user.password, salt);
         user.password = hash;
+
         const userDetails = Object.values(user);
-        const accountDetails = Object.values(user);
         const id = uuid();
 
         try {
             await db.query(`START TRANSACTION`);
-            await db.query(`INSERT INTO user VALUES (?, ?, ?, ?, ?)`, [id, ...userDetails]);
+            await db.query(`INSERT INTO user VALUES (?, ?, ?, ?, ?)`, [
+                id,
+                userDetails[0],
+                userDetails[1],
+                userDetails[2],
+                userDetails[3],
+            ]);
             await db.query(`INSERT INTO account VALUES (?, ?, ?, ?, ?, ?)`, [
                 id,
-                ...accountDetails,
+                userDetails[4],
+                userDetails[5],
+                userDetails[6],
+                userDetails[7],
+                userDetails[8],
             ]);
             await db.query(`COMMIT`);
         } catch (err) {
             console.error(err);
         }
+    }
+
+    public static async updatePassword(id: string, password: string) {
+        const query = `UPDATE user SET password = ? WHERE id = ?`;
+        await db.query(query, [password, id]);
     }
 }

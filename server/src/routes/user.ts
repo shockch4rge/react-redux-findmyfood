@@ -1,4 +1,4 @@
-import users from "../models/users/UserController";
+import users from "../api/users/UserController";
 import { RouteSchema } from "../RouteManager";
 
 module.exports = [
@@ -27,4 +27,9 @@ module.exports = [
         method: "delete",
         proc: users.deleteUser,
     },
+    {
+        uri: "/user/:id/password",
+        method: "put",
+        proc: users.updatePassword
+    }
 ] as RouteSchema[];

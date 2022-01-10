@@ -1,4 +1,4 @@
-import images from "../models/images/ImageController";
+import images from "../api/images/ImageController";
 import { RouteSchema } from "../RouteManager";
 
 module.exports = [

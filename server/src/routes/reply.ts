@@ -1,4 +1,4 @@
-import replies from "../models/replies/ReplyController";
+import replies from "../api/replies/ReplyController";
 import { RouteSchema } from "../RouteManager";
 
 module.exports = [
@@ -26,5 +26,5 @@ module.exports = [
         uri: "/replies/:reviewId",
         method: "get",
         proc: replies.getReviewReplies,
-    }
+    },
 ] as RouteSchema[];

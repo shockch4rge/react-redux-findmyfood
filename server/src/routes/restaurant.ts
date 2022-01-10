@@ -1,4 +1,4 @@
-import restaurants from "../models/restaurants/RestaurantController";
+import restaurants from "../api/restaurants/RestaurantController";
 import { RouteSchema } from "../RouteManager";
 
 module.exports = [

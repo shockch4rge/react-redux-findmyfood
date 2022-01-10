@@ -1,6 +1,7 @@
 import { RowDataPacket } from "mysql2";
 import { ReplyData } from "../../models/Reply";
 import db from "../../db";
+import { uuid } from "../../utilities/uuid";
 
 export default class ReplyRepository {
     public static async getReviewReplies(reviewId: string) {
@@ -18,10 +19,11 @@ export default class ReplyRepository {
         await db.query(query, [...values, id]);
     }
 
-    public static async add(reply: ReplyData) {
+    public static async add(reply: Omit<ReplyData, "id" | "isEdited">) {
         const values = Object.values(reply);
+        const id = uuid();
         const query = `INSERT INTO reply VALUES (?, ?, ?, ?, ?, ?)`;
-        await db.query(query, [...values]);
+        await db.query(query, [id, ...values, false]);
     }
 
     public static async get(id: string) {

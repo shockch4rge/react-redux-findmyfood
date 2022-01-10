@@ -27,7 +27,7 @@ export default class ReviewController {
     }
 
     public static async update(request: Request, response: Response) {
-        const id = request.body.id
+        const id = request.params.id
 
         try {
             await ReviewRepository.update(id, { ...request.body })

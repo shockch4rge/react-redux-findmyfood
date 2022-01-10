@@ -23,7 +23,7 @@ export default class UserController {
 
     public static async registerUser(request: Request, response: Response) {
         try {
-            await UserRepository.register({ ...request.body.user });
+            await UserRepository.register({ ...request.body });
             response.json({ message: "User registered!" });
         } 
         catch (err) {
@@ -49,6 +49,18 @@ export default class UserController {
             await UserRepository.update(request.params.userId, request.body);
             response.json({ msg: "User updated!" });
         } 
+        catch (err) {
+            response.json(err);
+        }
+    }
+
+    public static async updatePassword(request: Request, response: Response) {
+        const userId = request.params.id;
+
+        try {
+            await UserRepository.updatePassword(request.body.password, userId);
+            response.json({ msg: `Password updated for user: ${userId}`})
+        }
         catch (err) {
             response.json(err);
         }

@@ -14,7 +14,7 @@ export default class ReplyController {
 
     public static async update(request: Request, response: Response) {
         try {
-            await ReplyRepository.update(request.params.replyId, { ...request.body });
+            await ReplyRepository.update(request.params.id, { ...request.body });
             response.json({ msg: "Reply updated!" });
         }
         catch (err) {
