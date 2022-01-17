@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UserData } from "../../../../server/src/models/users/User";
+import { UserData } from "../../models/User";
 
 // #region actions
 type RequestUser = Pick<UserData, "id">;
@@ -8,15 +8,19 @@ type RegisterUser = UserData;
 // #endregion
 
 const slice = createSlice({
-    name: "user",
+    name: "users",
 
-    initialState: null as UserData | null,
+    initialState: {
+        list: [] as UserData[],
+        lastFetch: null,
+        loading: false,
+    },
 
     reducers: {
         userRequested: (user, action: PayloadAction<RequestUser>) => {},
 
         userRegistered: (user, action: PayloadAction<RegisterUser>) => {
-            return action.payload;
+            user.list.push({ ...action.payload });
         },
     },
 });

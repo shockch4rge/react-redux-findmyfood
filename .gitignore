@@ -26,5 +26,5 @@ fonts
 uploads
 __tests__
 babel.config.json
-jest.config.js
+jest.config.ts
 config.json

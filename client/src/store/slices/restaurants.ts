@@ -1,19 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RestaurantData } from "../../../../server/src/models/restaurants/Restaurant";
+import { RestaurantData } from "../../models/Restaurant";
 
 // #region actions
-type RequestRestaurant = Pick<RestaurantData, "id">;
-
 type AddRestaurant = Pick<
     RestaurantData,
-    | "id"
-    | "name"
-    | "averageRating"
-    | "cuisine"
-    | "description"
-    | "address"
-    | "telephone"
+    "id" | "name" | "averageRating" | "cuisine" | "description" | "address" | "telephone"
 >;
+
+type AddAllRestaurants = RestaurantData[];
 // #endregion
 
 const slice = createSlice({
@@ -26,22 +20,25 @@ const slice = createSlice({
     },
 
     reducers: {
-        restaurantRequested: (
-            restaurants,
-            action: PayloadAction<RequestRestaurant>
-        ) => {},
+        allRestaurantsAdded: (state, action: PayloadAction<AddAllRestaurants>) => {
+            state.list.push(...action.payload);
+        },
 
-        restaurantAdded: (
-            restaurants,
-            action: PayloadAction<AddRestaurant>
-        ) => {
-            restaurants.list.push({
-                ...action.payload,
-            } as RestaurantData);
+        restaurantsRequested: state => {
+            state.loading = true;
+            state.lastFetch = Date.now();
+        },
+
+        restaurantsReceived: state => {
+            state.loading = false;
+        },
+
+        restaurantAdded: (state, action: PayloadAction<AddRestaurant>) => {
+            state.list.push({ ...action.payload } as RestaurantData);
         },
     },
 });
 
-export const { restaurantAdded, restaurantRequested } = slice.actions;
+export const { allRestaurantsAdded, restaurantAdded, restaurantsRequested } = slice.actions;
 
 export default slice.reducer;

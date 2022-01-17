@@ -1,47 +1,52 @@
-import Review from "../models/Review";
-import starFull from "../assets/images/star-full.svg";
-import { useAppSelector } from "../hooks/useAppSelector";
-
 interface Props {
-    review: Review;
-    editable?: {
-        onEdit: () => void;
-        onDelete: () => void;
-    };
+    // user: User;
 }
 
 const ReviewCard = (props: Props) => {
-    const { id, title, content, rating, timestamp } = props.review;
-    const review = useAppSelector(state => state.entities.reviews.list.find(review => review.id === id))
-
     return (
         <>
         </>
+        // <Box
+        //     sx={{
+        //         boxShadow: `var(--shadow-elevation-medium)`,
+        //         borderImageSlice: 1,
+        //         borderImageSource: `var(--gradient)`,
+        //     }}
+        //     minH="60px"
+        //     minW="60px"
+        //     borderRadius="xl"
+        //     p="8"
+        // >
+        //     <HStack spacing="10" divider={<StackDivider/>}>
+        //         <VStack>
+        //             <Avatar
+        //                 size="xl"
+        //                 src="https://bit.ly/dan-abramov"
+        //                 fallbackSrc="https://bit.ly/3qcZQsm"
+        //             />
+        //             <Text>Dan Abramov</Text>
+        //         </VStack>
+        //         <VStack w="container.md">
+        //             <Box>
+        //                 <Heading fontFamily="GalyonBook" fontWeight="bolder" size="md" mb="4">
+        //                     This is a really lorem restaurant!
+        //                 </Heading>
+        //                 <Text>
+        //                     Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ea perferendis
+        //                     sed, eveniet magnam vitae ad amet, odio pariatur expedita culpa sit
+        //                     impedit id dignissimos mollitia rem quibusdam repudiandae sequi
+        //                     laudantium! Lorem ipsum dolor sit amet consectetur adipisicing elit.
+        //                     Aliquam dolores minima, placeat ipsum et perspiciatis aspernatur
+        //                     accusamus molestias harum amet similique totam facere a qui porro velit,
+        //                     molestiae officia quae.
+        //                 </Text>
+        //             </Box>
+        //         </VStack>
+        //     </HStack>
+        // </Box>
     );
 };
 
-const renderStarIcons = (props: Props) => {
-    const { rating } = props.review;
-
-    const emptyStars = [];
-    const stars = [];
-
-    for (let i = 0; i < rating; i++) {
-        stars.push(<img src={starFull} />);
-    }
-
-    return <span>{stars}</span>;
-};
-
-const renderEditButtons = (props: Props) => {
-    if (!props.editable) return;
-
-    const { onEdit, onDelete } = props.editable;
-
-    return (
-        <>
-        </>
-    );
-};
+const ReplyCard = () => {};
 
 export default ReviewCard;

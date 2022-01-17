@@ -24,46 +24,46 @@ const slice = createSlice({
     },
 
     reducers: {
-        reviewsRequestedFromRestaurant: reviews => {
-            reviews.loading = true;
+        reviewsRequestedFromRestaurant: state => {
+            state.loading = true;
         },
 
-        reviewsReceived: reviews => {
-            reviews.lastFetch = Date.now();
-            reviews.loading = false;
+        reviewsReceived: state => {
+            state.lastFetch = Date.now();
+            state.loading = false;
         },
 
-        reviewsAdded: (reviews, action: PayloadAction<AddReviews>) => {
-            reviews.list.push(...action.payload)
+        reviewsAdded: (state, action: PayloadAction<AddReviews>) => {
+            state.list.push(...action.payload)
         },
 
-        reviewAdded: (reviews, action: PayloadAction<AddReview>) => {
-            reviews.list.push(action.payload);
+        reviewAdded: (state, action: PayloadAction<AddReview>) => {
+            state.list.push(action.payload);
         },
 
-        reviewDeleted: (reviews, action: PayloadAction<DeleteReview>) => {
+        reviewDeleted: (state, action: PayloadAction<DeleteReview>) => {
             const id = action.payload.id;
-            const index = reviews.list.findIndex(review => review.id === id);
+            const index = state.list.findIndex(review => review.id === id);
 
             if (index !== -1) {
-                reviews.list.splice(index, 1);
+                state.list.splice(index, 1);
             }
         },
 
-        reviewEdited: (reviews, action: PayloadAction<EditReview>) => {
+        reviewEdited: (state, action: PayloadAction<EditReview>) => {
             const { id, title, content, rating } = action.payload;
 
-            const index = reviews.list.findIndex(review => review.id === id);
+            const index = state.list.findIndex(review => review.id === id);
 
-            reviews.list[index].content = content;
-            reviews.list[index].title = title;
-            reviews.list[index].rating = rating;
-            reviews.list[index].timestamp = timestamp();
-            reviews.list[index].isEdited = true;
+            state.list[index].content = content;
+            state.list[index].title = title;
+            state.list[index].rating = rating;
+            state.list[index].timestamp = timestamp();
+            state.list[index].isEdited = true;
         },
 
-        requestedReviewFromUser: (reviews, action: PayloadAction<RequestUserReview>) => {
-            reviews.list.filter(review => review.userId === action.payload.userId);
+        requestedReviewFromUser: (state, action: PayloadAction<RequestUserReview>) => {
+            state.list.filter(review => review.userId === action.payload.userId);
         },
     },
 });

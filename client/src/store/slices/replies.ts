@@ -9,16 +9,22 @@ type DeleteReply = Pick<ReplyData, "id">;
 
 const slice = createSlice({
     name: "replies",
-    initialState: [] as ReplyData[],
+
+    initialState: {
+        list: [] as ReplyData[],
+        lastFetch: null,
+        loading: false,
+    },
+
     reducers: {
-        replyAdded: (replies, action: PayloadAction<AddReply>) => {
-            replies.push({ ...action.payload } as ReplyData);
+        replyAdded: (state, action: PayloadAction<AddReply>) => {
+            state.list.push({ ...action.payload } as ReplyData);
         },
 
-        replyDeleted: (replies, action: PayloadAction<DeleteReply>) => {
-            const index = replies.findIndex(reply => reply.id === action.payload.id);
+        replyDeleted: (state, action: PayloadAction<DeleteReply>) => {
+            const index = state.list.findIndex(reply => reply.id === action.payload.id);
 
-            replies.splice(index, 1);
+            state.list.splice(index, 1);
         },
     },
 });

@@ -1,3 +1,25 @@
+export class AuthHelper {
+    public static isEmail(email: string) {
+        const regex = new RegExp(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+
+        return regex.test(email);
+    }
+
+    public static isPassword(password: string) {
+        const cases: boolean[] = [
+            hasDigits(password),
+            hasUppercaseLetters(password),
+            hasLowerCaseLetters(password),
+            hasLength(password),
+            hasSpecialCaseLetter(password),
+        ];
+
+        return cases.every(_case => _case);
+    }
+}
+
 export function isEmail(email: string) {
     const regex = new RegExp(
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -5,6 +27,10 @@ export function isEmail(email: string) {
 
     return regex.test(email);
 }
+
+export const EMAIL_REGEX = new RegExp(
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+);
 
 /**
  * Ensure string has:
@@ -16,10 +42,6 @@ export function isEmail(email: string) {
  * @param password The input
  * @returns A check success/failure
  */
-export function isPassword(...cases: boolean[]) {
-    return cases.every(_case => _case);
-}
-
 export function hasUppercaseLetters(password: string, quantity: number = 2) {
     const regex = new RegExp(`((.*[A-Z]){${quantity}})`);
     return regex.test(password);

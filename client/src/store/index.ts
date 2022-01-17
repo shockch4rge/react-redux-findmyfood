@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { combineReducers } from "@reduxjs/toolkit";
 import reviewReducer from "./slices/reviews";
-import userReducer from "./slices/user";
+import userReducer from "./slices/users";
 import restaurantReducer from "./slices/restaurants";
 import authReducer from "./slices/auth";
 import apiMiddleware, { apiCallBegan } from "./middleware/api";

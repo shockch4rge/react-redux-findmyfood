@@ -1,22 +1,13 @@
 import { createAction, Middleware, PayloadAction } from "@reduxjs/toolkit";
 import axios, { Method } from "axios";
-import { ReviewData } from "../../../../server/src/models/Review";
 import config from "../../config.json"
 
-//#region action and types
-export async function getApiReview() {
-    const response = await axios.get("http://localhost:8080/review/review-id");
-    return response.data as ReviewData;
-}
-
-export async function getRestaurantReviews() {
-    const response = await axios.get("http://localhost:8080/restaurant/id");
-}
-
+//#region types
 export type ApiCall = {
     url: string;
     method: Method;
     data?: any;
+    params?: any;
     onSuccess?: string;
     onError?: string;
 };
@@ -26,19 +17,20 @@ export const apiCallBegan = createAction<ApiCall>("api/callBegan");
 export const apiCallSuccess = createAction<any>("api/callSuccess");
 export const apiCallFailed = createAction<string>("api/callFailed");
 
-const api: Middleware<{}> = store => next => async (action: PayloadAction<ApiCall>) => {
+const apiMiddleware: Middleware<{}> = store => next => async (action: PayloadAction<ApiCall>) => {
     // pass this action to the next middleware available
     if (action.type !== apiCallBegan.type) return next(action);
 
     next(action);
 
-    const { url, method, data, onSuccess, onError } = action.payload;
+    const { url, method, data, params, onSuccess, onError } = action.payload;
 
     try {
         const response = await axios.request({
             baseURL: config.api.baseUrl,
             url,
             method,
+            params,
             data,
         });
 
@@ -60,4 +52,4 @@ const api: Middleware<{}> = store => next => async (action: PayloadAction<ApiCal
     }
 };
 
-export default api;
+export default apiMiddleware

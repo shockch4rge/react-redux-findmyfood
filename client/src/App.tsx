@@ -1,57 +1,51 @@
-import store from "./store"
+import store from "./store";
 import { Provider } from "react-redux";
 import { useRoutes } from "react-router-dom";
 import PageNotFound from "./pages/PageNotFound";
 import "./assets/styles/App.css";
 import "./assets/styles/detail-card.css";
 import "./assets/styles/restaurant-page.css";
-import { getMockDetailCard } from "./components/common/DetailCard";
-import Register from "./pages/RegisterPage";
-import RestaurantPage from "./pages/RestaurantPage";
-import ReviewCard from "./components/ReviewCard";
-import Review from "./models/Review";
-import Restaurant from "./models/Restaurant";
-import { ChakraProvider } from "@chakra-ui/react";
+import RegistrationPage from "./pages/RegistrationPage";
+import AboutPage from "./pages/AboutPage";
+import HomePage from "./pages/HomePage";
+import { ThemeProvider } from "@mui/material";
+import theme from "./theme";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
     const routes = useRoutes([
         {
+            path: "login",
+            caseSensitive: true,
+            element: <LoginPage />,
+        },
+        {
             path: "register",
             caseSensitive: true,
-            element: <Register onSubmit={(email, password) => {}} />,
+            element: <RegistrationPage />,
         },
         {
-            path: "restaurant",
+            path: "home",
             caseSensitive: true,
-            element: (
-                <RestaurantPage
-                    userId={"userId"}
-                    restaurant={Restaurant.getMockRestaurant()}
-                />
-            ),
+            element: <HomePage />,
         },
         {
+            path: "about",
             caseSensitive: true,
-            path: "/mockReview",
-            element: <ReviewCard review={Review.getMockReview()} />,
+            element: <AboutPage />,
         },
         {
-            caseSensitive: true,
-            path: "/mockDetail",
-            element: getMockDetailCard(),
-        },
-        {
-            caseSensitive: true,
             path: "*",
+            caseSensitive: true,
             element: <PageNotFound />,
         },
     ]);
 
     return (
-        <ChakraProvider>
+        <ThemeProvider theme={theme}>
             <Provider store={store}>{routes}</Provider>
-        </ChakraProvider>
+        </ThemeProvider>
     );
-};
+}
 
 export default App;

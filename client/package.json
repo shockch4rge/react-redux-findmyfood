@@ -1,64 +1,32 @@
 {
-  "name": "react-redux-findmyfood",
-  "version": "0.1.0",
-  "private": true,
+  "name": "client",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "jest",
+    "test:watch": "npm test -- --watch"
+  },
   "dependencies": {
-    "@chakra-ui/react": "^1.7.3",
-    "@emotion/react": "^11.7.1",
-    "@emotion/styled": "^11.6.0",
+    "@mui/material": "^5.2.8",
     "@reduxjs/toolkit": "^1.7.1",
-    "@testing-library/jest-dom": "^5.16.1",
-    "@testing-library/react": "^12.1.2",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/node": "^16.11.15",
-    "@types/react": "^17.0.37",
-    "@types/react-dom": "^17.0.11",
-    "@types/uuid": "^8.3.3",
     "axios": "^0.24.0",
-    "concurrently": "^6.5.1",
-    "framer-motion": "^5.5.5",
-    "joi": "^17.5.0",
-    "no-try": "^3.1.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.6",
-    "react-router-dom": "^6.2.1",
-    "react-scripts": "5.0.0",
-    "typescript": "^4.5.4",
-    "uuid": "^8.3.2",
-    "web-vitals": "^2.1.2"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 opera version",
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "react-router-dom": "^6.2.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.16.5",
-    "@babel/preset-env": "^7.16.5",
-    "@types/jest": "^27.0.3",
-    "babel-jest": "^27.4.5",
-    "jest": "^27.4.5",
-    "ts-jest": "^27.1.2"
+    "@babel/core": "^7.16.7",
+    "@babel/preset-env": "^7.16.8",
+    "@types/jest": "^27.4.0",
+    "@types/react": "^17.0.33",
+    "@types/react-dom": "^17.0.10",
+    "@vitejs/plugin-react": "^1.0.7",
+    "babel-jest": "^27.4.6",
+    "jest": "^27.4.7",
+    "typescript": "^4.4.4",
+    "vite": "^2.7.2"
   }
 }

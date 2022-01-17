@@ -1,13 +1,29 @@
-import { useEffect, useState } from "react";
-import store from "../store/index";
+import axios from "axios";
+import { userLoggedIn, userLoggedOut } from "../store/slices/auth";
+import { useAppDispatch } from "./useAppDispatch";
+import { useAppSelector } from "./useAppSelector";
+import api from "../api";
 
 export const useAuth = () => {
-    const storeLoginState = store.getState().auth.loggedIn;
-    const [loggedIn, setLoggedIn] = useState(storeLoginState);
+    const dispatch = useAppDispatch();
+    const user = useAppSelector(state => state.auth.user);
 
-    useEffect(() => {
-        setLoggedIn(storeLoginState);
-    }, [storeLoginState]);
+    const logIn = async (email: string, password: string) => {
+        const { data } = await api.request({
+            url: "/users",
+            data: {
+                email,
+                password,
+            },
+            method: "get",
+        });
 
-    return loggedIn;
+        dispatch(userLoggedIn(data));
+    };
+
+    const logOut = () => {
+        dispatch(userLoggedOut());
+    };
+
+    return { logIn, logOut, user };
 };

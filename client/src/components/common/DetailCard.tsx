@@ -1,5 +1,5 @@
-import { Box, Flex, Image, Stack, Text, useDisclosure } from "@chakra-ui/react";
-import { uuid } from "../../utilities/uuid"
+import { Button, Card, CardActions, CardContent, CardMedia, Typography } from "@mui/material";
+import { uuid } from "../../utilities/uuid";
 
 interface Props {
     header?: string;
@@ -22,43 +22,21 @@ const DetailCard = (props: Props) => {
 
     return (
         <>
-            <Box
-                className="d-card"
-                m="15"
-                maxW="lg"
-                borderRadius="xl"
-                overflow="hidden"
-            >
-                <Image className="d-card-img" src={imageUrl} marginBottom="5" />
-                <Stack paddingStart="6" paddingEnd="6" paddingBottom="6">
-                    <Text fontSize="sm" className="d-card-header">{header}</Text>
-                    <Text
-
-                        className="d-card-desc"
-                    >
-                        {description}
-                    </Text>
-                    {fields.map(field => (
-                        <Box
-
-                            key={uuid()}
-                            className="d-card-field"
-                        >
-                            <Text key={uuid()} className="d-card-field title">
-                                {field.title}:
-                            </Text>
-                            <Text key={uuid()} className="d-card-field value">
-                                {field.value}
-                            </Text>
-                        </Box>
-                    ))}
-                </Stack>
-                {others}
-            </Box>
+            <Card sx={{ maxWidth: 345 }}>
+                <CardMedia component="img" height={140} image={imageUrl} />
+                <CardContent>
+                    <Typography variant="h5">Restaurant Name</Typography>
+                    <Typography variant="body2">
+                        This is some boilerplate text to fill up some space in a card.
+                    </Typography>
+                </CardContent>
+                <CardActions>
+                    <Button size="small">See More</Button>
+                </CardActions>
+            </Card>
         </>
     );
 };
-
 
 export const getMockDetailCard = () => {
     return (
