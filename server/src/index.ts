@@ -10,10 +10,10 @@ const routes = new RouterManager();
 const router = routes.getConfiguredRouter();
 
 app.use("/static", express.static("uploads"));
-app.use(express.json());
+app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(fileUpload())
-app.use(router);
+app.use("/api", router);
 
 app.listen(PORT, "localhost", () => console.info(`Listening on http://localhost:${PORT}`));

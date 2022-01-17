@@ -76,6 +76,8 @@ export default class UserRepository {
         `;
 
         const results = await db.query(query, [email, _password]);
+        console.log(results[0])
+        
         return (results[0] as RowDataPacket[])[0];
     }
 
@@ -86,6 +88,9 @@ export default class UserRepository {
 
         const userDetails = Object.values(user);
         const id = uuid();
+
+        console.log(userDetails);
+        
 
         try {
             await db.query(`START TRANSACTION`);

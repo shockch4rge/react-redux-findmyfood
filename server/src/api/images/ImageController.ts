@@ -19,7 +19,7 @@ export default class ImageController {
     }
 
     public static async upload(request: Request, response: Response) {
-        const userId = request.body.userId;
+        const userId = request.params.userId;
         const file = request.files?.file as fileUpload.UploadedFile;
 
         // replace the file name with the user id
@@ -28,9 +28,9 @@ export default class ImageController {
         const filePath = path.join(__dirname, "../../uploads", fileName);
 
         try {
+            await ImageRepository.add(request.params.userId, fileName);
             // move the file to the /uploads folder
             await file.mv(filePath);
-            await ImageRepository.add(request.body.userId, fileName);
         } 
         catch (err) {
             response.status(500).json(err);

@@ -15,8 +15,7 @@ export default class UserController {
         try {
             await UserRepository.delete(id);
             response.json({ msg: "User deleted!" });
-        } 
-        catch (err) {
+        } catch (err) {
             response.json(err);
         }
     }
@@ -25,22 +24,22 @@ export default class UserController {
         try {
             await UserRepository.register({ ...request.body });
             response.json({ message: "User registered!" });
-        } 
-        catch (err) {
+        } catch (err) {
             response.json(err);
         }
     }
 
     public static async loginUser(request: Request, response: Response) {
+        console.log(request.headers);
+
         const email = request.body.email;
         const password = request.body.password;
 
         try {
             const result = await UserRepository.login(email, password);
             response.json(result);
-        } 
-        catch (err) {
-            response.json({ msg: (err as Error).message });
+        } catch (err) {
+            response.status(500).json(err);
         }
     }
 
@@ -48,9 +47,8 @@ export default class UserController {
         try {
             await UserRepository.update(request.params.userId, request.body);
             response.json({ msg: "User updated!" });
-        } 
-        catch (err) {
-            response.json(err);
+        } catch (err) {
+            response.status(500).json(err);
         }
     }
 
@@ -59,9 +57,8 @@ export default class UserController {
 
         try {
             await UserRepository.updatePassword(request.body.password, userId);
-            response.json({ msg: `Password updated for user: ${userId}`})
-        }
-        catch (err) {
+            response.json({ msg: `Password updated for user: ${userId}` });
+        } catch (err) {
             response.json(err);
         }
     }

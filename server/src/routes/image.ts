@@ -3,7 +3,7 @@ import { RouteSchema } from "../RouteManager";
 
 module.exports = [
     {
-        uri: "/image/user",
+        uri: "/image/user/:userId",
         method: "post",
         proc: images.upload,
     },

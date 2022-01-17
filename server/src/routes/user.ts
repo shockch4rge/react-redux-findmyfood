@@ -13,7 +13,7 @@ module.exports = [
         proc: users.registerUser,
     },
     {
-        uri: "/login",
+        uri: "/login/:email&:password",
         method: "get",
         proc: users.loginUser,
     },
