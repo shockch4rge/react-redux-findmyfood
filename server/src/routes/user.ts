@@ -1,5 +1,5 @@
 import users from "../api/users/UserController";
-import { RouteSchema } from "../RouteManager";
+import { RouteSchema } from "../classes/RouteManager";
 
 module.exports = [
     {

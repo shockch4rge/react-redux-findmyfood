@@ -1,4 +1,4 @@
-import { UserData } from "../../models/User";
+import { UserData } from "./User";
 import db from "../../db";
 import { RowDataPacket } from "mysql2";
 import { uuid } from "../../utilities/uuid";
@@ -76,8 +76,8 @@ export default class UserRepository {
         `;
 
         const results = await db.query(query, [email, _password]);
-        console.log(results[0])
-        
+        console.log(results[0]);
+
         return (results[0] as RowDataPacket[])[0];
     }
 
@@ -90,24 +90,16 @@ export default class UserRepository {
         const id = uuid();
 
         console.log(userDetails);
-        
 
         try {
             await db.query(`START TRANSACTION`);
             await db.query(`INSERT INTO user VALUES (?, ?, ?, ?, ?)`, [
                 id,
-                userDetails[0],
-                userDetails[1],
-                userDetails[2],
-                userDetails[3],
+                ...userDetails.slice(0, 4),
             ]);
             await db.query(`INSERT INTO account VALUES (?, ?, ?, ?, ?, ?)`, [
                 id,
-                userDetails[4],
-                userDetails[5],
-                userDetails[6],
-                userDetails[7],
-                userDetails[8],
+                ...userDetails.slice(4),
             ]);
             await db.query(`COMMIT`);
         } catch (err) {

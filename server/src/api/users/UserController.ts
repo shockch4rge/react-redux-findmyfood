@@ -1,5 +1,6 @@
 import UserRepository from "./UserRepository";
 import { Request, Response } from "express";
+import nm from "nodemailer";
 
 export default class UserController {
     public static async getUser(request: Request, response: Response) {
@@ -53,7 +54,7 @@ export default class UserController {
     }
 
     public static async updatePassword(request: Request, response: Response) {
-        const userId = request.params.id;
+        const userId = request.params.userId;
 
         try {
             await UserRepository.updatePassword(request.body.password, userId);

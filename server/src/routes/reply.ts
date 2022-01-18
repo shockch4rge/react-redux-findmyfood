@@ -1,5 +1,5 @@
 import replies from "../api/replies/ReplyController";
-import { RouteSchema } from "../RouteManager";
+import { RouteSchema } from "../classes/RouteManager";
 
 module.exports = [
     {

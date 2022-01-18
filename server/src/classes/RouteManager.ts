@@ -22,7 +22,7 @@ export default class RouterManager {
      */
     public getConfiguredRouter() {
         const schemas: RouteSchema[][] = [];
-        const routeDir = path.join(__dirname, "./routes");
+        const routeDir = path.join(__dirname, "../routes");
 
         for (const routeFile of fs.readdirSync(routeDir)) {
             const schema = require(`${routeDir}/${routeFile}`) as RouteSchema[];

@@ -1,5 +1,5 @@
 import bookmarks from "../api/bookmarks/BookmarkController";
-import { RouteSchema } from "../RouteManager";
+import { RouteSchema } from "../classes/RouteManager";
 
 module.exports = [
     {

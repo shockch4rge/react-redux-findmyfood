@@ -1,6 +1,6 @@
 import db from "../../db";
 import { RowDataPacket } from "mysql2";
-import { BookmarkData } from "../../models/Bookmark";
+import { BookmarkData } from "./Bookmark";
 import { uuid } from "../../utilities/uuid";
 
 export default class BookmarkRepository {

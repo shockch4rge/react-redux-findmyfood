@@ -1,5 +1,5 @@
 import { RowDataPacket } from "mysql2";
-import { ReviewData } from "../../models/Review";
+import { ReviewData } from "./Review";
 import db from "../../db"
 import { uuid } from "../../utilities/uuid";
 
