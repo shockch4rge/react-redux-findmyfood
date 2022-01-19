@@ -1,7 +1,9 @@
 import { RestaurantData } from "../../models/Restaurant";
 import mainApi from "./mainApi";
 
-const restaurantApi = mainApi.injectEndpoints({
+const restaurants = mainApi.injectEndpoints({
+    overrideExisting: false,
+
     endpoints: builder => ({
         getAllRestaurants: builder.query<RestaurantData[], void>({
             query: () => ({
@@ -10,8 +12,8 @@ const restaurantApi = mainApi.injectEndpoints({
             }),
         }),
 
-        getRestaurantById: builder.query<RestaurantData, string>({
-            query: (id: string) => ({
+        getRestaurant: builder.query<RestaurantData, string>({
+            query: id => ({
                 url: `/restaurant/${id}`,
                 method: "get",
             }),
@@ -19,4 +21,4 @@ const restaurantApi = mainApi.injectEndpoints({
     }),
 });
 
-export const { useGetAllRestaurantsQuery, useGetRestaurantByIdQuery } = restaurantApi;
+export const { useGetAllRestaurantsQuery, useGetRestaurantQuery } = restaurants;

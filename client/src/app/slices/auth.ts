@@ -6,20 +6,15 @@ type LogIn = UserData;
 const slice = createSlice({
     name: "auth",
 
-    initialState: {
-        loggedIn: false,
-        user: null as UserData | null,
-    },
+    initialState: null as UserData | null,
 
     reducers: {
         userLoggedIn: (state, action: PayloadAction<LogIn>) => {
-            state.loggedIn = true;
-            state.user = action.payload;
+            state = action.payload;
         },
 
         userLoggedOut: state => {
-            state.loggedIn = false;
-            state.user = null;
+            state = null;
         },
     },
 });
