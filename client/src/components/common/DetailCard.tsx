@@ -1,5 +1,4 @@
 import { Button, Card, CardActions, CardContent, CardMedia, Typography } from "@mui/material";
-import { uuid } from "../../utilities/uuid";
 
 interface Props {
     header?: string;

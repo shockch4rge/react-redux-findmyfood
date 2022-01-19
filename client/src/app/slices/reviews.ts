@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ReviewData } from "../../../../server/src/models/Review";
+import { ReviewData } from "../../../../server/src/api/reviews/Review";
 import { timestamp } from "../../utilities/timestamp";
 
 // #region actions

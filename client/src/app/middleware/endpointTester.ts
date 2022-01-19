@@ -17,7 +17,7 @@ export const apiCallBegan = createAction<ApiCall>("api/callBegan");
 export const apiCallSuccess = createAction<any>("api/callSuccess");
 export const apiCallFailed = createAction<string>("api/callFailed");
 
-const apiMiddleware: Middleware<{}> = store => next => async (action: PayloadAction<ApiCall>) => {
+const endpointTester: Middleware<{}> = store => next => async (action: PayloadAction<ApiCall>) => {
     // pass this action to the next middleware available
     if (action.type !== apiCallBegan.type) return next(action);
 
@@ -52,4 +52,4 @@ const apiMiddleware: Middleware<{}> = store => next => async (action: PayloadAct
     }
 };
 
-export default apiMiddleware
+export default endpointTester

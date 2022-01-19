@@ -2,6 +2,21 @@
     font-family: GalyonBook;
 }
 
+body {
+    max-width: 1400px;
+    margin: auto;
+}
+
+@font-face {
+    font-family: GalyonBold;
+    src: url("../fonts/Galyon-Bold.otf");
+}
+
+@font-face {
+    font-family: GalyonBook;
+    src: url("../fonts/Galyon-Book.otf");
+}
+
 .centered {
     position: absolute;
     top: 50%;

@@ -1,20 +1,36 @@
 import { createTheme } from "@mui/material";
 
-const theme = createTheme({
-    // typography: {
-    //     fontFamily: ["GalyonBold", "GalyonBook"].join(","),
-    // },
+let theme = createTheme({
+    typography: {
+        fontFamily: ["GalyonBold", "GalyonBook"].join(","),
+    },
 
-    // components: {
-    //     MuiCssBaseline: {
-    //         styleOverrides: `
-    //             @font-face {
-    //                 font-family: GalyonBold;
-    //                 src: url("../fonts/Galyon-Bold.otf"), url("../fonts/Galyon-Book.otf");
-    //             }
-    //         `,
-    //     },
-    // },
+    palette: {
+        primary: {
+            light: "#8bf84c",
+            main: "#30d64a",
+        },
+    },
+
+    
+});
+
+theme = createTheme(theme, {
+    components: {
+        MuiAppBar: {
+            variants: [
+                {
+                    props: {},
+                    style: {
+                        backgroundColor: theme.palette.common.white,
+                        borderBottom: "medium solid",
+                        borderImageSlice: 1,
+                        borderImageSource: "var(--gradient)",
+                    },
+                },
+            ],
+        },
+    },
 });
 
 export default theme

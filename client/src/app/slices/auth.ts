@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UserData } from "../../../../server/src/models/User";
+import { UserData } from "../../../../server/src/api/users/User";
 
 type LogIn = UserData;
 

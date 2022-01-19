@@ -1,3 +1,4 @@
+
 # react-redux-findmyfood
 A restaurant lookup & review website as a full-stack web app.
 
