@@ -1,12 +1,12 @@
 
 # react-redux-findmyfood
-A restaurant lookup & review website as a full-stack web app.
+A restaurant lookup & review website full-stack app.
 
 # Built using:
 ### Front-End
-- React framework
-- chakra UI framework
-- React Redux with redux-toolkit
+- React.js framework
+- Material UI framework
+- React Redux with Redux Toolkit Query
 
 ### Back-End
 - express.js
