@@ -14,6 +14,7 @@
     "@reduxjs/toolkit": "^1.7.1",
     "@types/nodemailer": "^6.4.4",
     "axios": "^0.24.0",
+    "camelcase": "^6.3.0",
     "no-try": "^3.1.0",
     "nodemailer": "^6.7.2",
     "react": "^17.0.2",
