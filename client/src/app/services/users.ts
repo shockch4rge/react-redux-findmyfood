@@ -1,7 +1,15 @@
 import { UserData } from "../../models/User";
-import mainApi from "./mainApi";
+import { userLoggedIn, userLoggedOut } from "../slices/auth";
+import api from "./api";
 
-const users = mainApi.injectEndpoints({
+// #region query arg types
+export type LoginRequest = {
+    email: string;
+    password: string;
+};
+// #endregion
+
+const users = api.injectEndpoints({
     overrideExisting: false,
 
     endpoints: builder => ({
@@ -12,7 +20,7 @@ const users = mainApi.injectEndpoints({
             }),
         }),
 
-        registerUser: builder.query<void, UserData>({
+        registerUser: builder.mutation<UserData, Omit<UserData, "id">>({
             query: user => ({
                 url: `/user`,
                 method: "post",
@@ -20,22 +28,34 @@ const users = mainApi.injectEndpoints({
             }),
         }),
 
-        deleteUser: builder.query<void, string>({
+        deleteUser: builder.mutation<void, string>({
             query: id => ({
                 url: `/user/${id}`,
                 method: "delete",
             }),
         }),
 
-        updateUser: builder.query<UserData, UserData>({
+        updateUser: builder.mutation<UserData, UserData>({
             query: updated => ({
                 url: `/user/${updated.id}`,
                 method: "put",
                 // body: bruhh gonna go sleep
             }),
         }),
+
+        loginUser: builder.mutation<UserData, LoginRequest>({
+            query: ({ email, password }) => ({
+                url: `/login/${email}&${password}`,
+                method: "get",
+            }),
+        }),
     }),
 });
 
-export const { useGetUserQuery, useDeleteUserQuery, useRegisterUserQuery, useUpdateUserQuery } =
-    users;
+export const {
+    useGetUserQuery,
+    useDeleteUserMutation,
+    useRegisterUserMutation,
+    useUpdateUserMutation,
+    useLoginUserMutation,
+} = users;

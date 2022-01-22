@@ -1,7 +1,7 @@
 import { ReplyData } from "../../models/Reply";
-import mainApi from "./mainApi";
+import api from "./api";
 
-const replies = mainApi.injectEndpoints({
+const replies = api.injectEndpoints({
     overrideExisting: false,
 
     endpoints: builder => ({
@@ -19,7 +19,7 @@ const replies = mainApi.injectEndpoints({
             }),
         }),
 
-        addReply: builder.query<void, ReplyData>({
+        addReply: builder.mutation<void, ReplyData>({
             query: reply => ({
                 url: `/reply`,
                 method: "post",
@@ -27,14 +27,14 @@ const replies = mainApi.injectEndpoints({
             }),
         }),
 
-        deleteReply: builder.query<void, string>({
+        deleteReply: builder.mutation<void, string>({
             query: id => ({
                 url: `/reply/${id}`,
                 method: "delete",
             }),
         }),
 
-        editReply: builder.query<void, Omit<ReplyData, "userId" | "reviewId">>({
+        editReply: builder.mutation<void, Omit<ReplyData, "userId" | "reviewId">>({
             query: edited => ({
                 url: `/reply/${edited.id}`,
                 method: "put",
@@ -49,9 +49,9 @@ const replies = mainApi.injectEndpoints({
 });
 
 export const {
-    useAddReplyQuery,
-    useDeleteReplyQuery,
+    useAddReplyMutation,
+    useDeleteReplyMutation,
     useGetReplyQuery,
     useGetReviewRepliesQuery,
-    useEditReplyQuery,
+    useEditReplyMutation,
 } = replies;

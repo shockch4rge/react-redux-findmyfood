@@ -1,7 +1,7 @@
 import { ReviewData } from "../../models/Review";
-import mainApi from "./mainApi";
+import api from "./api";
 
-const reviews = mainApi.injectEndpoints({
+const reviews = api.injectEndpoints({
     overrideExisting: false,
 
     endpoints: builder => ({
@@ -19,14 +19,14 @@ const reviews = mainApi.injectEndpoints({
             }),
         }),
 
-        deleteReview: builder.query<void, string>({
+        deleteReview: builder.mutation<void, string>({
             query: id => ({
                 url: `/review/${id}`,
                 method: "delete",
             }),
         }),
 
-        addReview: builder.query<void, ReviewData>({
+        addReview: builder.mutation<void, ReviewData>({
             query: review => ({
                 url: `/review`,
                 method: "post",
@@ -34,7 +34,7 @@ const reviews = mainApi.injectEndpoints({
             }),
         }),
 
-        editReview: builder.query<ReviewData, Omit<ReviewData, "userId" | "restaurantId">>({
+        editReview: builder.mutation<ReviewData, Omit<ReviewData, "userId" | "restaurantId">>({
             query: edited => ({
                 url: `/review/${edited.id}`,
                 body: {
@@ -50,9 +50,9 @@ const reviews = mainApi.injectEndpoints({
 });
 
 export const {
-    useAddReviewQuery,
-    useDeleteReviewQuery,
-    useEditReviewQuery,
+    useAddReviewMutation,
+    useDeleteReviewMutation,
+    useEditReviewMutation,
     useGetRestaurantReviewsQuery,
     useGetReviewQuery,
 } = reviews;

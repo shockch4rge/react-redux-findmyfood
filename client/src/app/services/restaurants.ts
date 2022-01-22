@@ -1,7 +1,7 @@
 import { RestaurantData } from "../../models/Restaurant";
-import mainApi from "./mainApi";
+import api from "./api";
 
-const restaurants = mainApi.injectEndpoints({
+const restaurants = api.injectEndpoints({
     overrideExisting: false,
 
     endpoints: builder => ({
