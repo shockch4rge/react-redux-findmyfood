@@ -12,6 +12,7 @@ import { ThemeProvider } from "@mui/material";
 import theme from "./theme";
 import LoginPage from "./pages/LoginPage";
 import RestaurantPage from "./pages/RestaurantPage";
+import ScrollToTop from "./utilities/ScrollToTop";
 
 function App() {
     const routes = useRoutes([
@@ -49,7 +50,9 @@ function App() {
 
     return (
         <ThemeProvider theme={theme}>
-            <Provider store={store}>{routes}</Provider>
+            <Provider store={store}>
+                <ScrollToTop>{routes}</ScrollToTop>
+            </Provider>
         </ThemeProvider>
     );
 }
