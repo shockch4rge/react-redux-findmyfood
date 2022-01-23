@@ -1,33 +1,60 @@
 import { Box, Button, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import FormWithValidation from "../components/common/FormWithValidation";
-import { useAuth } from "../hooks/useAuth";
+import { LoginRequest, useLoginUserMutation } from "../app/services/users";
+import { userLoggedIn } from "../app/slices/auth";
+import EnhancedInput from "../components/common/EnhancedInput";
 import { useAppDispatch } from "../hooks/useAppDispatch";
-import { useEmailer } from "../hooks/useEmailer";
+import { useAppSelector } from "../hooks/useAppSelector";
 
 const Login = () => {
-    const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const { user, logIn } = useAuth();
-    const { sendEmail } = useEmailer();
+    const dispatch = useAppDispatch();
+    const user = useAppSelector(state => state.auth);
 
     useEffect(() => {
-        if (user) navigate("/restaurant");
-    }, []);
+        if (user) navigate("/home");
+    });
 
-    const [email, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    const [login] = useLoginUserMutation();
+    const [loginDetails, setLoginDetails] = useState<LoginRequest>({
+        email: "",
+        password: "",
+    });
+
+    const handleChange = (name: string, value: string) => {
+        setLoginDetails(prev => ({ ...prev, [name]: value }));
+    };
 
     return (
         <>
             <Box sx={{ mx: "auto" }}>
                 <Box sx={{ display: "grid", gridTemplateRows: "repeat(3, 1fr)" }}>
-                    <FormWithValidation label="Email" type="email" onChange={setUsername} />
-                    <FormWithValidation label="Password" type="password" onChange={setPassword} />
+                    <EnhancedInput
+                        label="Email"
+                        type="email"
+                        onChange={handleChange}
+                    />
+                    <EnhancedInput
+                        label="Password"
+                        type="password"
+                        onChange={handleChange}
+                    />
                 </Box>
-                <Button onClick={() => sendEmail(email)}>Forgot Password?</Button>
-                <Button onClick={() => logIn(email, password)}>Hello!</Button>
+                <Button onClick={() => {}}>Forgot Password?</Button>
+                <Button
+                    onClick={() => {
+                        login(loginDetails)
+                            .unwrap()
+                            .then(user => {
+                                dispatch(userLoggedIn(user));
+                                navigate("/home");
+                            })
+                            .catch(console.log);
+                    }}
+                >
+                    Hello!
+                </Button>
             </Box>
         </>
     );
