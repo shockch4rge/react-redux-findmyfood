@@ -11,6 +11,7 @@ import HomePage from "./pages/HomePage";
 import { ThemeProvider } from "@mui/material";
 import theme from "./theme";
 import LoginPage from "./pages/LoginPage";
+import RestaurantPage from "./pages/RestaurantPage";
 
 function App() {
     const routes = useRoutes([
@@ -33,6 +34,11 @@ function App() {
             path: "about",
             caseSensitive: true,
             element: <AboutPage />,
+        },
+        {
+            path: "restaurant/:restaurantId",
+            caseSensitive: true,
+            element: <RestaurantPage />,
         },
         {
             path: "*",
