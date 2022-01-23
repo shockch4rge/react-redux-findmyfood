@@ -13,8 +13,8 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
-import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../hooks/useAppSelector";
 
 interface ButtonData {
     label: string;
@@ -27,7 +27,7 @@ const NavBar = () => {
     const navigate = useNavigate();
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-    const { user } = useAuth();
+    const user = useAppSelector(state => state.auth);
 
     // #region nav bar buttons
     const pageButtons = [
@@ -53,6 +53,17 @@ const NavBar = () => {
         {
             label: "Sign Out",
             onClick: () => navigate("/logOut"),
+        },
+    ] as ButtonData[];
+
+    const loginButtons = [
+        {
+            label: "Login",
+            onClick: () => navigate("/login"),
+        },
+        {
+            label: "Register",
+            onClick: () => navigate("/register"),
         },
     ] as ButtonData[];
     // #endregion
@@ -87,13 +98,14 @@ const NavBar = () => {
                             fontWeight: "bold",
                             background: "var(--gradient)",
                             display: { xs: "none", md: "flex" },
-                            "-webkit-background-clip": "text",
-                            "-webkit-text-fill-color": "transparent",
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent",
                         }}
                     >
                         FindMyFood!
                     </Typography>
 
+                    {/* Mobile Nav */}
                     <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
                         <IconButton
                             size="large"
@@ -134,10 +146,20 @@ const NavBar = () => {
                         variant="h5"
                         noWrap
                         component="div"
-                        sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
+                        sx={{
+                            flexGrow: 1,
+                            display: { xs: "flex", md: "none" },
+                            fontFamily: "GalyonBold",
+                            fontWeight: "bold",
+                            background: "var(--gradient)",
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent",
+                        }}
                     >
                         FindMyFood!
                     </Typography>
+
+                    {/* Desktop Nav */}
                     <Box ml={10} sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
                         {pageButtons.map(button => (
                             <Button
@@ -153,7 +175,7 @@ const NavBar = () => {
                         ))}
                     </Box>
 
-                    <Box sx={{ flexGrow: 0 }}>
+                    <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
                         {user ? (
                             <>
                                 <Tooltip title="Open settings">
@@ -171,8 +193,11 @@ const NavBar = () => {
                             </>
                         ) : (
                             <>
-                                <Button onClick={() => navigate("/login")}>Log In</Button>
-                                <Button>Sign Up</Button>
+                                {loginButtons.map(button => (
+                                    <Button key={button.label} onClick={() => button.onClick()}>
+                                        {button.label}
+                                    </Button>
+                                ))}
                             </>
                         )}
 
