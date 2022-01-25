@@ -24,6 +24,10 @@ body {
     transform: translate(-50%, -50%);
 }
 
+::-webkit-file-upload-button {
+   display: none;
+}
+
 .gradient {
     --magic-rainbow-color-1: hsl(0deg, 96%, 55%);
     --magic-rainbow-color-2: hsl(25deg, 100%, 50%);
