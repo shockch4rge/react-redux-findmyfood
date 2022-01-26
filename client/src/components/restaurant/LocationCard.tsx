@@ -17,7 +17,7 @@ const LocationCard = ({ restaurant }: Props) => {
                     minWidth: 300,
                     width: "fit-content",
                     height: 300,
-                    borderRadius: 6,
+                    borderRadius: 5,
                     boxShadow: 3,
                     p: 1,
                 }}
@@ -33,7 +33,7 @@ const LocationCard = ({ restaurant }: Props) => {
                     <Stack spacing={1} mt={1}>
                         <Box>
                             <Typography>Location:</Typography>
-                            <Typography variant="body2">{restaurant.name}</Typography>
+                            <Typography variant="body2">{restaurant.address}</Typography>
                         </Box>
                         <Box>
                             <Typography>Opening Hours:</Typography>

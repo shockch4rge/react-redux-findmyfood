@@ -1,4 +1,4 @@
-import { Box, Typography, Card, CardContent, Rating } from "@mui/material";
+import { Box, Typography, Card, CardContent } from "@mui/material";
 import { RestaurantData } from "../../models/Restaurant";
 
 interface Props {
@@ -16,7 +16,7 @@ const DetailsCard = ({ restaurant }: Props) => {
                     minWidth: 300,
                     width: "fit-content",
                     height: 300,
-                    borderRadius: 6,
+                    borderRadius: 5,
                     boxShadow: 3,
                     p: 1,
                 }}
