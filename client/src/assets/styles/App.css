@@ -28,6 +28,10 @@ body {
    display: none;
 }
 
+input[type="file"] {
+    opacity: 0;
+}
+
 .gradient {
     --magic-rainbow-color-1: hsl(0deg, 96%, 55%);
     --magic-rainbow-color-2: hsl(25deg, 100%, 50%);
