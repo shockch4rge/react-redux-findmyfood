@@ -1,15 +1,13 @@
+import "./assets/styles/App.css";
+import theme from "./theme";
 import store from "./app/store";
 import { Provider } from "react-redux";
 import { useRoutes } from "react-router-dom";
 import PageNotFound from "./pages/PageNotFound";
-import "./assets/styles/App.css";
-import "./assets/styles/detail-card.css";
-import "./assets/styles/restaurant-page.css";
 import RegistrationPage from "./pages/RegistrationPage";
 import AboutPage from "./pages/AboutPage";
 import HomePage from "./pages/HomePage";
 import { ThemeProvider } from "@mui/material";
-import theme from "./theme";
 import LoginPage from "./pages/LoginPage";
 import RestaurantPage from "./pages/RestaurantPage";
 import ScrollToTop from "./utilities/ScrollToTop";
