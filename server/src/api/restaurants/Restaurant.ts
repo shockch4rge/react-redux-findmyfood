@@ -3,7 +3,7 @@ export default class Restaurant implements RestaurantData {
     public name: string;
     public description: string;
     public averageRating: number;
-    public cuisine: string;
+    public cuisines: Cuisine[];
     public telephone: string;
     public address: string;
     public availableTimes: AvailableTimesData;
@@ -14,7 +14,7 @@ export default class Restaurant implements RestaurantData {
         this.name = data.name;
         this.description = data.description;
         this.averageRating = data.averageRating;
-        this.cuisine = data.cuisine;
+        this.cuisines = data.cuisines;
         this.telephone = data.telephone;
         this.address = data.address;
         this.availableTimes = data.availableTimes;
@@ -27,8 +27,8 @@ export default class Restaurant implements RestaurantData {
             name: "Mock Dining",
             description:
                 "This is the restaurant's description, lengthened out to make for some boilerplate text that fills up some space on a screen or a box.",
-            averageRating: 4.2,
-            cuisine: "Mock Food",
+            averageRating: 4.3,
+            cuisines: ["Asian", "Chinese", "Halal"],
             address: "Mock Street 42",
             telephone: "91234567",
             availableTimes: {
@@ -39,6 +39,24 @@ export default class Restaurant implements RestaurantData {
             imageUrl: "https://restaurant_url.com",
         });
     }
+
+    public static toJSON(data: any) {
+        return {
+            id: data.id,
+            name: data.name,
+            description: data.description,
+            address: data.address,
+            telephone: data.telephone,
+            averageRating: data.rating,
+            cuisines: String(data.cuisine).split(", "),
+            availableTimes: {
+                days: String(data.days).split(", "),
+                openingHours: data.opening_hours,
+                closingHours: data.closing_hours,
+            },
+            imageUrl: data.image_url,
+        } as RestaurantData;
+    }
 }
 
 export interface RestaurantData {
@@ -48,7 +66,7 @@ export interface RestaurantData {
     address: string;
     telephone: string;
     averageRating: number;
-    cuisine: string;
+    cuisines: Cuisine[];
     availableTimes: AvailableTimesData;
     imageUrl: string;
 }
@@ -58,3 +76,28 @@ export interface AvailableTimesData {
     openingHours: string;
     closingHours: string;
 }
+
+export type Cuisine = typeof CUISINES[keyof typeof CUISINES];
+
+export const CUISINES = {
+    halal: "Halal",
+    local: "Local",
+    western: "Western",
+    mart: "Mart",
+    noodles: "Noodles",
+    seafood: "Seafood",
+    fast_food: "Fast Food",
+    dessert: "Dessert",
+    indian: "Indian",
+    chinese: "Chinese",
+    japanese: "Japanese",
+    thai: "Thai",
+    burgers: "Burgers",
+    healthy: "Healthy",
+    korean: "Korean",
+    asian: "Asian",
+    sushi: "Sushi",
+    vietnamese: "Vietnamese",
+    italian: "Italian",
+    mexican: "Mexican",
+} as const;
