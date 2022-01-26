@@ -1,6 +1,5 @@
 import UserRepository from "./UserRepository";
 import { Request, Response } from "express";
-import nm from "nodemailer";
 
 export default class UserController {
     public static async getUser(request: Request, response: Response) {
@@ -31,8 +30,6 @@ export default class UserController {
     }
 
     public static async loginUser(request: Request, response: Response) {
-        console.log(request.headers);
-
         const email = request.body.email;
         const password = request.body.password;
 

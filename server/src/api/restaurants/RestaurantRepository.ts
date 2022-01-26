@@ -23,9 +23,21 @@ export default class RestaurantRepository {
     }
 
     public static async getAll() {
-        const query = `SELECT * FROM restaurant`;
+        const query = `
+        SELECT 
+            r.*, 
+            a_t.days,
+            a_t.opening_hours,
+            a_t.closing_hours, 
+            ri.image_url
+        FROM restaurant r
+        JOIN available_times a_t
+            ON a_t.restaurant_id = r.id
+        JOIN restaurant_image ri
+            ON ri.restaurant_id = r.id
+            `;
         const results = await db.query(query);
 
-        return (results[0] as RowDataPacket[])
+        return results[0] as RowDataPacket[];
     }
 }

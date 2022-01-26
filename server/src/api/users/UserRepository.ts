@@ -81,27 +81,33 @@ export default class UserRepository {
         return (results[0] as RowDataPacket[])[0];
     }
 
-    public static async register(user: Omit<UserData, "id">) {
+    public static async register(user: UserData) {
         const salt = await bcrypt.genSalt();
         const hash = await bcrypt.hash(user.password, salt);
         user.password = hash;
 
         const userDetails = Object.values(user);
-        const id = uuid();
 
         console.log(userDetails);
 
         try {
             await db.query(`START TRANSACTION`);
             await db.query(`INSERT INTO user VALUES (?, ?, ?, ?, ?)`, [
-                id,
+                user.id,
                 ...userDetails.slice(0, 4),
             ]);
             await db.query(`INSERT INTO account VALUES (?, ?, ?, ?, ?, ?)`, [
-                id,
+                user.id,
                 ...userDetails.slice(4),
             ]);
             await db.query(`COMMIT`);
+
+            const results = await db.query(
+                `SELECT u.*, a.* FROM user u account a WHERE u.id = ? AND a.id = u.id`,
+                [user.id]
+            );
+
+            return (results[0] as RowDataPacket[])[0];
         } catch (err) {
             console.error(err);
         }

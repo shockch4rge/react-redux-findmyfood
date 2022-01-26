@@ -8,7 +8,7 @@ export default class ImageRepository {
         return (results[0] as RowDataPacket[])[0];
     }
 
-    public static async add(userId: string, fileName: string) {
+    public static async upload(userId: string, fileName: string) {
         const query = `INSERT INTO user_avatar VALUES (?, ?)`;
         await db.query(query, [userId, fileName]);
     }

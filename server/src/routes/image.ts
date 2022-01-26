@@ -15,7 +15,7 @@ module.exports = [
     {
         uri: "/image/user/:userId",
         method: "get",
-        proc: images.getImage,
+        proc: images.get,
     },
     {
         uri: "/image/user/:userId",
