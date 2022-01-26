@@ -1,3 +1,5 @@
+import { uuid } from "../utilities/uuid";
+
 export default class Review implements ReviewData {
     public id: string;
     public restaurantId: string;
@@ -29,7 +31,20 @@ export default class Review implements ReviewData {
             content: "This restaurant is great!",
             timestamp: new Date(Date.now()),
             isEdited: false,
-        })
+        });
+    }
+
+    public static getEmpty(restaurantId: string, userId: string) {
+        return {
+            id: uuid(),
+            restaurantId,
+            userId,
+            title: "",
+            content: "",
+            rating: 0.0,
+            timestamp: new Date(Date.now()),
+            isEdited: false,
+        } as ReviewData;
     }
 }
 
