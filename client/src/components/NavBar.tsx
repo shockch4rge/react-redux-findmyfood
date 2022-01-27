@@ -15,6 +15,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../hooks/useAppSelector";
+import { userLoggedOut } from "../app/slices/auth/auth";
+import { useAppDispatch } from "../hooks/useAppDispatch";
 
 interface ButtonData {
     label: string;
@@ -27,7 +29,25 @@ const NavBar = () => {
     const navigate = useNavigate();
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+    const dispatch = useAppDispatch();
     const user = useAppSelector(state => state.auth);
+
+    // #region handlers
+    const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorElNav(event.currentTarget);
+    };
+    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorElUser(event.currentTarget);
+    };
+
+    const handleCloseNavMenu = () => {
+        setAnchorElNav(null);
+    };
+
+    const handleCloseUserMenu = () => {
+        setAnchorElUser(null);
+    };
+    // #endregion
 
     // #region nav bar buttons
     const pageButtons = [
@@ -52,7 +72,11 @@ const NavBar = () => {
         },
         {
             label: "Sign Out",
-            onClick: () => navigate("/logOut"),
+            onClick: () => {
+                handleCloseUserMenu();
+                dispatch(userLoggedOut());
+                window.location.reload();
+            },
         },
     ] as ButtonData[];
 
@@ -66,23 +90,6 @@ const NavBar = () => {
             onClick: () => navigate("/register"),
         },
     ] as ButtonData[];
-    // #endregion
-
-    // #region handlers
-    const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElNav(event.currentTarget);
-    };
-    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElUser(event.currentTarget);
-    };
-
-    const handleCloseNavMenu = () => {
-        setAnchorElNav(null);
-    };
-
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
-    };
     // #endregion
 
     return (

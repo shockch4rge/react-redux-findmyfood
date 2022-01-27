@@ -1,7 +1,7 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { LoginRequest, useLoginUserMutation } from "../app/services/users";
+import { LoginRequest, useLazyLoginUserQuery } from "../app/services/users";
 import { userLoggedIn } from "../app/slices/auth/auth";
 import { useAppDispatch } from "../hooks/useAppDispatch";
 import { useAppSelector } from "../hooks/useAppSelector";
@@ -9,19 +9,23 @@ import { useAppSelector } from "../hooks/useAppSelector";
 const Login = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const user = useAppSelector(state => state.auth);
-
-    useEffect(() => {
-        if (user) navigate("/home");
-    });
-
-    const [login] = useLoginUserMutation();
+    const [login] = useLazyLoginUserQuery();
     const [loginDetails, setLoginDetails] = useState<LoginRequest>({
         email: "",
         password: "",
     });
+    const user = useAppSelector(state => state.auth);
 
-    const handleChange = (name: string, value: string) => {
+    // navigate to home if user to already logged in on page mount
+    useEffect(() => {
+        if (user) navigate("/home");
+    }, [user]);
+
+    console.log(loginDetails);
+
+    const handleLoginDetailsChange = ({
+        target: { name, value },
+    }: React.ChangeEvent<HTMLInputElement>) => {
         setLoginDetails(prev => ({ ...prev, [name]: value }));
     };
 
@@ -29,15 +33,17 @@ const Login = () => {
         <>
             <Box sx={{ mx: "auto" }}>
                 <Box sx={{ display: "grid", gridTemplateRows: "repeat(3, 1fr)" }}>
-                    <EnhancedInput
+                    <TextField
                         label="Email"
                         type="email"
-                        onChange={e => handleChange(e.target.name, e.target.value)}
+                        name="email"
+                        onChange={handleLoginDetailsChange}
                     />
-                    <EnhancedInput
+                    <TextField
                         label="Password"
                         type="password"
-                        onChange={e => handleChange(e.target.name, e.target.value)}
+                        name="password"
+                        onChange={handleLoginDetailsChange}
                     />
                 </Box>
                 <Button onClick={() => {}}>Forgot Password?</Button>
@@ -45,14 +51,11 @@ const Login = () => {
                     onClick={() => {
                         login(loginDetails)
                             .unwrap()
-                            .then(user => {
-                                dispatch(userLoggedIn(user));
-                                navigate("/home");
-                            })
+                            .then(user => dispatch(userLoggedIn(user)))
                             .catch(console.log);
                     }}
                 >
-                    Hello!
+                    Login
                 </Button>
             </Box>
         </>
