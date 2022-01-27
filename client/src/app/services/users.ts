@@ -20,11 +20,11 @@ const users = api.injectEndpoints({
             }),
         }),
 
-        registerUser: builder.mutation<UserData, UserData>({
+        registerUser: builder.mutation<UserData, FormData>({
             query: user => ({
                 url: `/user`,
                 method: "post",
-                body: user,
+                body: user
             }),
         }),
 
@@ -43,7 +43,7 @@ const users = api.injectEndpoints({
             }),
         }),
 
-        loginUser: builder.mutation<UserData, LoginRequest>({
+        loginUser: builder.query<UserData, LoginRequest>({
             query: ({ email, password }) => ({
                 url: `/login/${email}&${password}`,
                 method: "get",
@@ -57,5 +57,5 @@ export const {
     useDeleteUserMutation,
     useRegisterUserMutation,
     useUpdateUserMutation,
-    useLoginUserMutation,
+    useLazyLoginUserQuery,
 } = users;

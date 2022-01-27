@@ -7,7 +7,7 @@ const reviews = api.injectEndpoints({
     endpoints: builder => ({
         getRestaurantReviews: builder.query<ReviewData[], string>({
             query: restaurantId => ({
-                url: `/review/${restaurantId}`,
+                url: `/reviews/${restaurantId}`,
                 method: "get",
             }),
         }),
@@ -26,7 +26,7 @@ const reviews = api.injectEndpoints({
             }),
         }),
 
-        addReview: builder.mutation<void, ReviewData>({
+        addReview: builder.mutation<void, Omit<ReviewData, "id" | "isEdited">>({
             query: review => ({
                 url: `/review`,
                 method: "post",
@@ -37,6 +37,7 @@ const reviews = api.injectEndpoints({
         editReview: builder.mutation<ReviewData, Omit<ReviewData, "userId" | "restaurantId">>({
             query: edited => ({
                 url: `/review/${edited.id}`,
+                method: "post",
                 body: {
                     content: edited.content,
                     title: edited.title,

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UserData } from "../../models/User"
+import { UserData } from "../../../models/User"
 
 type LogIn = UserData;
 
@@ -10,11 +10,11 @@ const slice = createSlice({
 
     reducers: {
         userLoggedIn: (state, action: PayloadAction<LogIn>) => {
-            state = action.payload;
+            return action.payload;
         },
 
-        userLoggedOut: state => {
-            state = null;
+        userLoggedOut: () => {
+            return null;
         },
     },
 });
