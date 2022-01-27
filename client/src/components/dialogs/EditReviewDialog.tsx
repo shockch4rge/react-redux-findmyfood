@@ -1,6 +1,17 @@
-import { Dialog, DialogTitle, DialogContent, Stack, Box, InputLabel, TextField, Rating, DialogActions, Button } from "@mui/material";
+import {
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    Stack,
+    Box,
+    InputLabel,
+    TextField,
+    Rating,
+    DialogActions,
+    Button,
+} from "@mui/material";
 import { useState } from "react";
-import { setShowEditReviewDialog, setEditReviewDialogPayload } from "../../app/slices/dialogs";
+import { setShowEditReviewDialog, setEditReviewDialogPayload } from "../../app/slices/ui/dialogs";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { ReviewData } from "../../models/Review";
@@ -81,7 +92,19 @@ const EditReviewDialog = ({ review }: Props) => {
                 </Stack>
             </DialogContent>
             <DialogActions>
-                <Button onClick={() => dispatch(setShowEditReviewDialog(false))}>Cancel</Button>
+                <Button
+                    onClick={() => {
+                        // reset all to pre-edit
+                        setTitle(review.title);
+                        setContent(review.content);
+                        setRating(review.rating);
+                        setIsValidContent(false);
+                        setIsValidTitle(false);
+                        dispatch(setShowEditReviewDialog(false));
+                    }}
+                >
+                    Cancel
+                </Button>
                 <Button
                     disabled={!isValidTitle || !isValidContent}
                     onClick={() => {
@@ -102,4 +125,4 @@ const EditReviewDialog = ({ review }: Props) => {
     );
 };
 
-export default EditReviewDialog
+export default EditReviewDialog;

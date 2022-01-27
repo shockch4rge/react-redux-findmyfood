@@ -27,6 +27,10 @@ let theme = createTheme({
             main: "#30d64a",
         },
     },
+
+    breakpoints: {
+        
+    }
 });
 
 theme = createTheme(theme, {
@@ -43,6 +47,9 @@ theme = createTheme(theme, {
                     },
                 },
             ],
+            styleOverrides: {
+                boxShadow: 0
+            }
         },
 
         MuiCssBaseline: {

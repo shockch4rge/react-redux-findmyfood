@@ -1,5 +1,5 @@
 import { UserData } from "../../models/User";
-import { userLoggedIn, userLoggedOut } from "../slices/auth";
+import { userLoggedIn, userLoggedOut } from "../slices/auth/auth";
 import api from "./api";
 
 // #region query arg types
@@ -20,7 +20,7 @@ const users = api.injectEndpoints({
             }),
         }),
 
-        registerUser: builder.mutation<UserData, Omit<UserData, "id">>({
+        registerUser: builder.mutation<UserData, UserData>({
             query: user => ({
                 url: `/user`,
                 method: "post",

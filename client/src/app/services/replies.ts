@@ -53,5 +53,6 @@ export const {
     useDeleteReplyMutation,
     useGetReplyQuery,
     useGetReviewRepliesQuery,
+    useLazyGetReviewRepliesQuery,
     useEditReplyMutation,
 } = replies;

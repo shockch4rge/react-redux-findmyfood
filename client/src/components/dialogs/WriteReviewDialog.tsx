@@ -1,6 +1,6 @@
 import { Dialog, DialogTitle, DialogContent, Stack, Box, InputLabel, TextField, Rating, DialogActions, Button } from "@mui/material";
 import { useState } from "react";
-import { setShowWriteReviewDialog, setWriteReviewDialogPayload } from "../../app/slices/dialogs";
+import { setShowWriteReviewDialog, setWriteReviewDialogPayload } from "../../app/slices/ui/dialogs";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { useAppSelector } from "../../hooks/useAppSelector";
 

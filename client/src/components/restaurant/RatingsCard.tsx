@@ -1,5 +1,5 @@
 import { Box, Typography, Card, CardContent, Rating, Button } from "@mui/material";
-import { setShowWriteReviewDialog } from "../../app/slices/dialogs";
+import { setShowWriteReviewDialog } from "../../app/slices/ui/dialogs";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { RestaurantData } from "../../models/Restaurant";
 import { ReviewData } from "../../models/Review";

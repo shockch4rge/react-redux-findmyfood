@@ -1,12 +1,13 @@
 import UserRepository from "./UserRepository";
 import { Request, Response } from "express";
+import User from "./User";
 
 export default class UserController {
     public static async getUser(request: Request, response: Response) {
         const id = request.params.id;
 
         const user = await UserRepository.get(id);
-        response.json(user);
+        response.json(User.toJSON(user));
     }
 
     public static async deleteUser(request: Request, response: Response) {
@@ -30,9 +31,9 @@ export default class UserController {
     }
 
     public static async loginUser(request: Request, response: Response) {
-        const email = request.body.email;
-        const password = request.body.password;
-
+        const email = request.params.email;
+        const password = request.params.password;
+        
         try {
             const result = await UserRepository.login(email, password);
             response.json(result);

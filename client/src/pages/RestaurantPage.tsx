@@ -27,7 +27,7 @@ import {
     setShowEditReviewDialog,
     setShowWriteReviewDialog,
     setWriteReviewDialogPayload,
-} from "../app/slices/dialogs";
+} from "../app/slices/ui/dialogs";
 import EditReviewDialog from "../components/dialogs/EditReviewDialog";
 import WriteReviewDialog from "../components/dialogs/WriteReviewDialog";
 import DetailsCard from "../components/restaurant/DetailsCard";

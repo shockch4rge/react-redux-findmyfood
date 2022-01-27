@@ -1,11 +1,13 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import authReducer from "./slices/auth";
-import dialogs from "./slices/dialogs";
+import authReducer from "./slices/auth/auth";
+import dialogs from "./slices/ui/dialogs";
+import steps from "./slices/ui/steps";
 import endpointTester from "./middleware/endpointTester";
 import api from "./services/api";
 
 const uiReducer = combineReducers({
     dialogs,
+    steps,
 });
 
 const store = configureStore({

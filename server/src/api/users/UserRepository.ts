@@ -33,9 +33,26 @@ export default class UserRepository {
     }
 
     public static async get(id: string) {
-        const query = "SELECT * FROM user WHERE id = ?";
+        const query = `
+        SELECT 
+            u.*,
+            a.email,
+            a.password,
+            a.address,
+            a.telephone,
+            a.activated,
+            ua.avatar_path
+        FROM user u
+        JOIN account a
+            ON a.user_id = u.id
+        JOIN user_avatar ua
+            ON ua.user_id = u.id
+        WHERE u.id = ?
+        `;
 
         const results = await db.query(query, [id]);
+        console.log(results[0]);
+        
         return (results[0] as RowDataPacket[])[0];
     }
 
@@ -101,13 +118,6 @@ export default class UserRepository {
                 ...userDetails.slice(4),
             ]);
             await db.query(`COMMIT`);
-
-            const results = await db.query(
-                `SELECT u.*, a.* FROM user u account a WHERE u.id = ? AND a.id = u.id`,
-                [user.id]
-            );
-
-            return (results[0] as RowDataPacket[])[0];
         } catch (err) {
             console.error(err);
         }

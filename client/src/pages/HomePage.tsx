@@ -18,11 +18,8 @@ import {
 } from "@mui/material";
 import NavBar from "../components/NavBar";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Box } from "@mui/material";
-import { useGetAllRestaurantsQuery } from "../app/services/restaurants";
 import Restaurant, { RestaurantData } from "../models/Restaurant";
 import { DesktopSearchBar, MobileSearchBar } from "../components/SearchBar";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface ButtonData {
@@ -33,7 +30,7 @@ interface ButtonData {
 const HomePage = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    // const { isFetching, isLoading, data } = useGetAllRestaurantsQuery();
+    // const { isFetching, isLoading, data: restaurants } = useGetAllRestaurantsQuery();
 
     const mock = Restaurant.getMockRestaurant();
     const restaurants = new Array(12).fill(mock, 0) as RestaurantData[];
@@ -42,7 +39,7 @@ const HomePage = () => {
     const filterButtons = [
         {
             label: "Rating",
-            onClick: () => restaurants.sort(restaurant => restaurant.averageRating),
+            onClick: () => restaurants?.sort(restaurant => restaurant.averageRating),
         },
         {
             label: "Cost",
@@ -73,21 +70,25 @@ const HomePage = () => {
                         restaurants.map(restaurant => (
                             <Grid item xs={4} key={`grid_${restaurant.id}`}>
                                 <Card elevation={3}>
-                                    <CardActionArea onClick={() => navigate(`/restaurant/${restaurant.id}`)}>
+                                    <CardActionArea
+                                        onClick={() => navigate(`/restaurant/${restaurant.id}`)}
+                                    >
                                         <CardMedia
                                             component="img"
                                             height={180}
                                             image={"https://bit.ly/3qODNbU"}
                                         />
                                         <CardContent>
-                                            <Typography sx={{ fontSize: 16 }}>{restaurant.name}</Typography>
+                                            <Typography sx={{ fontSize: 16 }}>
+                                                {restaurant.name}
+                                            </Typography>
                                             <Rating
                                                 sx={{
                                                     mt: 0.3,
                                                 }}
                                                 readOnly
                                                 precision={0.5}
-                                                value={restaurant.averageRating}
+                                                value={+restaurant.averageRating}
                                                 size="small"
                                             />
                                             <Stack direction="row" spacing={0.5} sx={{ mt: 1 }}>
@@ -130,7 +131,7 @@ const HomePage = () => {
                                     <Typography>{restaurant.name}</Typography>
                                     <Rating
                                         readOnly
-                                        value={restaurant.averageRating}
+                                        value={+restaurant.averageRating}
                                         precision={0.5}
                                         size="small"
                                     />

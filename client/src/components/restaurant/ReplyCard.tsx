@@ -3,6 +3,7 @@ import { useGetUserQuery } from "../../app/services/users";
 import { useGetUserAvatarQuery } from "../../app/services/images";
 import { ReplyData } from "../../models/Reply";
 import User from "../../models/User";
+import { useAvatar } from "../../hooks/useAvatar";
 
 interface Props {
     reply: ReplyData;
@@ -10,7 +11,7 @@ interface Props {
 
 const ReplyCard = ({ reply }: Props) => {
     // const { isLoading: userLoading, data: user } = useGetUserQuery(reply.userId);
-    // const { isLoading: avatarLoading, data: userAvatar } = useGetUserAvatarQuery(reply.userId);
+    // const avatarUrl = useAvatar(user.id)
 
     // #region marked for deletion
     const mockUser = User.getMockUser();

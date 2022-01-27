@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ReviewData } from "../../models/Review";
+import { ReviewData } from "../../../models/Review";
 
 type SetWriteReviewDialogPayload = Pick<ReviewData, "title" | "content" | "rating">;
 

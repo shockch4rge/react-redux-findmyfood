@@ -2,8 +2,7 @@ import { Box, Button, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginRequest, useLoginUserMutation } from "../app/services/users";
-import { userLoggedIn } from "../app/slices/auth";
-import EnhancedInput from "../components/common/EnhancedInput";
+import { userLoggedIn } from "../app/slices/auth/auth";
 import { useAppDispatch } from "../hooks/useAppDispatch";
 import { useAppSelector } from "../hooks/useAppSelector";
 
@@ -33,12 +32,12 @@ const Login = () => {
                     <EnhancedInput
                         label="Email"
                         type="email"
-                        onChange={handleChange}
+                        onChange={e => handleChange(e.target.name, e.target.value)}
                     />
                     <EnhancedInput
                         label="Password"
                         type="password"
-                        onChange={handleChange}
+                        onChange={e => handleChange(e.target.name, e.target.value)}
                     />
                 </Box>
                 <Button onClick={() => {}}>Forgot Password?</Button>
