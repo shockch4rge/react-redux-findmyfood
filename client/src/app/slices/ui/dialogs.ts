@@ -17,6 +17,9 @@ const dialogs = createSlice({
             show: false,
             payload: {} as Pick<ReviewData, "title" | "content" | "rating">,
         },
+        deleteReview: {
+            show: false,
+        },
     },
 
     reducers: {
@@ -38,6 +41,10 @@ const dialogs = createSlice({
         setEditReviewDialogPayload: (state, action: PayloadAction<SetEditReviewDialogPayload>) => {
             state.editReview.payload = action.payload;
         },
+
+        setShowDeleteReviewDialog: (state, action: PayloadAction<boolean>) => {
+            state.deleteReview.show = action.payload;
+        },
     },
 });
 
@@ -46,5 +53,6 @@ export const {
     setWriteReviewDialogPayload,
     setShowEditReviewDialog,
     setEditReviewDialogPayload,
+    setShowDeleteReviewDialog,
 } = dialogs.actions;
 export default dialogs.reducer;
