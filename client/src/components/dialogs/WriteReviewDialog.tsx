@@ -1,11 +1,29 @@
-import { Dialog, DialogTitle, DialogContent, Stack, Box, InputLabel, TextField, Rating, DialogActions, Button } from "@mui/material";
+import {
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    Stack,
+    Box,
+    InputLabel,
+    TextField,
+    Rating,
+    DialogActions,
+    Button,
+} from "@mui/material";
 import { useState } from "react";
+import { useAddReviewMutation } from "../../app/services/reviews";
 import { setShowWriteReviewDialog, setWriteReviewDialogPayload } from "../../app/slices/ui/dialogs";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { useAppSelector } from "../../hooks/useAppSelector";
 
-const WriteReviewDialog = () => {
+interface Props {
+    restaurantId: string;
+    userId: string;
+}
+
+const WriteReviewDialog = ({ restaurantId, userId }: Props) => {
     const dispatch = useAppDispatch();
+    const [addReview] = useAddReviewMutation();
     const open = useAppSelector(state => state.ui.dialogs.writeReview.show);
 
     const titleId = "write-review-dialog-title";
@@ -19,8 +37,16 @@ const WriteReviewDialog = () => {
     const [isValidTitle, setIsValidTitle] = useState(false);
     const [isValidContent, setIsValidContent] = useState(false);
 
+    const handleOnClose = () => {
+        setTitle("");
+        setContent("");
+        setRating(1);
+        setIsValidContent(false);
+        setIsValidTitle(false);
+    };
+
     return (
-        <Dialog open={open} onClose={() => console.log("dialog closed")} fullWidth>
+        <Dialog open={open} onClose={handleOnClose} fullWidth>
             <DialogTitle>Write a review</DialogTitle>
             <DialogContent>
                 <Stack spacing={3}>
@@ -81,13 +107,16 @@ const WriteReviewDialog = () => {
                     disabled={!isValidTitle || !isValidContent}
                     onClick={() => {
                         dispatch(setShowWriteReviewDialog(false));
-                        dispatch(
-                            setWriteReviewDialogPayload({
-                                title,
-                                content,
-                                rating,
-                            })
-                        );
+                        addReview({
+                            restaurantId,
+                            userId,
+                            title,
+                            content,
+                            rating,
+                            timestamp: new Date(Date.now()),
+                        })
+                            .then(data => console.log(data))
+                            .catch(console.log);
                     }}
                 >
                     Post
@@ -97,4 +126,4 @@ const WriteReviewDialog = () => {
     );
 };
 
-export default WriteReviewDialog
+export default WriteReviewDialog;
