@@ -26,7 +26,7 @@ const LocationCard = ({ restaurant }: Props) => {
                     <iframe
                         height={120}
                         frameBorder="0"
-                        src={`https://www.google.com/maps/embed/v1/place?key=${config.google.apis.maps}&q=New+York`}
+                        src={`https://www.google.com/maps/embed/v1/place?key=${config.google.apis.maps}&q=${restaurant.address.replace(" ", "+")}`}
                         allowFullScreen
                         style={{ borderRadius: 8 }}
                     />
