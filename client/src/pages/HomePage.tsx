@@ -21,6 +21,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Restaurant, { RestaurantData } from "../models/Restaurant";
 import { DesktopSearchBar, MobileSearchBar } from "../components/SearchBar";
 import { useNavigate } from "react-router-dom";
+import { useGetAllRestaurantsQuery } from "../app/services/restaurants";
 
 interface ButtonData {
     label: string;
@@ -30,10 +31,10 @@ interface ButtonData {
 const HomePage = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    // const { isFetching, isLoading, data: restaurants } = useGetAllRestaurantsQuery();
+    const { isFetching, isLoading, data: restaurants } = useGetAllRestaurantsQuery();
 
-    const mock = Restaurant.getMockRestaurant();
-    const restaurants = new Array(12).fill(mock, 0) as RestaurantData[];
+    // const mock = Restaurant.getMockRestaurant();
+    // const restaurants = new Array(12).fill(mock, 0) as RestaurantData[];
 
     // #region Buttons
     const filterButtons = [
