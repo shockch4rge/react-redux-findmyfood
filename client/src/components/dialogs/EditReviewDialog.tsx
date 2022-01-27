@@ -11,6 +11,7 @@ import {
     Button,
 } from "@mui/material";
 import { useState } from "react";
+import { useEditReviewMutation } from "../../app/services/reviews";
 import { setShowEditReviewDialog, setEditReviewDialogPayload } from "../../app/slices/ui/dialogs";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { useAppSelector } from "../../hooks/useAppSelector";
@@ -23,6 +24,7 @@ interface Props {
 const EditReviewDialog = ({ review }: Props) => {
     const dispatch = useAppDispatch();
     const open = useAppSelector(state => state.ui.dialogs.editReview.show);
+    const [editReview] = useEditReviewMutation();
 
     const titleId = "edit-review-dialog-title";
     const contentId = "edit-review-dialog-content";
@@ -35,8 +37,16 @@ const EditReviewDialog = ({ review }: Props) => {
     const [isValidTitle, setIsValidTitle] = useState(false);
     const [isValidContent, setIsValidContent] = useState(false);
 
+    const handleOnClose = () => {
+        setTitle(review.title);
+        setContent(review.content);
+        setRating(review.rating);
+        setIsValidContent(false);
+        setIsValidTitle(false);
+    };
+
     return (
-        <Dialog open={open} onClose={() => console.log("dialog closed")} fullWidth>
+        <Dialog open={open} onClose={handleOnClose} fullWidth>
             <DialogTitle>Edit your review</DialogTitle>
             <DialogContent>
                 <Stack spacing={3}>
@@ -92,30 +102,21 @@ const EditReviewDialog = ({ review }: Props) => {
                 </Stack>
             </DialogContent>
             <DialogActions>
-                <Button
-                    onClick={() => {
-                        // reset all to pre-edit
-                        setTitle(review.title);
-                        setContent(review.content);
-                        setRating(review.rating);
-                        setIsValidContent(false);
-                        setIsValidTitle(false);
-                        dispatch(setShowEditReviewDialog(false));
-                    }}
-                >
-                    Cancel
-                </Button>
+                <Button onClick={() => dispatch(setShowEditReviewDialog(false))}>Cancel</Button>
                 <Button
                     disabled={!isValidTitle || !isValidContent}
                     onClick={() => {
                         dispatch(setShowEditReviewDialog(false));
-                        dispatch(
-                            setEditReviewDialogPayload({
-                                title,
-                                content,
-                                rating,
-                            })
-                        );
+                        editReview({
+                            id: review.id,
+                            content,
+                            title,
+                            rating,
+                            timestamp: new Date(Date.now()),
+                            isEdited: true,
+                        })
+                            .unwrap()
+                            .then(data => console.log(data));
                     }}
                 >
                     Save
