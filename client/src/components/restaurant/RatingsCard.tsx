@@ -1,6 +1,7 @@
 import { Box, Typography, Card, CardContent, Rating, Button } from "@mui/material";
 import { setShowWriteReviewDialog } from "../../app/slices/ui/dialogs";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { useAppSelector } from "../../hooks/useAppSelector";
 import { RestaurantData } from "../../models/Restaurant";
 import { ReviewData } from "../../models/Review";
 import WriteReviewDialog from "../dialogs/WriteReviewDialog";
@@ -8,11 +9,11 @@ import WriteReviewDialog from "../dialogs/WriteReviewDialog";
 interface Props {
     restaurant: RestaurantData;
     reviews: ReviewData[];
-    hasUserReviewed: boolean
 }
 
-const RatingsCard = ({ restaurant, reviews, hasUserReviewed }: Props) => {
+const RatingsCard = ({ restaurant, reviews }: Props) => {
     const dispatch = useAppDispatch();
+    const user = useAppSelector(state => state.auth);
 
     return (
         <Box>
@@ -37,21 +38,22 @@ const RatingsCard = ({ restaurant, reviews, hasUserReviewed }: Props) => {
                             ({reviews.length} reviews)
                         </Typography>
                     </Box>
-                    {!hasUserReviewed && (
-                        <Box display="flex" justifyContent="space-around" alignItems="center">
-                            <Button
-                                variant="contained"
-                                sx={{ borderRadius: 10, mt: 17, width: 260 }}
-                                onClick={() => dispatch(setShowWriteReviewDialog(true))}
-                            >
-                                Write a review
-                            </Button>
-                        </Box>
+                    {user && reviews.find(r => r.userId === user.id) && (
+                        <>
+                            <Box display="flex" justifyContent="space-around" alignItems="center">
+                                <Button
+                                    variant="contained"
+                                    sx={{ borderRadius: 10, mt: 17, width: 260 }}
+                                    onClick={() => dispatch(setShowWriteReviewDialog(true))}
+                                >
+                                    Write a review
+                                </Button>
+                            </Box>
+                            <WriteReviewDialog restaurantId={restaurant.id} userId={user.id} />
+                        </>
                     )}
                 </CardContent>
             </Card>
-
-            <WriteReviewDialog />
         </Box>
     );
 };
