@@ -40,19 +40,14 @@ export default class UserRepository {
             a.password,
             a.address,
             a.telephone,
-            a.activated,
-            ua.avatar_path
+            a.activated
         FROM user u
         JOIN account a
             ON a.user_id = u.id
-        JOIN user_avatar ua
-            ON ua.user_id = u.id
         WHERE u.id = ?
         `;
 
-        const results = await db.query(query, [id]);
-        console.log(results[0]);
-        
+        const results = await db.query(query, [id]);        
         return (results[0] as RowDataPacket[])[0];
     }
 
@@ -82,13 +77,10 @@ export default class UserRepository {
             a.password,
             a.address,
             a.telephone,
-            a.activated,
-            ua.avatar_path
+            a.activated
         FROM user u
         JOIN account a
             ON a.user_id = u.id
-        JOIN user_avatar ua
-            ON ua.user_id = u.id
         WHERE a.email = ? AND a.password = ?
         `;
 
@@ -99,23 +91,24 @@ export default class UserRepository {
     }
 
     public static async register(user: UserData) {
+        console.log(user);
+        
+
         const salt = await bcrypt.genSalt();
         const hash = await bcrypt.hash(user.password, salt);
         user.password = hash;
 
         const userDetails = Object.values(user);
 
-        console.log(userDetails);
-
         try {
             await db.query(`START TRANSACTION`);
-            await db.query(`INSERT INTO user VALUES (?, ?, ?, ?, ?)`, [
-                user.id,
-                ...userDetails.slice(0, 4),
+            await db.query(`INSERT INTO user VALUES (?, ?, ?, ?, ?, ?)`, [
+                ...userDetails.slice(0, 5),
+                userDetails[10]
             ]);
             await db.query(`INSERT INTO account VALUES (?, ?, ?, ?, ?, ?)`, [
                 user.id,
-                ...userDetails.slice(4),
+                ...userDetails.slice(5, 10),
             ]);
             await db.query(`COMMIT`);
         } catch (err) {
