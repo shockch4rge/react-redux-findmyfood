@@ -2,6 +2,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { Card, Container, Box, Avatar, Typography, Divider, Rating, Button } from "@mui/material";
 import { useGetUserAvatarQuery } from "../../app/services/images";
 import { useGetReviewRepliesQuery } from "../../app/services/replies";
+import { useGetUserQuery } from "../../app/services/users";
 import Reply, { ReplyData } from "../../models/Reply";
 import { ReviewData } from "../../models/Review";
 import User from "../../models/User";
@@ -12,14 +13,8 @@ interface Props {
 }
 
 const ReviewCard = ({ review }: Props) => {
-    // const { isLoading: userLoading, data: user } = useGetUserQuery(review.userId);
-    // const { isLoading: repliesLoading, data: replies } = useGetReviewRepliesQuery(review.id);
-    // const { isLoading: avatarLoading, data: userAvatar } = useGetUserAvatarQuery(review.userId);
-
-    // #region marked for deletion
-    const mockUser = User.getMockUser();
-    const replies = new Array(10).fill(Reply.getMockReply()) as ReplyData[];
-    // #endregion
+    const { isLoading: userLoading, data: user } = useGetUserQuery(review.userId);
+    const { isLoading: repliesLoading, data: replies } = useGetReviewRepliesQuery(review.id);
 
     return (
         <>
@@ -36,7 +31,7 @@ const ReviewCard = ({ review }: Props) => {
                     <Box display="flex" justifyContent="center" alignItems="center">
                         <Avatar sx={{ width: 80, height: 80, mb: 1 }} />
                     </Box>
-                    <Typography textAlign="center">{mockUser?.username}</Typography>
+                    <Typography textAlign="center">{user?.username}</Typography>
                 </Container>
                 <Divider orientation="vertical" flexItem sx={{ ml: 2, mr: 4 }} />
                 <Box width="100%">
@@ -50,14 +45,14 @@ const ReviewCard = ({ review }: Props) => {
                         textAlign="end"
                         sx={{ fontFamily: "GalyonBook", fontStyle: "italic" }}
                     >
-                        {review.isEdited ? "Edited" : "Posted"} {review.timestamp.toDateString()}
+                        {review.isEdited ? "Edited" : "Posted"} {review.timestamp}
                     </Typography>
                     <Button onClick={() => {}} startIcon={<AddIcon />}>
                         Add Reply
                     </Button>
                 </Box>
             </Card>
-            {replies.slice(0, 2).map(reply => (
+            {replies?.slice(0, 2).map(reply => (
                 <ReplyCard reply={reply} />
             ))}
         </>

@@ -10,9 +10,8 @@ import {
     Divider,
     IconButton,
     Button,
+    Skeleton,
 } from "@mui/material";
-import Restaurant, { RestaurantData } from "../models/Restaurant";
-import Review, { ReviewData } from "../models/Review";
 import { useAppDispatch } from "../hooks/useAppDispatch";
 import { useParams, useNavigate } from "react-router-dom";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
@@ -21,9 +20,11 @@ import { useAppSelector } from "../hooks/useAppSelector";
 import React, { useEffect, useState } from "react";
 import User from "../models/User";
 import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import {
     setEditReviewDialogPayload,
+    setShowDeleteReviewDialog,
     setShowEditReviewDialog,
     setShowWriteReviewDialog,
     setWriteReviewDialogPayload,
@@ -39,6 +40,7 @@ import { useGetRestaurantReviewsQuery } from "../app/services/reviews";
 
 const RestaurantPage = () => {
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
     const { restaurantId } = useParams();
 
     const {
@@ -46,26 +48,27 @@ const RestaurantPage = () => {
         data: restaurant,
         error,
     } = useGetRestaurantQuery(restaurantId!);
-    const { isLoading: reviewsLoading, data: reviews } = useGetRestaurantReviewsQuery(
-        restaurantId!
-    );
+
+    const {
+        isLoading: reviewsLoading,
+        data: reviews,
+        refetch: refetchReviews,
+    } = useGetRestaurantReviewsQuery(restaurantId!);
+
     const user = useAppSelector(state => state.auth);
 
-    useEffect(() => {
-        if (!restaurant) navigate("/home");
-    }, []);
-
-    if (!restaurant || !reviews) return <>Hello!</>;
-
-    const dispatch = useAppDispatch();
-    const userReview = reviews.find(review => review.userId === user?.id);
+    const isLoading = restaurantLoading || reviewsLoading || !restaurant || !reviews;
+    const userReview = reviews?.find(review => review.userId === user?.id);
 
     return (
         <>
             {error ? (
                 <>Oh no, something went wrong!</>
-            ) : restaurantLoading || reviewsLoading ? (
-                <>Loading...</>
+            ) : isLoading ? (
+                <Container>
+                    <NavBar />
+                    <Skeleton variant="rectangular" width={210} height={118} />
+                </Container>
             ) : (
                 <>
                     <NavBar />
@@ -83,14 +86,13 @@ const RestaurantPage = () => {
                                 my: 5,
                                 height: 400,
                                 borderRadius: { xs: 4, md: 6 },
-                                background:
-                                    "linear-gradient(to top, #161616, transparent), url(https://picsum.photos/seed/picsum/536/354) center center no-repeat",
+                                background: `linear-gradient(to top, #161616, transparent), url(${restaurant.imageUrl}) center center no-repeat`,
                                 backgroundSize: "cover",
                                 overflow: "hidden",
                             }}
                         >
                             <Typography
-                                variant="h4"
+                                variant="h3"
                                 sx={{ color: theme => theme.palette.common.white }}
                             >
                                 {restaurant.name}
@@ -104,10 +106,10 @@ const RestaurantPage = () => {
                             justifyContent="space-between"
                             mb={7}
                         >
-                            <RatingsCard
-                                restaurant={restaurant}
-                                reviews={reviews}
-                                hasUserReviewed={!!userReview}
+                            <RatingsCard restaurant={restaurant} reviews={reviews} />
+                            <WriteReviewDialog
+                                restaurantId={restaurant.id}
+                                onPost={() => refetchReviews()}
                             />
                             <DetailsCard restaurant={restaurant} />
                             <LocationCard restaurant={restaurant} />
@@ -175,7 +177,7 @@ const RestaurantPage = () => {
 
                                     <WriteReviewDialog
                                         restaurantId={restaurant.id}
-                                        userId={user.id}
+                                        onPost={() => refetchReviews()}
                                     />
                                 </Stack>
                             )}
@@ -222,7 +224,7 @@ const RestaurantPage = () => {
                                             textAlign="end"
                                             sx={{ fontFamily: "GalyonBook", fontStyle: "italic" }}
                                         >
-                                            {userReview.timestamp.toDateString()}
+                                            {userReview.timestamp}
                                         </Typography>
                                         <Button
                                             onClick={() => dispatch(setShowEditReviewDialog(true))}
@@ -230,9 +232,20 @@ const RestaurantPage = () => {
                                         >
                                             Edit Review
                                         </Button>
+                                        <Button
+                                            onClick={() =>
+                                                dispatch(setShowDeleteReviewDialog(true))
+                                            }
+                                            startIcon={<DeleteIcon />}
+                                        >
+                                            Delete Review
+                                        </Button>
                                     </Box>
 
-                                    <EditReviewDialog review={userReview} />
+                                    <EditReviewDialog
+                                        review={userReview}
+                                        onPost={() => refetchReviews()}
+                                    />
                                 </Card>
                             )}
                         </Box>
@@ -244,19 +257,23 @@ const RestaurantPage = () => {
 
                             <Stack spacing={3}>
                                 {reviews.length >= 1 &&
-                                    reviews.map(review => <ReviewCard review={review} />)}
+                                    reviews.map(review => (
+                                        <ReviewCard key={review.id} review={review} />
+                                    ))}
 
-                                <Box
-                                    mb={10}
-                                    display="flex"
-                                    justifyContent="center"
-                                    alignItems="center"
-                                >
-                                    <Typography fontSize={16} variant="body2">
-                                        There are no reviews for this restaurant yet... you can be
-                                        the first!
-                                    </Typography>
-                                </Box>
+                                {reviews.length === 0 && (
+                                    <Box
+                                        mb={10}
+                                        display="flex"
+                                        justifyContent="center"
+                                        alignItems="center"
+                                    >
+                                        <Typography fontSize={16} variant="body2">
+                                            There are no reviews for this restaurant yet... you can
+                                            be the first!
+                                        </Typography>
+                                    </Box>
+                                )}
                             </Stack>
                         </Box>
                     </Container>

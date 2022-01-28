@@ -15,15 +15,17 @@ import { useAddReviewMutation } from "../../app/services/reviews";
 import { setShowWriteReviewDialog, setWriteReviewDialogPayload } from "../../app/slices/ui/dialogs";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { useAppSelector } from "../../hooks/useAppSelector";
+import { timestamp } from "../../utilities/timestamp";
 
 interface Props {
     restaurantId: string;
-    userId: string;
+    onPost: () => void;
 }
 
-const WriteReviewDialog = ({ restaurantId, userId }: Props) => {
+const WriteReviewDialog = ({ restaurantId, onPost }: Props) => {
     const dispatch = useAppDispatch();
     const [addReview] = useAddReviewMutation();
+    const user = useAppSelector(state => state.auth);
     const open = useAppSelector(state => state.ui.dialogs.writeReview.show);
 
     const titleId = "write-review-dialog-title";
@@ -109,13 +111,13 @@ const WriteReviewDialog = ({ restaurantId, userId }: Props) => {
                         dispatch(setShowWriteReviewDialog(false));
                         addReview({
                             restaurantId,
-                            userId,
+                            userId: user!.id,
+                            rating,
                             title,
                             content,
-                            rating,
-                            timestamp: new Date(Date.now()),
+                            timestamp: timestamp(),
                         })
-                            .then(data => console.log(data))
+                            .then(data => onPost())
                             .catch(console.log);
                     }}
                 >
