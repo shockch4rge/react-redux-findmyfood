@@ -33,9 +33,9 @@ const RatingsCard = ({ restaurant, reviews }: Props) => {
                 <CardContent>
                     <Typography variant="h2">{restaurant.averageRating}</Typography>
                     <Box sx={{ display: "flex" }}>
-                        <Rating readOnly value={restaurant.averageRating} precision={0.5} />
+                        <Rating readOnly value={+restaurant.averageRating} precision={0.5} />
                         <Typography ml={1} fontSize={16}>
-                            ({reviews.length} reviews)
+                            ({reviews.length} {reviews.length === 1 ? "review" : "reviews"})
                         </Typography>
                     </Box>
                     {user && reviews.find(r => r.userId === user.id) && (
@@ -49,7 +49,6 @@ const RatingsCard = ({ restaurant, reviews }: Props) => {
                                     Write a review
                                 </Button>
                             </Box>
-                            <WriteReviewDialog restaurantId={restaurant.id} userId={user.id} />
                         </>
                     )}
                 </CardContent>

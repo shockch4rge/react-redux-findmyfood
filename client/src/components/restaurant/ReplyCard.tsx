@@ -47,7 +47,7 @@ const ReplyCard = ({ reply }: Props) => {
                             fontStyle: "italic",
                         }}
                     >
-                        {reply.isEdited ? "Edited" : "Posted"} {reply.timestamp.toDateString()}
+                        {reply.isEdited ? "Edited" : "Posted"} {reply.timestamp}
                     </Typography>
                 </Box>
             </Card>
