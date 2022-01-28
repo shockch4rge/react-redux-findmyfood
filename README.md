@@ -1,10 +1,10 @@
-
 # react-redux-findmyfood
-A restaurant lookup & review website full-stack app.
+A restaurant lookup & review full-stack app.
 
 # Built using:
 ### Front-End
-- React.js framework
+- React.js library
+- Vite bundler with react-ts template
 - Material UI framework
 - React Redux with Redux Toolkit Query
 
@@ -13,4 +13,9 @@ A restaurant lookup & review website full-stack app.
 - node.js
 
 ### Database
-- MySQL with mysql2
+- MySQL
+
+### Miscellaneous
+- TypeScript
+- node-mysql/mysql2
+
