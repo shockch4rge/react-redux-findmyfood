@@ -1,9 +1,11 @@
+import { timestamp } from "../utilities/timestamp";
+
 export default class Reply implements ReplyData {
     public id: string;
     public reviewId: string;
     public userId: string;
     public content: string;
-    public timestamp: Date;
+    public timestamp: string;
     public isEdited: boolean;
 
     public constructor(data: ReplyData) {
@@ -21,7 +23,7 @@ export default class Reply implements ReplyData {
             reviewId: "review-id",
             userId: "user-id",
             content: "I agree with this great review!",
-            timestamp: new Date(Date.now()),
+            timestamp: timestamp(),
             isEdited: false,
         })
     }
@@ -32,6 +34,6 @@ export interface ReplyData {
     reviewId: string;
     userId: string;
     content: string;
-    timestamp: Date;
+    timestamp: string;
     isEdited: boolean;
 }

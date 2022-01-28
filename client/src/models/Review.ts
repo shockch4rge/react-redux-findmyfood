@@ -1,3 +1,4 @@
+import { timestamp } from "../utilities/timestamp";
 import { uuid } from "../utilities/uuid";
 
 export default class Review implements ReviewData {
@@ -7,7 +8,7 @@ export default class Review implements ReviewData {
     public rating: number;
     public title: string;
     public content: string;
-    public timestamp: Date;
+    public timestamp: string;
     public isEdited: boolean;
 
     public constructor(data: ReviewData) {
@@ -29,7 +30,7 @@ export default class Review implements ReviewData {
             rating: 4.4,
             title: "My review of this restaurant",
             content: "This restaurant is great!",
-            timestamp: new Date(Date.now()),
+            timestamp: timestamp(),
             isEdited: false,
         });
     }
@@ -42,7 +43,7 @@ export default class Review implements ReviewData {
             title: "",
             content: "",
             rating: 0.0,
-            timestamp: new Date(Date.now()),
+            timestamp: timestamp(),
             isEdited: false,
         } as ReviewData;
     }
@@ -55,6 +56,6 @@ export interface ReviewData {
     title: string;
     content: string;
     rating: number;
-    timestamp: Date;
+    timestamp: string;
     isEdited: boolean;
 }
