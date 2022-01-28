@@ -20,4 +20,14 @@ export default class RestaurantController {
             response.json(err);
         }
     }
+
+    public static async add(request: Request, response: Response) {
+        try {
+            await RestaurantRepository.add(request.body);
+            response.json("Added restaurant!");
+        }
+        catch (err) {
+            response.status(500).send(err);
+        }
+    }
 }

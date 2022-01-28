@@ -1,3 +1,5 @@
+import faker from "@faker-js/faker";
+
 export default class Restaurant implements RestaurantData {
     public id: string;
     public name: string;
@@ -21,23 +23,38 @@ export default class Restaurant implements RestaurantData {
         this.imageUrl = data.imageUrl;
     }
 
-    public static getMockRestaurant() {
-        return new Restaurant({
-            id: "restaurant-id",
-            name: "Mock Dining",
-            description:
-                "This is the restaurant's description, lengthened out to make for some boilerplate text that fills up some space on a screen or a box.",
-            averageRating: 4.3,
-            cuisines: ["Asian", "Chinese", "Halal"],
-            address: "Mock Street 42",
-            telephone: "91234567",
+    public static fake() {
+        return {
+            name: faker.company.companyName(),
+            description: faker.lorem.paragraph(4),
+            address: faker.address.streetAddress(),
+            averageRating: faker.random.float({ min: 1, max: 5, precision: 0.5 }),
             availableTimes: {
-                openingHours: "12:00",
-                closingHours: "23:59",
-                days: ["Monday", "Tuesday"],
+                days: faker.random.arrayElements(
+                    ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+                    3
+                ),
+                closingHours: String(faker.random.number({ min: 13, max: 23 })),
+                openingHours: String(faker.random.number({ min: 0, max: 12 })),
             },
-            imageUrl: "https://restaurant_url.com",
-        });
+            cuisines: faker.random.arrayElements(
+                [
+                    "Italian",
+                    "Chinese",
+                    "Japanese",
+                    "Thai",
+                    "Indian",
+                    "Mexican",
+                    "American",
+                    "French",
+                    "Spanish",
+                    "German",
+                ],
+                4
+            ),
+            imageUrl: "https://cdn.pixabay.com/photo/2016/11/18/14/05/brick-wall-1834784__340.jpg",
+            telephone: faker.phone.phoneNumber("91234567"),
+        } as Omit<RestaurantData, "id">;
     }
 
     public static toJSON(data: any) {

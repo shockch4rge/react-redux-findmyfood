@@ -12,4 +12,9 @@ module.exports = [
         method: "get",
         proc: restaurants.getAll,
     },
+    {
+        uri: "/restaurant",
+        method: "post",
+        proc: restaurants.add,
+    }
 ] as RouteSchema[];
