@@ -32,7 +32,7 @@ const DeleteReviewDialog = ({ reviewId }: Props) => {
                         deleteReview(reviewId).then(() => dispatch(setShowDeleteReviewDialog(false)));
                     }}
                 >
-                    Save
+                    Delete
                 </Button>
             </DialogActions>
         </Dialog>

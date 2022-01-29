@@ -82,8 +82,7 @@ const EditReviewDialog = ({ review, onPost }: Props) => {
                             fullWidth
                             required
                             value={content}
-                            onChange={e => {
-                                const value = e.target.value;
+                            onChange={({ target: { value } }) => {
                                 setContent(value);
                                 setIsValidContent(value.length >= 20 && value.length <= 250);
                             }}

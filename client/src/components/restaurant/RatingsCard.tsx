@@ -1,10 +1,10 @@
 import { Box, Typography, Card, CardContent, Rating, Button } from "@mui/material";
-import { setShowWriteReviewDialog } from "../../app/slices/ui/dialogs";
+import { setShowWriteReviewDialog } from "../../app/slices/ui/dialogs/reviewDialog";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { RestaurantData } from "../../models/Restaurant";
 import { ReviewData } from "../../models/Review";
-import WriteReviewDialog from "../dialogs/WriteReviewDialog";
+import WriteReviewDialog from "../dialogs/review/WriteReviewDialog";
 
 interface Props {
     restaurant: RestaurantData;

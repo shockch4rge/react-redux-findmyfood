@@ -16,6 +16,7 @@ import { setShowWriteReviewDialog } from "../../../app/slices/ui/dialogs/reviewD
 import { useAppDispatch } from "../../../hooks/useAppDispatch";
 import { useAppSelector } from "../../../hooks/useAppSelector";
 import { timestamp } from "../../../utilities/timestamp";
+import Snack from "../../common/Snack";
 
 interface Props {
     restaurantId: string;
@@ -38,6 +39,9 @@ const WriteReviewDialog = ({ restaurantId, onPost }: Props) => {
 
     const [isValidTitle, setIsValidTitle] = useState(false);
     const [isValidContent, setIsValidContent] = useState(false);
+
+    const [openErrorSnack, setOpenErrorSnack] = useState(false);
+    const [openSuccessSnack, setOpenSuccessSnack] = useState(false);
 
     const handleOnClose = () => {
         setTitle("");
@@ -82,8 +86,7 @@ const WriteReviewDialog = ({ restaurantId, onPost }: Props) => {
                             fullWidth
                             required
                             placeholder="Describe your experience at the restaurant. Be descriptive!"
-                            onChange={e => {
-                                const value = e.target.value;
+                            onChange={({ target: { value } }) => {
                                 setContent(value);
                                 setIsValidContent(value.length >= 20 && value.length <= 250);
                             }}
@@ -126,6 +129,19 @@ const WriteReviewDialog = ({ restaurantId, onPost }: Props) => {
                     Post
                 </Button>
             </DialogActions>
+
+            <Snack
+                open={openErrorSnack}
+                severity="error"
+                message="Error posting review!"
+                onClose={() => setOpenErrorSnack(false)}
+            />
+            <Snack
+                open={openSuccessSnack}
+                severity="success"
+                message="Review posted!"
+                onClose={() => setOpenSuccessSnack(false)}
+            />
         </Dialog>
     );
 };
