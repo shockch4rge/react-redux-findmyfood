@@ -21,6 +21,7 @@ import { useAppDispatch } from "../../../hooks/useAppDispatch";
 import { useLazyLoginUserQuery } from "../../../app/services/users";
 import Snack from "../../common/Snack";
 import { userLoggedIn } from "../../../app/slices/auth/auth";
+import { createSnack } from "../../../app/slices/ui/snackbars/snack";
 
 const LoginDialog = () => {
     const open = useAppSelector(state => state.ui.dialogs.login.show);
@@ -29,8 +30,6 @@ const LoginDialog = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
-    const [openErrorSnack, setOpenErrorSnack] = useState(false);
-    const [openSuccessSnack, setOpenSuccessSnack] = useState(false);
 
     const [isValidEmail, setIsValidEmail] = useState(false);
     const [isValidPassword, setIsValidPassword] = useState(false);
@@ -42,6 +41,7 @@ const LoginDialog = () => {
         setPassword("");
         setIsValidEmail(false);
         setIsValidPassword(false);
+        setShowPassword(false);
     };
 
     return (
@@ -54,7 +54,6 @@ const LoginDialog = () => {
             <DialogContent>
                 <Stack spacing={3}>
                     <TextField
-                        autoComplete="off"
                         label="Email"
                         onChange={({ target: { value } }) => {
                             setEmail(value);
@@ -83,9 +82,7 @@ const LoginDialog = () => {
                         }}
                     />
 
-                    <Typography variant="body2">
-                        Don't have an account? Sign up!
-                    </Typography>
+                    <Typography variant="body2">Don't have an account? Sign up!</Typography>
                 </Stack>
             </DialogContent>
             <DialogActions>
@@ -100,9 +97,19 @@ const LoginDialog = () => {
                             const user = await login({ email, password }).unwrap();
                             dispatch(userLoggedIn(user));
                             dispatch(setShowLoginDialog(false));
+                            dispatch(
+                                createSnack({
+                                    message: "Logged in successfully!",
+                                    severity: "success",
+                                })
+                            );
                         } catch (err) {
-                            console.log(err);
-                            setOpenErrorSnack(true);
+                            dispatch(
+                                createSnack({
+                                    message: "Invalid email or password",
+                                    severity: "error",
+                                })
+                            );
                         }
                     }}
                 >
@@ -110,7 +117,7 @@ const LoginDialog = () => {
                 </Button>
             </DialogActions>
 
-            <Snack
+            {/* <Snack
                 open={openErrorSnack}
                 severity="error"
                 message="Error logging in!"
@@ -122,7 +129,7 @@ const LoginDialog = () => {
                 severity="success"
                 message="Logged in!"
                 onClose={() => setOpenSuccessSnack(false)}
-            />
+            /> */}
         </Dialog>
     );
 };

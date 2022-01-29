@@ -13,6 +13,7 @@ import {
 import { useState } from "react";
 import { useEditReplyMutation } from "../../../app/services/replies";
 import { setShowEditReplyDialog } from "../../../app/slices/ui/dialogs/replyDialog";
+import { createSnack } from "../../../app/slices/ui/snackbars/snack";
 import { useAppDispatch } from "../../../hooks/useAppDispatch";
 import { useAppSelector } from "../../../hooks/useAppSelector";
 import { ReplyData } from "../../../models/Reply";
@@ -67,18 +68,31 @@ const EditReplyDialog = ({ reply, onPost }: Props) => {
                 <Button onClick={() => dispatch(setShowEditReplyDialog(false))}>Cancel</Button>
                 <Button
                     disabled={!isValidContent}
-                    onClick={() => {
-                        editReply({
-                            id: reply.id,
-                            content,
-                            timestamp: timestamp(),
-                            isEdited: true,
-                        })
-                            .then(() => {
-                                dispatch(setShowEditReplyDialog(false));
-                                onPost();
-                            })
-                            .catch(console.log);
+                    onClick={async () => {
+                        try {
+                            await editReply({
+                                id: reply.id,
+                                content,
+                                timestamp: timestamp(),
+                                isEdited: true,
+                            }).unwrap();
+                            dispatch(setShowEditReplyDialog(false));
+                            dispatch(
+                                createSnack({
+                                    message: "Reply edited!",
+                                    severity: "success",
+                                })
+                            );
+                            onPost();
+                        } catch (err) {
+                            console.log(err);
+                            dispatch(
+                                createSnack({
+                                    message: "Error editing reply.",
+                                    severity: "error",
+                                })
+                            );
+                        }
                     }}
                 >
                     Save

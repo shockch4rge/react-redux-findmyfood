@@ -13,6 +13,7 @@ import {
 import { useState } from "react";
 import { useEditReviewMutation } from "../../../app/services/reviews";
 import { setShowEditReviewDialog } from "../../../app/slices/ui/dialogs/reviewDialog";
+import { createSnack } from "../../../app/slices/ui/snackbars/snack";
 import { useAppDispatch } from "../../../hooks/useAppDispatch";
 import { useAppSelector } from "../../../hooks/useAppSelector";
 import { ReviewData } from "../../../models/Review";
@@ -106,20 +107,33 @@ const EditReviewDialog = ({ review, onPost }: Props) => {
                 <Button onClick={() => dispatch(setShowEditReviewDialog(false))}>Cancel</Button>
                 <Button
                     disabled={!isValidTitle || !isValidContent}
-                    onClick={() => {
-                        editReview({
-                            id: review.id,
-                            content,
-                            title,
-                            rating,
-                            timestamp: timestamp(),
-                            isEdited: true,
-                        })
-                            .then(() => {
-                                dispatch(setShowEditReviewDialog(false));
-                                onPost();
-                            })
-                            .catch(console.log);
+                    onClick={async () => {
+                        try {
+                            await editReview({
+                                id: review.id,
+                                content,
+                                title,
+                                rating,
+                                timestamp: timestamp(),
+                                isEdited: true,
+                            }).unwrap();
+                            dispatch(setShowEditReviewDialog(false));
+                            dispatch(
+                                createSnack({
+                                    message: "Review edited!",
+                                    severity: "success",
+                                })
+                            );
+                            onPost();
+                        } catch (err) {
+                            console.log(err);
+                            dispatch(
+                                createSnack({
+                                    message: "Error deleting review.",
+                                    severity: "error",
+                                })
+                            );
+                        }
                     }}
                 >
                     Save

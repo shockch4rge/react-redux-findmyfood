@@ -14,6 +14,7 @@ import {
 import { useState } from "react";
 import { useAddReplyMutation } from "../../../app/services/replies";
 import { setShowWriteReplyDialog } from "../../../app/slices/ui/dialogs/replyDialog";
+import { createSnack } from "../../../app/slices/ui/snackbars/snack";
 import { useAppDispatch } from "../../../hooks/useAppDispatch";
 import { useAppSelector } from "../../../hooks/useAppSelector";
 import { ReviewData } from "../../../models/Review";
@@ -35,8 +36,6 @@ const WriteReplyDialog = ({ review, onPost }: Props) => {
 
     const [content, setContent] = useState("");
     const [isValidContent, setIsValidContent] = useState(false);
-    const [openErrorSnack, setOpenErrorSnack] = useState(false);
-    const [openSuccessSnack, setOpenSuccessSnack] = useState(false);
 
     const handleOnClose = () => {
         setContent("");
@@ -85,39 +84,36 @@ const WriteReplyDialog = ({ review, onPost }: Props) => {
                 <Button onClick={() => dispatch(setShowWriteReplyDialog(false))}>Cancel</Button>
                 <Button
                     disabled={!isValidContent}
-                    onClick={() => {
-                        addReply({
-                            reviewId: review.id,
-                            userId: user!.id,
-                            content,
-                            timestamp: timestamp(),
-                        })
-                            .then(() => {
-                                dispatch(setShowWriteReplyDialog(false));
-                                onPost();
-                            })
-                            .catch(err => {
-                                console.log(err);
-                                setOpenErrorSnack(true);
+                    onClick={async () => {
+                        try {
+                            await addReply({
+                                reviewId: review.id,
+                                userId: user!.id,
+                                content,
+                                timestamp: timestamp(),
                             });
+                            dispatch(setShowWriteReplyDialog(false));
+                            dispatch(
+                                createSnack({
+                                    message: "Reply posted!",
+                                    severity: "success",
+                                })
+                            );
+                            onPost();
+                        } catch (err) {
+                            console.log(err);
+                            dispatch(
+                                createSnack({
+                                    message: "Error posting reply.",
+                                    severity: "error",
+                                })
+                            );
+                        }
                     }}
                 >
                     Post
                 </Button>
             </DialogActions>
-
-            <Snack
-                open={openErrorSnack}
-                severity="error"
-                message="Error posting reply!"
-                onClose={() => setOpenErrorSnack(false)}
-            />
-            <Snack
-                open={openSuccessSnack}
-                severity="success"
-                message="Reply posted!"
-                onClose={() => setOpenSuccessSnack(false)}
-            />
         </Dialog>
     );
 };

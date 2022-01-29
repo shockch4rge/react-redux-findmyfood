@@ -10,12 +10,14 @@ import { setShowDeleteReviewDialog } from "../../../app/slices/ui/dialogs/review
 import { useDeleteReviewMutation } from "../../../app/services/reviews";
 import { useAppSelector } from "../../../hooks/useAppSelector";
 import { useAppDispatch } from "../../../hooks/useAppDispatch";
+import { createSnack } from "../../../app/slices/ui/snackbars/snack";
 
 interface Props {
     reviewId: string;
+    onDelete: () => void;
 }
 
-const DeleteReviewDialog = ({ reviewId }: Props) => {
+const DeleteReviewDialog = ({ reviewId, onDelete }: Props) => {
     const [deleteReview, { isLoading }] = useDeleteReviewMutation();
     const open = useAppSelector(state => state.ui.dialogs.review.delete.show);
     const dispatch = useAppDispatch();
@@ -28,8 +30,26 @@ const DeleteReviewDialog = ({ reviewId }: Props) => {
                 <Button onClick={() => dispatch(setShowDeleteReviewDialog(false))}>Cancel</Button>
                 <Button
                     color="error"
-                    onClick={() => {
-                        deleteReview(reviewId).then(() => dispatch(setShowDeleteReviewDialog(false)));
+                    onClick={async () => {
+                        try {
+                            await deleteReview(reviewId).unwrap();
+                            dispatch(setShowDeleteReviewDialog(false));
+                            dispatch(
+                                createSnack({
+                                    message: "Review deleted!",
+                                    severity: "success",
+                                })
+                            );
+                            onDelete();
+                        } catch (err) {
+                            console.log(err);
+                            dispatch(
+                                createSnack({
+                                    message: "Error deleting review.",
+                                    severity: "error",
+                                })
+                            );
+                        }
                     }}
                 >
                     Delete

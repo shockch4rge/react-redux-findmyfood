@@ -10,6 +10,7 @@ import { setShowDeleteReplyDialog } from "../../../app/slices/ui/dialogs/replyDi
 import { useDeleteReplyMutation } from "../../../app/services/replies";
 import { useAppSelector } from "../../../hooks/useAppSelector";
 import { useAppDispatch } from "../../../hooks/useAppDispatch";
+import { createSnack } from "../../../app/slices/ui/snackbars/snack";
 
 interface Props {
     replyId: string;
@@ -28,8 +29,25 @@ const DeleteReviewDialog = ({ replyId }: Props) => {
                 <Button onClick={() => dispatch(setShowDeleteReplyDialog(false))}>Cancel</Button>
                 <Button
                     color="error"
-                    onClick={() => {
-                        deleteReply(replyId).then(() => dispatch(setShowDeleteReplyDialog(false)));
+                    onClick={async () => {
+                        try {
+                            await deleteReply(replyId);
+                            dispatch(setShowDeleteReplyDialog(false));
+                            dispatch(
+                                createSnack({
+                                    message: "Reply deleted!",
+                                    severity: "sucesss",
+                                })
+                            );
+                        } catch (err) {
+                            console.log(err);
+                            dispatch(
+                                createSnack({
+                                    message: "Error deleting reply.",
+                                    severity: "error",
+                                })
+                            );
+                        }
                     }}
                 >
                     Delete
