@@ -117,7 +117,7 @@ const WriteReviewDialog = ({ restaurantId, onPost }: Props) => {
                             content,
                             timestamp: timestamp(),
                         })
-                            .then(data => onPost())
+                            .then(() => onPost())
                             .catch(console.log);
                     }}
                 >

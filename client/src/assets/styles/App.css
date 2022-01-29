@@ -2,11 +2,6 @@
     font-family: GalyonBook;
 }
 
-body {
-    max-width: 1400px;
-    margin: auto;
-}
-
 @font-face {
     font-family: GalyonBold;
     src: url("../fonts/Galyon-Bold.otf");
@@ -17,15 +12,12 @@ body {
     src: url("../fonts/Galyon-Book.otf");
 }
 
-.centered {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
 ::-webkit-file-upload-button {
    display: none;
+}
+
+body {
+    margin: 0;
 }
 
 input[type="file"] {
