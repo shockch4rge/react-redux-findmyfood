@@ -6,10 +6,10 @@ import {
     DialogTitle,
     CircularProgress,
 } from "@mui/material";
-import { setShowDeleteReviewDialog } from "../../app/slices/ui/dialogs";
-import { useDeleteReviewMutation } from "../../app/services/reviews";
-import { useAppSelector } from "../../hooks/useAppSelector";
-import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { setShowDeleteReviewDialog } from "../../../app/slices/ui/dialogs/reviewDialog";
+import { useDeleteReviewMutation } from "../../../app/services/reviews";
+import { useAppSelector } from "../../../hooks/useAppSelector";
+import { useAppDispatch } from "../../../hooks/useAppDispatch";
 
 interface Props {
     reviewId: string;
@@ -17,7 +17,7 @@ interface Props {
 
 const DeleteReviewDialog = ({ reviewId }: Props) => {
     const [deleteReview, { isLoading }] = useDeleteReviewMutation();
-    const open = useAppSelector(state => state.ui.dialogs.deleteReview.show);
+    const open = useAppSelector(state => state.ui.dialogs.review.delete.show);
     const dispatch = useAppDispatch();
 
     return (

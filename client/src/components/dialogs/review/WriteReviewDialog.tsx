@@ -11,45 +11,45 @@ import {
     Button,
 } from "@mui/material";
 import { useState } from "react";
-import { useEditReviewMutation } from "../../app/services/reviews";
-import { setShowEditReviewDialog, setEditReviewDialogPayload } from "../../app/slices/ui/dialogs";
-import { useAppDispatch } from "../../hooks/useAppDispatch";
-import { useAppSelector } from "../../hooks/useAppSelector";
-import { ReviewData } from "../../models/Review";
-import { timestamp } from "../../utilities/timestamp";
+import { useAddReviewMutation } from "../../../app/services/reviews";
+import { setShowWriteReviewDialog } from "../../../app/slices/ui/dialogs/reviewDialog";
+import { useAppDispatch } from "../../../hooks/useAppDispatch";
+import { useAppSelector } from "../../../hooks/useAppSelector";
+import { timestamp } from "../../../utilities/timestamp";
 
 interface Props {
-    review: ReviewData;
+    restaurantId: string;
     onPost: () => void;
 }
 
-const EditReviewDialog = ({ review, onPost }: Props) => {
+const WriteReviewDialog = ({ restaurantId, onPost }: Props) => {
     const dispatch = useAppDispatch();
-    const open = useAppSelector(state => state.ui.dialogs.editReview.show);
-    const [editReview] = useEditReviewMutation();
+    const [addReview] = useAddReviewMutation();
+    const user = useAppSelector(state => state.auth);
+    const open = useAppSelector(state => state.ui.dialogs.review.write.show);
 
-    const titleId = "edit-review-dialog-title";
-    const contentId = "edit-review-dialog-content";
-    const ratingId = "edit-review-dialog-rating";
+    const titleId = "write-review-dialog-title";
+    const contentId = "write-review-dialog-content";
+    const ratingId = "write-review-dialog-rating";
 
-    const [title, setTitle] = useState(review.title);
-    const [content, setContent] = useState(review.content);
-    const [rating, setRating] = useState(review.rating);
+    const [title, setTitle] = useState("");
+    const [content, setContent] = useState("");
+    const [rating, setRating] = useState(1);
 
     const [isValidTitle, setIsValidTitle] = useState(false);
     const [isValidContent, setIsValidContent] = useState(false);
 
     const handleOnClose = () => {
-        setTitle(review.title);
-        setContent(review.content);
-        setRating(review.rating);
+        setTitle("");
+        setContent("");
+        setRating(1);
         setIsValidContent(false);
         setIsValidTitle(false);
     };
 
     return (
         <Dialog open={open} onClose={handleOnClose} fullWidth>
-            <DialogTitle>Edit your review</DialogTitle>
+            <DialogTitle>Write a review</DialogTitle>
             <DialogContent>
                 <Stack spacing={3}>
                     <Box>
@@ -62,7 +62,7 @@ const EditReviewDialog = ({ review, onPost }: Props) => {
                             fullWidth
                             required
                             variant="standard"
-                            value={title}
+                            placeholder="Summarise your review!"
                             onChange={e => {
                                 const value = e.target.value;
                                 setTitle(value);
@@ -81,7 +81,7 @@ const EditReviewDialog = ({ review, onPost }: Props) => {
                             name="content"
                             fullWidth
                             required
-                            value={content}
+                            placeholder="Describe your experience at the restaurant. Be descriptive!"
                             onChange={e => {
                                 const value = e.target.value;
                                 setContent(value);
@@ -104,28 +104,30 @@ const EditReviewDialog = ({ review, onPost }: Props) => {
                 </Stack>
             </DialogContent>
             <DialogActions>
-                <Button onClick={() => dispatch(setShowEditReviewDialog(false))}>Cancel</Button>
+                <Button onClick={() => dispatch(setShowWriteReviewDialog(false))}>Cancel</Button>
                 <Button
                     disabled={!isValidTitle || !isValidContent}
                     onClick={() => {
-                        dispatch(setShowEditReviewDialog(false));
-                        editReview({
-                            id: review.id,
-                            content,
-                            title,
+                        addReview({
+                            restaurantId,
+                            userId: user!.id,
                             rating,
+                            title,
+                            content,
                             timestamp: timestamp(),
-                            isEdited: true,
                         })
-                            .then(() => onPost())
+                            .then(() => {
+                                dispatch(setShowWriteReviewDialog(false));
+                                onPost();
+                            })
                             .catch(console.log);
                     }}
                 >
-                    Save
+                    Post
                 </Button>
             </DialogActions>
         </Dialog>
     );
 };
 
-export default EditReviewDialog;
+export default WriteReviewDialog;
