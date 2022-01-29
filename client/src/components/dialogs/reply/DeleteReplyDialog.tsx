@@ -36,7 +36,7 @@ const DeleteReviewDialog = ({ replyId }: Props) => {
                             dispatch(
                                 createSnack({
                                     message: "Reply deleted!",
-                                    severity: "sucesss",
+                                    severity: "success",
                                 })
                             );
                         } catch (err) {
