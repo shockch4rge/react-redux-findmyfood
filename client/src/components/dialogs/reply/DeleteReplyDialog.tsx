@@ -1,0 +1,42 @@
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    CircularProgress,
+} from "@mui/material";
+import { setShowDeleteReplyDialog } from "../../../app/slices/ui/dialogs/replyDialog";
+import { useDeleteReplyMutation } from "../../../app/services/replies";
+import { useAppSelector } from "../../../hooks/useAppSelector";
+import { useAppDispatch } from "../../../hooks/useAppDispatch";
+
+interface Props {
+    replyId: string;
+}
+
+const DeleteReviewDialog = ({ replyId }: Props) => {
+    const dispatch = useAppDispatch();
+    const [deleteReply, { isLoading }] = useDeleteReplyMutation();
+    const open = useAppSelector(state => state.ui.dialogs.reply.delete.show);
+
+    return (
+        <Dialog open={open} fullWidth>
+            <DialogTitle>Are you sure you want to delete this reply?</DialogTitle>
+            <DialogContent>{isLoading && <CircularProgress />}</DialogContent>
+            <DialogActions>
+                <Button onClick={() => dispatch(setShowDeleteReplyDialog(false))}>Cancel</Button>
+                <Button
+                    color="error"
+                    onClick={() => {
+                        deleteReply(replyId).then(() => dispatch(setShowDeleteReplyDialog(false)));
+                    }}
+                >
+                    Delete
+                </Button>
+            </DialogActions>
+        </Dialog>
+    );
+};
+
+export default DeleteReviewDialog;
