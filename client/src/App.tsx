@@ -8,17 +8,14 @@ import RegistrationPage from "./pages/RegistrationPage";
 import AboutPage from "./pages/AboutPage";
 import HomePage from "./pages/HomePage";
 import { ThemeProvider } from "@mui/material";
-import LoginPage from "./pages/LoginPage";
 import RestaurantPage from "./pages/RestaurantPage";
 import ScrollToTop from "./utilities/ScrollToTop";
+import HomePageSkeleton from "./components/skeletons/HomePageSkeleton";
+import RestaurantPageSkeleton from "./components/skeletons/RestaurantPageSkeleton";
+import Snack from "./components/common/Snack";
 
 function App() {
     const routes = useRoutes([
-        {
-            path: "login",
-            caseSensitive: true,
-            element: <LoginPage />,
-        },
         {
             path: "register",
             caseSensitive: true,
@@ -40,6 +37,11 @@ function App() {
             element: <RestaurantPage />,
         },
         {
+            path: "skeleton",
+            caseSensitive: true,
+            element: <RestaurantPageSkeleton />,
+        },
+        {
             path: "*",
             caseSensitive: true,
             element: <PageNotFound />,
@@ -50,6 +52,7 @@ function App() {
         <ThemeProvider theme={theme}>
             <Provider store={store}>
                 <ScrollToTop>{routes}</ScrollToTop>
+                <Snack />
             </Provider>
         </ThemeProvider>
     );
