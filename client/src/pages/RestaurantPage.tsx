@@ -36,44 +36,57 @@ import {
     useGetRestaurantQuery,
     useUpdateRestaurantRatingMutation,
 } from "../app/services/restaurants";
-import { useGetRestaurantReviewsQuery, useGetReviewQuery } from "../app/services/reviews";
+import {
+    useGetRestaurantReviewsQuery,
+    useLazyGetReviewByUserAndRestaurantIdQuery,
+} from "../app/services/reviews";
 import DeleteReviewDialog from "../components/dialogs/review/DeleteReviewDialog";
 import { ReviewData } from "../models/Review";
 import Footer from "../components/Footer";
 import RestaurantPageSkeleton from "../components/skeletons/RestaurantPageSkeleton";
 import { setShowLoginDialog } from "../app/slices/ui/dialogs/loginDialog";
+import { createSnack } from "../app/slices/ui/snackbars/snack";
 
 const RestaurantPage = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const { restaurantId } = useParams();
+    const restaurantId = useParams().restaurantId!;
     const user = useAppSelector(state => state.auth);
+
+    const [userReview, setUserReview] = useState<ReviewData | undefined>(undefined);
 
     const {
         isLoading: restaurantLoading,
         data: restaurant,
         error,
-    } = useGetRestaurantQuery(restaurantId!);
+    } = useGetRestaurantQuery(restaurantId);
 
     const {
         isLoading: reviewsLoading,
         data: reviews,
         refetch: refetchReviews,
-    } = useGetRestaurantReviewsQuery(restaurantId!);
+    } = useGetRestaurantReviewsQuery(restaurantId);
 
+    const [fetchUserReview] = useLazyGetReviewByUserAndRestaurantIdQuery();
     const [updateRestaurantRating] = useUpdateRestaurantRatingMutation();
-    const [userReview, setUserReview] = useState<ReviewData | undefined>(undefined);
+
+    useEffect(() => {
+        if (user) {
+            fetchUserReview({ userId: user.id, restaurantId: restaurantId })
+                .unwrap()
+                .then(setUserReview)
+                .catch(console.log);
+        }
+    }, [user]);
 
     const onPost = () => {
         refetchReviews();
+        fetchUserReview({ userId: user!.id, restaurantId: restaurantId });
         updateRestaurantRating({
-            id: restaurantId!,
-            rating: reviews!.reduce((acc, review) => +acc + +review.rating, 0) / reviews!.length,
+            id: restaurantId,
+            rating: +(reviews!.reduce((acc, review) => +acc + +review.rating, 0) / reviews!.length),
         });
-        setUserReview(reviews!.find(review => review.userId === user!.id));
     };
-
-    useEffect(() => {}, [reviews]);
 
     const isLoading = restaurantLoading || reviewsLoading || !restaurant || !reviews;
 
@@ -112,6 +125,7 @@ const RestaurantPage = () => {
                                 {restaurant.name}
                             </Typography>
                         </Card>
+
                         <Divider sx={{ my: 5 }}>DETAILS</Divider>
 
                         <Stack
@@ -210,7 +224,10 @@ const RestaurantPage = () => {
                                             justifyContent="center"
                                             alignItems="center"
                                         >
-                                            <Avatar sx={{ width: 80, height: 80, mb: 1 }} />
+                                            <Avatar
+                                                sx={{ width: 80, height: 80, mb: 1 }}
+                                                src={user.avatarPath}
+                                            />
                                         </Box>
                                         <Typography textAlign="center">{user.username}</Typography>
                                     </Container>
@@ -237,25 +254,45 @@ const RestaurantPage = () => {
                                         >
                                             {userReview.timestamp}
                                         </Typography>
-                                        <Button
-                                            onClick={() => dispatch(setShowEditReviewDialog(true))}
-                                            startIcon={<EditIcon />}
-                                        >
-                                            Edit Review
-                                        </Button>
 
-                                        <EditReviewDialog review={userReview} onPost={onPost} />
+                                        <Stack direction="row" spacing={3}>
+                                            <Button
+                                                onClick={() =>
+                                                    dispatch(setShowEditReviewDialog(true))
+                                                }
+                                                startIcon={<EditIcon />}
+                                            >
+                                                Edit Review
+                                            </Button>
 
-                                        <Button
-                                            onClick={() =>
-                                                dispatch(setShowDeleteReviewDialog(true))
-                                            }
-                                            startIcon={<DeleteIcon />}
-                                        >
-                                            Delete Review
-                                        </Button>
+                                            <EditReviewDialog review={userReview} onPost={onPost} />
 
-                                        <DeleteReviewDialog reviewId={userReview.id} />
+                                            <Button
+                                                onClick={() =>
+                                                    dispatch(setShowDeleteReviewDialog(true))
+                                                }
+                                                startIcon={<DeleteIcon />}
+                                            >
+                                                Delete Review
+                                            </Button>
+                                        </Stack>
+
+                                        <DeleteReviewDialog
+                                            reviewId={userReview.id}
+                                            onDelete={() => {
+                                                refetchReviews();
+                                                setUserReview(undefined);
+                                                updateRestaurantRating({
+                                                    id: restaurantId!,
+                                                    rating: +(
+                                                        reviews!.reduce(
+                                                            (acc, review) => +acc + +review.rating,
+                                                            0
+                                                        ) / reviews!.length
+                                                    ),
+                                                });
+                                            }}
+                                        />
                                     </Box>
                                 </Card>
                             )}
