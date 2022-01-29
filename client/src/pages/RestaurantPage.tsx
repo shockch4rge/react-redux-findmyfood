@@ -25,9 +25,9 @@ import {
     setShowDeleteReviewDialog,
     setShowEditReviewDialog,
     setShowWriteReviewDialog,
-} from "../app/slices/ui/dialogs";
-import EditReviewDialog from "../components/dialogs/EditReviewDialog";
-import WriteReviewDialog from "../components/dialogs/WriteReviewDialog";
+} from "../app/slices/ui/dialogs/reviewDialog";
+import EditReviewDialog from "../components/dialogs/review/EditReviewDialog";
+import WriteReviewDialog from "../components/dialogs/review/WriteReviewDialog";
 import DetailsCard from "../components/restaurant/DetailsCard";
 import LocationCard from "../components/restaurant/LocationCard";
 import RatingsCard from "../components/restaurant/RatingsCard";
@@ -37,10 +37,11 @@ import {
     useUpdateRestaurantRatingMutation,
 } from "../app/services/restaurants";
 import { useGetRestaurantReviewsQuery, useGetReviewQuery } from "../app/services/reviews";
-import DeleteReviewDialog from "../components/dialogs/DeleteReviewDialog";
+import DeleteReviewDialog from "../components/dialogs/review/DeleteReviewDialog";
 import { ReviewData } from "../models/Review";
 import Footer from "../components/Footer";
 import RestaurantPageSkeleton from "../components/skeletons/RestaurantPageSkeleton";
+import { setShowLoginDialog } from "../app/slices/ui/dialogs/loginDialog";
 
 const RestaurantPage = () => {
     const navigate = useNavigate();
@@ -72,7 +73,7 @@ const RestaurantPage = () => {
         setUserReview(reviews!.find(review => review.userId === user!.id));
     };
 
-    useEffect(() => {}, [reviews, userReview]);
+    useEffect(() => {}, [reviews]);
 
     const isLoading = restaurantLoading || reviewsLoading || !restaurant || !reviews;
 
@@ -154,7 +155,7 @@ const RestaurantPage = () => {
                                     >
                                         <Button
                                             variant="outlined"
-                                            onClick={() => navigate("/login")}
+                                            onClick={() => dispatch(setShowLoginDialog(true))}
                                         >
                                             Login
                                         </Button>
