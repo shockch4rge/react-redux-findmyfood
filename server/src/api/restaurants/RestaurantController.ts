@@ -25,8 +25,18 @@ export default class RestaurantController {
         try {
             await RestaurantRepository.add(request.body);
             response.json("Added restaurant!");
+        } catch (err) {
+            response.status(500).send(err);
         }
-        catch (err) {
+    }
+
+    public static async updateRating(request: Request, response: Response) {
+        console.log(request.body);
+
+        try {
+            await RestaurantRepository.updateRating(request.params.id, request.body.rating);
+            response.json("Updated restaurant rating!");
+        } catch (err) {
             response.status(500).send(err);
         }
     }

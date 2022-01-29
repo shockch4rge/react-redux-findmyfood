@@ -16,5 +16,10 @@ module.exports = [
         uri: "/restaurant",
         method: "post",
         proc: restaurants.add,
+    },
+    {
+        uri: "/restaurant/:id/updateRating",
+        method: "put",
+        proc: restaurants.updateRating,
     }
 ] as RouteSchema[];

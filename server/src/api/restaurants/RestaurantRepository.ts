@@ -59,4 +59,8 @@ export default class RestaurantRepository {
         ]);
         await db.query(`COMMIT`);
     }
+
+    public static async updateRating(id: string, rating: number) {
+        await db.query(`UPDATE restaurant SET rating = ? WHERE id = ?`, [rating, id]);
+    }
 }

@@ -18,7 +18,17 @@ const restaurants = api.injectEndpoints({
                 method: "get",
             }),
         }),
+
+        updateRestaurantRating: builder.mutation<void, { id: string; rating: number }>({
+            query: ({ id, rating }) => ({
+                url: `/restaurant/${id}/updateRating`,
+                method: "put",
+                body: {
+                    rating,
+                },
+            }),
+        }),
     }),
 });
 
-export const { useGetAllRestaurantsQuery, useGetRestaurantQuery } = restaurants;
+export const { useGetAllRestaurantsQuery, useGetRestaurantQuery, useUpdateRestaurantRatingMutation } = restaurants;
