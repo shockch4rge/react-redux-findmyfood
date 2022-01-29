@@ -24,7 +24,7 @@ const users = api.injectEndpoints({
             query: user => ({
                 url: `/user`,
                 method: "post",
-                body: user
+                body: user,
             }),
         }),
 
@@ -48,6 +48,8 @@ const users = api.injectEndpoints({
                 url: `/login/${email}&${password}`,
                 method: "get",
             }),
+
+            keepUnusedDataFor: 0,
         }),
     }),
 });
