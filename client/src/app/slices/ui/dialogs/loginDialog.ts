@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const loginDialog = createSlice({
-    name: "loginDialog",
+    name: "login",
 
     initialState: {
         show: false,
@@ -15,4 +15,4 @@ const loginDialog = createSlice({
 });
 
 export const { setShowLoginDialog } = loginDialog.actions;
-export default loginDialog.reducer;
+export default loginDialog;

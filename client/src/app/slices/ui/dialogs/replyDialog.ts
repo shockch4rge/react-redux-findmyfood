@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { ReplyData } from "../../../../models/Reply";
 
 const replyDialog = createSlice({
-    name: "replyDialog",
+    name: "reply",
 
     initialState: {
         write: {
@@ -36,4 +36,4 @@ const replyDialog = createSlice({
 
 export const { setShowDeleteReplyDialog, setShowEditReplyDialog, setShowWriteReplyDialog } =
     replyDialog.actions;
-export default replyDialog.reducer;
+export default replyDialog;

@@ -1,27 +1,29 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import authReducer from "./slices/auth/auth";
-import replyDialog from "./slices/ui/dialogs/replyDialog";
-import reviewDialog from "./slices/ui/dialogs/reviewDialog";
-import steps from "./slices/ui/steps";
+import authSlice from "./slices/auth/auth";
+import replyDialogSlice from "./slices/ui/dialogs/replyDialog";
+import reviewDialogSlice from "./slices/ui/dialogs/reviewDialog";
+import loginDialogSlice from "./slices/ui/dialogs/loginDialog";
+import stepsSlice from "./slices/steps/steps";
 import endpointTester from "./middleware/endpointTester";
 import api from "./services/api";
-import loginDialog from "./slices/ui/dialogs/loginDialog";
+import snackSlice from "./slices/ui/snackbars/snack";
 
 const dialogs = combineReducers({
-    reply: replyDialog,
-    review: reviewDialog,
-    login: loginDialog,
+    [replyDialogSlice.name]: replyDialogSlice.reducer,
+    [reviewDialogSlice.name]: reviewDialogSlice.reducer,
+    [loginDialogSlice.name]: loginDialogSlice.reducer,
 });
 
 const uiReducer = combineReducers({
     dialogs,
-    steps,
+    [stepsSlice.name]: stepsSlice.reducer,
+    [snackSlice.name]: snackSlice.reducer,
 });
 
 const store = configureStore({
     reducer: {
         [api.reducerPath]: api.reducer,
-        auth: authReducer,
+        [authSlice.name]: authSlice.reducer,
         ui: uiReducer,
     },
     middleware: gDM => gDM().concat(endpointTester, api.middleware),

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const reviewDialogSlice = createSlice({
-    name: "reviewDialog",
+    name: "review",
 
     initialState: {
         write: {
@@ -34,4 +34,4 @@ const reviewDialogSlice = createSlice({
 
 export const { setShowDeleteReviewDialog, setShowEditReviewDialog, setShowWriteReviewDialog } =
     reviewDialogSlice.actions;
-export default reviewDialogSlice.reducer;
+export default reviewDialogSlice;

@@ -3,7 +3,7 @@ import { UserData } from "../../../models/User"
 
 type LogIn = UserData;
 
-const slice = createSlice({
+const auth = createSlice({
     name: "auth",
 
     initialState: null as UserData | null,
@@ -19,5 +19,5 @@ const slice = createSlice({
     },
 });
 
-export const { userLoggedIn, userLoggedOut } = slice.actions;
-export default slice.reducer;
+export const { userLoggedIn, userLoggedOut } = auth.actions;
+export default auth
