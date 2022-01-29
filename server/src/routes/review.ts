@@ -8,6 +8,11 @@ module.exports = [
         proc: reviews.get,
     },
     {
+        uri: "/review/user/:userId/restaurant/:restaurantId",
+        method: "get",
+        proc: reviews.getByUserAndRestaurantId,
+    },
+    {
         uri: "/review",
         method: "post",
         proc: reviews.add,

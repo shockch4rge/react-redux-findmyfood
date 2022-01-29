@@ -11,6 +11,12 @@ export default class ReviewRepository {
         return (results[0] as RowDataPacket[])[0];
     }
 
+    public static async getByUserAndRestaurantId(userId: string, restaurantId: string) {
+        const query = `SELECT * FROM review WHERE user_id = ? AND restaurant_id = ?`;
+        const reviews = await db.query(query, [userId, restaurantId]);
+        return (reviews[0] as RowDataPacket[])[0];
+    }
+
     public static async delete(id: string) {
         const query = `DELETE FROM review WHERE id = ?`;
         await db.query(query, [id]);

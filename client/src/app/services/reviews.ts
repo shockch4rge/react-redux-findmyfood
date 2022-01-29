@@ -19,6 +19,16 @@ const reviews = api.injectEndpoints({
             }),
         }),
 
+        getReviewByUserAndRestaurantId: builder.query<
+            ReviewData,
+            { userId: string; restaurantId: string }
+        >({
+            query: ({ userId, restaurantId }) => ({
+                url: `/review/user/${userId}/restaurant/${restaurantId}`,
+                method: "get",
+            }),
+        }),
+
         deleteReview: builder.mutation<void, string>({
             query: id => ({
                 url: `/review/${id}`,
@@ -56,4 +66,5 @@ export const {
     useEditReviewMutation,
     useGetRestaurantReviewsQuery,
     useGetReviewQuery,
+    useLazyGetReviewByUserAndRestaurantIdQuery,
 } = reviews;
