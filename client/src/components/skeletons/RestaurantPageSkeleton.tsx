@@ -20,7 +20,12 @@ const RestaurantPageSkeleton = () => {
                 mb={9}
             >
                 {detailCards.map((_, index) => (
-                    <Skeleton variant="rectangular" width={350} height={300} />
+                    <Skeleton
+                        key={`detail_card_skeleton_${index}`}
+                        variant="rectangular"
+                        width={350}
+                        height={300}
+                    />
                 ))}
             </Stack>
 
@@ -40,7 +45,11 @@ const RestaurantPageSkeleton = () => {
             </Box>
             <Stack spacing={4}>
                 {reviewCards.map((_, index) => (
-                    <Skeleton variant="rectangular" height={200} />
+                    <Skeleton
+                        key={`review_card_skeleton_${index}`}
+                        variant="rectangular"
+                        height={200}
+                    />
                 ))}
             </Stack>
         </Container>
