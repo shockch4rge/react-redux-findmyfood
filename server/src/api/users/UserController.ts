@@ -48,7 +48,7 @@ export default class UserController {
             const result = await UserRepository.login(email, password);
             response.json(User.toJSON(result));
         } catch (err) {
-            console.log(err)
+            console.log(err);
             response.status(500).send(err);
         }
     }

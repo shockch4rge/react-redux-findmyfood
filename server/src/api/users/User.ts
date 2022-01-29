@@ -34,7 +34,7 @@ export default class User implements UserData {
             firstName: data.first_name,
             lastName: data.last_name,
             gender: data.gender,
-            avatarPath: `${config.api.baseUrl}/uploads/${data.avatar_path}`,
+            avatarPath: `${config.api.uploadsUrl}/${data.avatar_path}`,
             email: data.email,
             password: data.password,
             address: data.address,
