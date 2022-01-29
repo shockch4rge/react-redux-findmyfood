@@ -19,6 +19,7 @@ import { userLoggedOut } from "../app/slices/auth/auth";
 import { useAppDispatch } from "../hooks/useAppDispatch";
 import { setShowLoginDialog } from "../app/slices/ui/dialogs/loginDialog";
 import LoginDialog from "./dialogs/login/LoginDialog";
+import { createSnack } from "../app/slices/ui/snackbars/snack";
 
 interface ButtonData {
     label: string;
@@ -83,7 +84,10 @@ const NavBar = () => {
             onClick: () => {
                 handleCloseUserMenu();
                 dispatch(userLoggedOut());
-                window.location.reload();
+                dispatch(createSnack({
+                    message: "You have been signed out.",
+                    severity: "success",
+                }))
             },
         },
     ] as ButtonData[];
