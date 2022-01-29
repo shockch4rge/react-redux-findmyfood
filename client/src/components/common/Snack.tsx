@@ -1,18 +1,25 @@
 import React, { useState } from "react";
 import { Snackbar, Alert, AlertProps, SnackbarProps } from "@mui/material";
+import { useAppSelector } from "../../hooks/useAppSelector";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { createSnack } from "../../app/slices/ui/snackbars/snack";
 
-interface Props {
-    severity: AlertProps["severity"];
-    message: string;
-    open: boolean;
-    onClose: () => void;
-    anchorOrigin?: SnackbarProps["anchorOrigin"];
-}
+const Snack = () => {
+    const { show, message, severity, anchorOrigin } = useAppSelector(state => state.ui.snack);
+    const dispatch = useAppDispatch();
 
-const Snack = ({ message, severity, open, onClose, anchorOrigin }: Props) => {
+    const handleOnClose = () => {
+        dispatch(createSnack({ show: false }));
+    };
+
     return (
-        <Snackbar open={open} anchorOrigin={anchorOrigin} autoHideDuration={6000} onClose={onClose}>
-            <Alert onClose={onClose} severity={severity} sx={{ width: "100%" }}>
+        <Snackbar
+            open={show}
+            anchorOrigin={anchorOrigin}
+            autoHideDuration={3000}
+            onClose={handleOnClose}
+        >
+            <Alert onClose={handleOnClose} severity={severity} sx={{ width: "100%" }}>
                 {message}
             </Alert>
         </Snackbar>
