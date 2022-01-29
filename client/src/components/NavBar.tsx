@@ -17,6 +17,8 @@ import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../hooks/useAppSelector";
 import { userLoggedOut } from "../app/slices/auth/auth";
 import { useAppDispatch } from "../hooks/useAppDispatch";
+import { setShowLoginDialog } from "../app/slices/ui/dialogs/loginDialog";
+import LoginDialog from "./dialogs/login/LoginDialog";
 
 interface ButtonData {
     label: string;
@@ -27,9 +29,11 @@ const settingsButtons = ["Profile", "Settings", "Sign Out"];
 
 const NavBar = () => {
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-    const dispatch = useAppDispatch();
+
     const user = useAppSelector(state => state.auth);
 
     // #region handlers
@@ -59,6 +63,10 @@ const NavBar = () => {
             label: "About",
             onClick: () => navigate("/about"),
         },
+        {
+            label: "Bookmarks",
+            onClick: () => navigate("/bookmarks"),
+        },
     ] as ButtonData[];
 
     const settingsButtons = [
@@ -83,10 +91,10 @@ const NavBar = () => {
     const loginButtons = [
         {
             label: "Login",
-            onClick: () => navigate("/login"),
+            onClick: () => dispatch(setShowLoginDialog(true)),
         },
         {
-            label: "Register",
+            label: "Sign Up",
             onClick: () => navigate("/register"),
         },
     ] as ButtonData[];
@@ -175,7 +183,7 @@ const NavBar = () => {
                                     handleCloseNavMenu();
                                     button.onClick();
                                 }}
-                                sx={{ my: 2, display: "block" }}
+                                sx={{ m: 2, display: "block" }}
                             >
                                 {button.label}
                             </Button>
@@ -191,10 +199,7 @@ const NavBar = () => {
                                         onClick={handleOpenUserMenu}
                                         sx={{ p: 0 }}
                                     >
-                                        <Avatar
-                                            alt="Remy Sharp"
-                                            src="https://picsum.photos/seed/picsum/536/354"
-                                        />
+                                        <Avatar alt="user avatar" src={user.avatarPath} />
                                     </IconButton>
                                 </Tooltip>
                             </>
@@ -205,6 +210,8 @@ const NavBar = () => {
                                         {button.label}
                                     </Button>
                                 ))}
+
+                                <LoginDialog />
                             </>
                         )}
 
