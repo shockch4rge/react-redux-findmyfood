@@ -16,12 +16,14 @@ import { setShowEditReviewDialog, setEditReviewDialogPayload } from "../../app/s
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { ReviewData } from "../../models/Review";
+import { timestamp } from "../../utilities/timestamp";
 
 interface Props {
     review: ReviewData;
+    onPost: () => void;
 }
 
-const EditReviewDialog = ({ review }: Props) => {
+const EditReviewDialog = ({ review, onPost }: Props) => {
     const dispatch = useAppDispatch();
     const open = useAppSelector(state => state.ui.dialogs.editReview.show);
     const [editReview] = useEditReviewMutation();
@@ -112,11 +114,11 @@ const EditReviewDialog = ({ review }: Props) => {
                             content,
                             title,
                             rating,
-                            timestamp: new Date(Date.now()),
+                            timestamp: timestamp(),
                             isEdited: true,
                         })
-                            .unwrap()
-                            .then(data => console.log(data));
+                            .then(() => onPost())
+                            .catch(console.log);
                     }}
                 >
                     Save
