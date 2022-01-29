@@ -19,7 +19,7 @@ const replies = api.injectEndpoints({
             }),
         }),
 
-        addReply: builder.mutation<void, ReplyData>({
+        addReply: builder.mutation<void, Omit<ReplyData, "id" | "isEdited">>({
             query: reply => ({
                 url: `/reply`,
                 method: "post",
