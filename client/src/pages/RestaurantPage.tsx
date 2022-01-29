@@ -18,16 +18,13 @@ import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import NavBar from "../components/NavBar";
 import { useAppSelector } from "../hooks/useAppSelector";
 import React, { useEffect, useState } from "react";
-import User from "../models/User";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import {
-    setEditReviewDialogPayload,
     setShowDeleteReviewDialog,
     setShowEditReviewDialog,
     setShowWriteReviewDialog,
-    setWriteReviewDialogPayload,
 } from "../app/slices/ui/dialogs";
 import EditReviewDialog from "../components/dialogs/EditReviewDialog";
 import WriteReviewDialog from "../components/dialogs/WriteReviewDialog";
@@ -35,13 +32,21 @@ import DetailsCard from "../components/restaurant/DetailsCard";
 import LocationCard from "../components/restaurant/LocationCard";
 import RatingsCard from "../components/restaurant/RatingsCard";
 import ReviewCard from "../components/restaurant/ReviewCard";
-import { useGetRestaurantQuery } from "../app/services/restaurants";
-import { useGetRestaurantReviewsQuery } from "../app/services/reviews";
+import {
+    useGetRestaurantQuery,
+    useUpdateRestaurantRatingMutation,
+} from "../app/services/restaurants";
+import { useGetRestaurantReviewsQuery, useGetReviewQuery } from "../app/services/reviews";
+import DeleteReviewDialog from "../components/dialogs/DeleteReviewDialog";
+import { ReviewData } from "../models/Review";
+import Footer from "../components/Footer";
+import RestaurantPageSkeleton from "../components/skeletons/RestaurantPageSkeleton";
 
 const RestaurantPage = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { restaurantId } = useParams();
+    const user = useAppSelector(state => state.auth);
 
     const {
         isLoading: restaurantLoading,
@@ -55,20 +60,28 @@ const RestaurantPage = () => {
         refetch: refetchReviews,
     } = useGetRestaurantReviewsQuery(restaurantId!);
 
-    const user = useAppSelector(state => state.auth);
+    const [updateRestaurantRating] = useUpdateRestaurantRatingMutation();
+    const [userReview, setUserReview] = useState<ReviewData | undefined>(undefined);
+
+    const onPost = () => {
+        refetchReviews();
+        updateRestaurantRating({
+            id: restaurantId!,
+            rating: reviews!.reduce((acc, review) => +acc + +review.rating, 0) / reviews!.length,
+        });
+        setUserReview(reviews!.find(review => review.userId === user!.id));
+    };
+
+    useEffect(() => {}, [reviews, userReview]);
 
     const isLoading = restaurantLoading || reviewsLoading || !restaurant || !reviews;
-    const userReview = reviews?.find(review => review.userId === user?.id);
 
     return (
         <>
             {error ? (
                 <>Oh no, something went wrong!</>
             ) : isLoading ? (
-                <Container>
-                    <NavBar />
-                    <Skeleton variant="rectangular" width={210} height={118} />
-                </Container>
+                <RestaurantPageSkeleton />
             ) : (
                 <>
                     <NavBar />
@@ -107,10 +120,7 @@ const RestaurantPage = () => {
                             mb={7}
                         >
                             <RatingsCard restaurant={restaurant} reviews={reviews} />
-                            <WriteReviewDialog
-                                restaurantId={restaurant.id}
-                                onPost={() => refetchReviews()}
-                            />
+                            <WriteReviewDialog restaurantId={restaurant.id} onPost={onPost} />
                             <DetailsCard restaurant={restaurant} />
                             <LocationCard restaurant={restaurant} />
                         </Stack>
@@ -177,7 +187,7 @@ const RestaurantPage = () => {
 
                                     <WriteReviewDialog
                                         restaurantId={restaurant.id}
-                                        onPost={() => refetchReviews()}
+                                        onPost={onPost}
                                     />
                                 </Stack>
                             )}
@@ -232,6 +242,9 @@ const RestaurantPage = () => {
                                         >
                                             Edit Review
                                         </Button>
+
+                                        <EditReviewDialog review={userReview} onPost={onPost} />
+
                                         <Button
                                             onClick={() =>
                                                 dispatch(setShowDeleteReviewDialog(true))
@@ -240,12 +253,9 @@ const RestaurantPage = () => {
                                         >
                                             Delete Review
                                         </Button>
-                                    </Box>
 
-                                    <EditReviewDialog
-                                        review={userReview}
-                                        onPost={() => refetchReviews()}
-                                    />
+                                        <DeleteReviewDialog reviewId={userReview.id} />
+                                    </Box>
                                 </Card>
                             )}
                         </Box>
@@ -256,12 +266,12 @@ const RestaurantPage = () => {
                             </Typography>
 
                             <Stack spacing={3}>
-                                {reviews.length >= 1 &&
+                                {reviews &&
                                     reviews.map(review => (
                                         <ReviewCard key={review.id} review={review} />
                                     ))}
 
-                                {reviews.length === 0 && (
+                                {reviews.length <= 0 && (
                                     <Box
                                         mb={10}
                                         display="flex"
@@ -277,6 +287,7 @@ const RestaurantPage = () => {
                             </Stack>
                         </Box>
                     </Container>
+                    <Footer />
                 </>
             )}
         </>
