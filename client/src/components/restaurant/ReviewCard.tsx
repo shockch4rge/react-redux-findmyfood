@@ -28,13 +28,28 @@ interface Props {
 const ReviewCard = ({ review }: Props) => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const userLoggedIn = useAppSelector(state => state.auth);
-    const { isLoading: userLoading, data: user } = useGetUserQuery(review.userId);
-    const { isLoading: repliesLoading, data: replies, refetch: refetchReplies } = useGetReviewRepliesQuery(review.id);
+    // get the current/logged in user from the store
+    const activeUser = useAppSelector(state => state.auth);
+    // get the replies to this review
+    const {
+        isLoading: repliesLoading,
+        data: replies,
+        refetch: refetchReplies,
+    } = useGetReviewRepliesQuery(review.id);
+    // get the poster of this review
+    const { isLoading: userLoading, data: poster } = useGetUserQuery(review.userId);
 
     const onPost = () => {
         refetchReplies();
-    }
+    };
+
+    const onEdit = () => {
+        refetchReplies();
+    };
+
+    const onDelete = () => {
+        refetchReplies();
+    };
 
     return (
         <>
@@ -49,9 +64,9 @@ const ReviewCard = ({ review }: Props) => {
             >
                 <Container sx={{ width: "fit-content" }}>
                     <Box display="flex" justifyContent="center" alignItems="center">
-                        <Avatar sx={{ width: 80, height: 80, mb: 1 }} src={user?.avatarPath} />
+                        <Avatar sx={{ width: 80, height: 80, mb: 1 }} src={poster?.avatarPath} />
                     </Box>
-                    <Typography textAlign="center">{user?.username}</Typography>
+                    <Typography textAlign="center">{poster?.username}</Typography>
                 </Container>
                 <Divider orientation="vertical" flexItem sx={{ ml: 2, mr: 4 }} />
                 <Box width="100%">
@@ -68,26 +83,36 @@ const ReviewCard = ({ review }: Props) => {
                         {review.isEdited ? "Edited" : "Posted"} {review.timestamp}
                     </Typography>
 
-                    {userLoggedIn ? (
-                        <Button
-                            variant="outlined"
-                            onClick={() => dispatch(setShowWriteReplyDialog(true))}
-                            startIcon={<AddIcon />}
-                        >
-                            Add Reply
+                    {/* active user is logged in and review isn't posted by them */}
+                    {activeUser && review.userId !== activeUser.id ? (
+                        <Box>
+                            <Button
+                                variant="outlined"
+                                onClick={() => dispatch(setShowWriteReplyDialog(true))}
+                                startIcon={<AddIcon />}
+                            >
+                                Add Reply
+                            </Button>
+
+                            <WriteReplyDialog review={review} onPost={onPost} />
+                        </Box>
+                    ) : // active user is logged in and review is posted by them
+                    activeUser && review.userId === activeUser.id ? (
+                        <Button variant="outlined" disabled={true}>
+                            You can't reply to your own reviews!
                         </Button>
                     ) : (
-                        <Button variant="outlined" onClick={() => dispatch(setShowLoginDialog(true))}>
+                        <Button
+                            variant="outlined"
+                            onClick={() => dispatch(setShowLoginDialog(true))}
+                        >
                             Sign in to reply!
                         </Button>
                     )}
                 </Box>
             </Card>
-            {replies?.slice(0, 2).map(reply => (
-                <ReplyCard key={reply.id} reply={reply} />
-            ))}
-
-            <WriteReplyDialog review={review} onPost={onPost}/>
+            {replies &&
+                replies.slice(0, 2).map(reply => <ReplyCard key={reply.id} reply={reply} />)}
         </>
     );
 };
