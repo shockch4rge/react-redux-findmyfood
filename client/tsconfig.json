@@ -14,7 +14,14 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+
+    "baseUrl": "./src",
+    "paths": {
+      "@hooks/*": ["./hooks/*"],
+      "@components/*": ["./components/*"],
+    }
   },
-  "include": ["./src"]
+  "include": ["./src/**/*.ts"],
+  "exclude": ["node_modules", ".vscode", "**/*.spec.ts", "**/*.d.ts"],
 }
