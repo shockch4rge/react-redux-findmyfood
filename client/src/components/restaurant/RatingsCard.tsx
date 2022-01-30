@@ -31,9 +31,15 @@ const RatingsCard = ({ restaurant, reviews }: Props) => {
                 }}
             >
                 <CardContent>
-                    <Typography variant="h2">{restaurant.averageRating}</Typography>
+                    <Typography variant="h2">
+                        {reviews.length >= 1 ? restaurant.averageRating : "0.0"}
+                    </Typography>
                     <Box sx={{ display: "flex" }}>
-                        <Rating readOnly value={+restaurant.averageRating} precision={0.5} />
+                        <Rating
+                            readOnly
+                            value={reviews.length >= 1 ? +restaurant.averageRating : 0.0}
+                            precision={0.5}
+                        />
                         <Typography ml={1} fontSize={16}>
                             ({reviews.length} {reviews.length === 1 ? "review" : "reviews"})
                         </Typography>
