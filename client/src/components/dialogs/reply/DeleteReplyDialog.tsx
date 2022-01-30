@@ -14,9 +14,10 @@ import { createSnack } from "../../../app/slices/ui/snackbars/snack";
 
 interface Props {
     replyId: string;
+    onDelete: () => void;
 }
 
-const DeleteReviewDialog = ({ replyId }: Props) => {
+const DeleteReviewDialog = ({ replyId, onDelete }: Props) => {
     const dispatch = useAppDispatch();
     const [deleteReply, { isLoading }] = useDeleteReplyMutation();
     const open = useAppSelector(state => state.ui.dialogs.reply.delete.show);
@@ -39,6 +40,7 @@ const DeleteReviewDialog = ({ replyId }: Props) => {
                                     severity: "success",
                                 })
                             );
+                            onDelete();
                         } catch (err) {
                             console.log(err);
                             dispatch(

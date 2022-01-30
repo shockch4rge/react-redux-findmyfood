@@ -21,10 +21,10 @@ import { timestamp } from "../../../utilities/timestamp";
 
 interface Props {
     review: ReviewData;
-    onPost: () => void;
+    onEdit: () => void;
 }
 
-const EditReviewDialog = ({ review, onPost }: Props) => {
+const EditReviewDialog = ({ review, onEdit }: Props) => {
     const dispatch = useAppDispatch();
     const open = useAppSelector(state => state.ui.dialogs.review.edit.show);
     const [editReview] = useEditReviewMutation();
@@ -64,8 +64,7 @@ const EditReviewDialog = ({ review, onPost }: Props) => {
                             required
                             variant="standard"
                             value={title}
-                            onChange={e => {
-                                const value = e.target.value;
+                            onChange={({ target: { value } }) => {
                                 setTitle(value);
                                 setIsValidTitle(value.length >= 10 && value.length <= 55);
                             }}
@@ -97,7 +96,7 @@ const EditReviewDialog = ({ review, onPost }: Props) => {
                         <Rating
                             id={ratingId}
                             precision={0.5}
-                            value={rating}
+                            value={+rating}
                             onChange={(_, newRating) => setRating(newRating!)}
                         />
                     </Box>
@@ -124,12 +123,12 @@ const EditReviewDialog = ({ review, onPost }: Props) => {
                                     severity: "success",
                                 })
                             );
-                            onPost();
+                            onEdit();
                         } catch (err) {
                             console.log(err);
                             dispatch(
                                 createSnack({
-                                    message: "Error deleting review.",
+                                    message: "Error editing review.",
                                     severity: "error",
                                 })
                             );

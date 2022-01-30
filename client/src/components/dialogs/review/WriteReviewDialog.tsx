@@ -65,8 +65,7 @@ const WriteReviewDialog = ({ restaurantId, onPost }: Props) => {
                             required
                             variant="standard"
                             placeholder="Summarise your review!"
-                            onChange={e => {
-                                const value = e.target.value;
+                            onChange={({ target: { value } }) => {
                                 setTitle(value);
                                 setIsValidTitle(value.length >= 10 && value.length <= 55);
                             }}

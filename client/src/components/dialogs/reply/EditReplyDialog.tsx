@@ -21,10 +21,10 @@ import { timestamp } from "../../../utilities/timestamp";
 
 interface Props {
     reply: ReplyData;
-    onPost: () => void;
+    onEdit: () => void;
 }
 
-const EditReplyDialog = ({ reply, onPost }: Props) => {
+const EditReplyDialog = ({ reply, onEdit }: Props) => {
     const dispatch = useAppDispatch();
     const open = useAppSelector(state => state.ui.dialogs.reply.edit.show);
     const [editReply] = useEditReplyMutation();
@@ -83,7 +83,7 @@ const EditReplyDialog = ({ reply, onPost }: Props) => {
                                     severity: "success",
                                 })
                             );
-                            onPost();
+                            onEdit();
                         } catch (err) {
                             console.log(err);
                             dispatch(
