@@ -1,5 +1,6 @@
 import { UserData } from "../../models/User";
 import { userLoggedIn, userLoggedOut } from "../slices/auth/auth";
+import { cacher } from "../../utilities/cacher";
 import api from "./api";
 
 // #region query arg types
@@ -18,6 +19,8 @@ const users = api.injectEndpoints({
                 url: `/user/${id}`,
                 method: "get",
             }),
+
+            providesTags: cacher.cacheByIdArg("Users"),
         }),
 
         registerUser: builder.mutation<UserData, FormData>({
@@ -33,13 +36,14 @@ const users = api.injectEndpoints({
                 url: `/user/${id}`,
                 method: "delete",
             }),
+
+            invalidatesTags: cacher.invalidatesList("Users"),
         }),
 
         updateUser: builder.mutation<UserData, UserData>({
             query: updated => ({
                 url: `/user/${updated.id}`,
                 method: "put",
-                // body: bruhh gonna go sleep
             }),
         }),
 
@@ -49,7 +53,7 @@ const users = api.injectEndpoints({
                 method: "get",
             }),
 
-            keepUnusedDataFor: 0,
+            keepUnusedDataFor: 1,
         }),
     }),
 });
