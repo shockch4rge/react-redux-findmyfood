@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ReplyData } from "../../../../models/Reply";
 
 const replyDialog = createSlice({
     name: "reply",
@@ -7,7 +6,6 @@ const replyDialog = createSlice({
     initialState: {
         write: {
             show: false,
-            payload: {} as Pick<ReplyData, "content">,
         },
 
         edit: {
