@@ -47,7 +47,7 @@ export default class UserRepository {
         WHERE u.id = ?
         `;
 
-        const results = await db.query(query, [id]);        
+        const results = await db.query(query, [id]);
         return (results[0] as RowDataPacket[])[0];
     }
 
@@ -58,7 +58,7 @@ export default class UserRepository {
 
         // if no password received, user entered the wrong email
         if (possiblePassword.length <= 0) {
-            throw new Error("Email was incorrect!");
+            throw new Error("Could not find that email!");
         }
 
         const _password = possiblePassword[0]["password"];

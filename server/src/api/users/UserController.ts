@@ -49,7 +49,7 @@ export default class UserController {
             response.json(User.toJSON(result));
         } catch (err) {
             console.log(err);
-            response.status(500).send(err);
+            response.status(500).send((err as Error).message);
         }
     }
 
