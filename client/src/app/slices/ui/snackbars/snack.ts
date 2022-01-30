@@ -34,8 +34,15 @@ const snack = createSlice({
                 }
             });
         },
+
+        closeSnack: (state) => {
+            return ({
+                ...state,
+                show: false,
+            })
+        }
     },
 });
 
-export const { createSnack } = snack.actions;
+export const { createSnack, closeSnack } = snack.actions;
 export default snack;
