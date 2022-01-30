@@ -1,4 +1,5 @@
-import { Box, Card, Container, Avatar, Typography, Divider } from "@mui/material";
+import { Box, Card, Container, Avatar, Typography, Divider, Button } from "@mui/material";
+import { useAppSelector } from "../../hooks/useAppSelector";
 import { useGetUserQuery } from "../../app/services/users";
 import { ReplyData } from "../../models/Reply";
 
@@ -7,7 +8,10 @@ interface Props {
 }
 
 const ReplyCard = ({ reply }: Props) => {
-    const { isLoading: userLoading, data: user } = useGetUserQuery(reply.userId);
+    // get the current/logged in user from the store
+    const activeUser = useAppSelector(state => state.auth);
+    // get the poster of this reply
+    const { isLoading: posterLoading, data: poster } = useGetUserQuery(reply.userId);
 
     return (
         <Box display="flex" justifyContent="flex-end">
@@ -22,9 +26,9 @@ const ReplyCard = ({ reply }: Props) => {
             >
                 <Container sx={{ width: "fit-content" }}>
                     <Box display="flex" justifyContent="center" alignItems="center">
-                        <Avatar sx={{ width: 50, height: 50, mb: 1 }} src={user?.avatarPath} />
+                        <Avatar sx={{ width: 50, height: 50, mb: 1 }} src={poster?.avatarPath} />
                     </Box>
-                    <Typography textAlign="center">{user?.username}</Typography>
+                    <Typography textAlign="center">{poster?.username}</Typography>
                 </Container>
                 <Divider orientation="vertical" flexItem sx={{ ml: 1, mr: 3 }} />
                 <Box width="100%">
@@ -41,6 +45,14 @@ const ReplyCard = ({ reply }: Props) => {
                     >
                         {reply.isEdited ? "Edited" : "Posted"} {reply.timestamp}
                     </Typography>
+
+                    {/* active user is logged in and reply is posted by them */}
+                    {activeUser && reply.userId === activeUser.id && (
+                        <Box>
+                            <Button>Edit Reply</Button>
+                            <Button>Delete Reply</Button>
+                        </Box>
+                    )}
                 </Box>
             </Card>
         </Box>
