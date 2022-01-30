@@ -11,6 +11,7 @@ import {
     Button,
     IconButton,
     InputAdornment,
+    Link,
 } from "@mui/material";
 import { useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -19,9 +20,9 @@ import { useAppSelector } from "../../../hooks/useAppSelector";
 import { setShowLoginDialog } from "../../../app/slices/ui/dialogs/loginDialog";
 import { useAppDispatch } from "../../../hooks/useAppDispatch";
 import { useLazyLoginUserQuery } from "../../../app/services/users";
-import Snack from "../../common/Snack";
 import { userLoggedIn } from "../../../app/slices/auth/auth";
 import { createSnack } from "../../../app/slices/ui/snackbars/snack";
+import { Link as RouterLink } from "react-router-dom";
 
 const LoginDialog = () => {
     const open = useAppSelector(state => state.ui.dialogs.login.show);
@@ -81,15 +82,31 @@ const LoginDialog = () => {
                             ),
                         }}
                     />
-
-                    <Typography variant="body2">Don't have an account? Sign up!</Typography>
+                    <Box>
+                        <Typography variant="body2">
+                            Don't have an account?{" "}
+                            <Link component={RouterLink} to="/registernew">
+                                Sign up!
+                            </Link>
+                        </Typography>
+                        <Typography variant="body2">
+                            <Link component={RouterLink} to="/registernew">
+                                Forgot password?
+                            </Link>
+                        </Typography>
+                    </Box>
                 </Stack>
             </DialogContent>
             <DialogActions>
-                <Button variant="outlined" onClick={() => dispatch(setShowLoginDialog(false))}>
+                <Button
+                    size="large"
+                    variant="outlined"
+                    onClick={() => dispatch(setShowLoginDialog(false))}
+                >
                     Cancel
                 </Button>
                 <Button
+                    size="large"
                     variant="contained"
                     disabled={!isValidEmail || !isValidPassword}
                     onClick={async () => {
@@ -106,7 +123,7 @@ const LoginDialog = () => {
                         } catch (err) {
                             dispatch(
                                 createSnack({
-                                    message: "Invalid email or password",
+                                    message: err.data,
                                     severity: "error",
                                 })
                             );
@@ -116,20 +133,6 @@ const LoginDialog = () => {
                     Login
                 </Button>
             </DialogActions>
-
-            {/* <Snack
-                open={openErrorSnack}
-                severity="error"
-                message="Error logging in!"
-                anchorOrigin={{ vertical: "top", horizontal: "center" }}
-                onClose={() => setOpenErrorSnack(false)}
-            />
-            <Snack
-                open={openSuccessSnack}
-                severity="success"
-                message="Logged in!"
-                onClose={() => setOpenSuccessSnack(false)}
-            /> */}
         </Dialog>
     );
 };
