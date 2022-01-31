@@ -23,6 +23,7 @@ import { useLazyLoginUserQuery } from "../../../app/services/users";
 import { userLoggedIn } from "../../../app/slices/auth/auth";
 import { createSnack } from "../../../app/slices/ui/snackbars/snack";
 import { Link as RouterLink } from "react-router-dom";
+import { AuthHelper } from "../../../utilities/AuthHelper";
 
 const LoginDialog = () => {
     const open = useAppSelector(state => state.ui.dialogs.login.show);
@@ -32,24 +33,29 @@ const LoginDialog = () => {
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
 
-    const [isValidEmail, setIsValidEmail] = useState(false);
-    const [isValidPassword, setIsValidPassword] = useState(false);
+    /**
+     * we set initial state to null for grey text fields - they'll only turn red
+     * if the user enters something in them. user experience!
+     */
+    const [isValidEmail, setIsValidEmail] = useState<boolean | null>(null);
+    const [isValidPassword, setIsValidPassword] = useState<boolean | null>(null);
 
     const [login] = useLazyLoginUserQuery();
 
+    // reset back to initial state
     const handleOnClose = () => {
         setEmail("");
         setPassword("");
-        setIsValidEmail(false);
-        setIsValidPassword(false);
+        setIsValidEmail(null);
+        setIsValidPassword(null);
         setShowPassword(false);
     };
 
     return (
         <Dialog open={open} onClose={handleOnClose} fullWidth>
             <Box m={2}>
-                <Typography textAlign="center" variant="h3">
-                    FindMyFood!
+                <Typography textAlign="center" variant="h4">
+                    Login to FindMyFood!
                 </Typography>
             </Box>
             <DialogContent>
@@ -58,9 +64,10 @@ const LoginDialog = () => {
                         label="Email"
                         onChange={({ target: { value } }) => {
                             setEmail(value);
-                            setIsValidEmail(value.length > 0);
+                            setIsValidEmail(AuthHelper.isEmail(value));
                         }}
-                        error={!isValidEmail}
+                        error={isValidEmail !== null && !isValidEmail}
+                        helperText={isValidEmail !== null && !isValidEmail && "Please enter a valid email."}
                     />
                     <TextField
                         autoComplete="off"
@@ -71,7 +78,7 @@ const LoginDialog = () => {
                             setPassword(value);
                             setIsValidPassword(value.length > 0);
                         }}
-                        error={!isValidPassword}
+                        error={isValidPassword !== null && !isValidPassword}
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
@@ -89,8 +96,9 @@ const LoginDialog = () => {
                                 Sign up!
                             </Link>
                         </Typography>
+                        {/* TODO: Create forgot-password redirect and get nodemailer working */}
                         <Typography variant="body2">
-                            <Link component={RouterLink} to="/registernew">
+                            <Link component={RouterLink} to="/forgot-password">
                                 Forgot password?
                             </Link>
                         </Typography>
@@ -101,8 +109,11 @@ const LoginDialog = () => {
                 <Button
                     size="large"
                     variant="outlined"
-                    onClick={() => dispatch(setShowLoginDialog(false))}
-                >
+                    onClick={() => {
+                        dispatch(setShowLoginDialog(false));
+                        // handleOnClose isn't called automatically for some reason
+                        handleOnClose();
+                    }}>
                     Cancel
                 </Button>
                 <Button
@@ -115,21 +126,12 @@ const LoginDialog = () => {
                             dispatch(userLoggedIn(user));
                             dispatch(setShowLoginDialog(false));
                             dispatch(
-                                createSnack({
-                                    message: "Logged in successfully!",
-                                    severity: "success",
-                                })
+                                createSnack({ message: `Hello, ${user.username}!`, severity: "success" })
                             );
                         } catch (err) {
-                            dispatch(
-                                createSnack({
-                                    message: err.data,
-                                    severity: "error",
-                                })
-                            );
+                            dispatch(createSnack({ message: err.data, severity: "error" }));
                         }
-                    }}
-                >
+                    }}>
                     Login
                 </Button>
             </DialogActions>
