@@ -2,7 +2,7 @@ import "./assets/styles/App.css";
 import theme from "./theme";
 import store from "./app/store";
 import { Provider } from "react-redux";
-import { useRoutes } from "react-router-dom";
+import { Navigate, useRoutes } from "react-router-dom";
 import PageNotFound from "./pages/PageNotFound";
 import RegistrationPage from "./pages/RegistrationPage";
 import AboutPage from "./pages/AboutPage";
@@ -40,6 +40,10 @@ function App() {
             path: "skeleton",
             caseSensitive: true,
             element: <RestaurantPageSkeleton />,
+        },
+        {
+            path: "/",
+            element: <Navigate replace to="/home" />,
         },
         {
             path: "*",
