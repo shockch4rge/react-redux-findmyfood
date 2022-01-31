@@ -3,7 +3,6 @@ import authSlice from "./slices/auth/auth";
 import replyDialogSlice from "./slices/ui/dialogs/replyDialog";
 import reviewDialogSlice from "./slices/ui/dialogs/reviewDialog";
 import loginDialogSlice from "./slices/ui/dialogs/loginDialog";
-import stepsSlice from "./slices/steps/steps";
 import endpointTester from "./middleware/endpointTester";
 import api from "./services/api";
 import snackSlice from "./slices/ui/snackbars/snack";
@@ -16,7 +15,6 @@ const dialogs = combineReducers({
 
 const uiReducer = combineReducers({
     dialogs,
-    [stepsSlice.name]: stepsSlice.reducer,
     [snackSlice.name]: snackSlice.reducer,
 });
 

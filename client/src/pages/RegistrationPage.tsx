@@ -1,325 +1,254 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import {
-    Box,
-    Button,
     Container,
-    Grow,
-    Stack,
-    Typography,
-    Paper,
-    Avatar,
-    Input,
     TextField,
+    Typography,
     Grid,
+    Paper,
+    Box,
+    Select,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Stack,
     InputAdornment,
     IconButton,
-    FormControl,
-    FormControlLabel,
-    FormLabel,
-    Radio,
-    RadioGroup,
-    InputLabel,
+    Input,
+    Avatar,
+    Button,
 } from "@mui/material";
-import DoneIcon from "@mui/icons-material/Done";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { useRegisterUserMutation } from "../app/services/users";
-import { userLoggedIn } from "../app/slices/auth/auth";
+import User from "../models/User";
+import { useEffect, useState } from "react";
+import { useLazyLoginUserQuery, useRegisterUserMutation } from "../app/services/users";
 import { useAppDispatch } from "../hooks/useAppDispatch";
+import { createSnack } from "../app/slices/ui/snackbars/snack";
+import { useNavigate } from "react-router-dom";
 import { AuthHelper } from "../utilities/AuthHelper";
-import User, { UserData } from "../models/User";
-import CustomStepper from "../components/common/CustomStepper";
-import camelcase from "camelcase";
-import { useDispatch } from "react-redux";
-import { setProfileStepPayload } from "../app/slices/ui/steps";
-import { useAppSelector } from "../hooks/useAppSelector";
+import PasswordStrengthMeter from "../components/PasswordStrengthMeter";
 
-type CredentialsChangeHandler = ({
-    target: { name, value },
-}: React.ChangeEvent<HTMLInputElement>) => void;
+const RegistrationPageNew = () => {
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
 
-const RegistrationPage = () => {
-    const [stepNumber, setStepNumber] = useState(0);
-    const [userInfo, setUserInfo] = useState<UserData>(User.getEmpty());
+    const [userInfo, setUserInfo] = useState(User.getEmpty());
 
-    const profileInfo = useAppSelector(state => state.ui.steps.profile.payload);
-    const accountInfo = useAppSelector(state => state.ui.steps.account.payload);
+    const [avatarPreviewUri, setAvatarPreviewUri] = useState("");
 
-    const handleCredentialsChange = ({
-        target: { name, value },
-    }: React.ChangeEvent<HTMLInputElement>) => {
+    const [showPassword, setShowPassword] = useState(false);
+    const [isValidEmail, setIsValidEmail] = useState<boolean | null>(null);
+    const [isValidPassword, setIsValidPassword] = useState<boolean | null>(null);
+    const [isSubmittable, setIsSubmittable] = useState(false);
+
+    const [avatarFile, setAvatarFile] = useState<File | null>(null);
+
+    const [register] = useRegisterUserMutation();
+    const [login] = useLazyLoginUserQuery();
+
+    const handleFormChange = ({ target: { name, value } }: any) => {
         setUserInfo(prev => ({ ...prev, [name]: value }));
     };
 
-    const steps = ["Public Profile", "Account Info", "Finish!"];
-
-    useEffect(() => {
-        setUserInfo(prev => ({ ...prev, ...profileInfo, ...accountInfo }));
-    }, [profileInfo, accountInfo]);
-
-    return (
-        <>
-            <Container maxWidth="md">
-                <CustomStepper sx={{ mt: "10%" }} steps={steps} activeStep={stepNumber} />;
-                <Box sx={{ height: 400, mt: 10 }}>
-                    {stepNumber === 0 && (
-                        <PublicProfileStep handleCredentialsChange={handleCredentialsChange} />
-                    )}
-                    {stepNumber === 1 && (
-                        <AccountInfoStep handleCredentialsChange={handleCredentialsChange} />
-                    )}
-                    {stepNumber === 2 && <FinishedStep userCredentials={userInfo} />}
-                </Box>
-                <Box
-                    sx={{
-                        mt: 5,
-                        display: "flex",
-                        justifyContent: "space-between",
-                    }}
-                >
-                    <Button
-                        onClick={() => setStepNumber(prev => prev - 1)}
-                        disabled={stepNumber < 1}
-                    >
-                        Previous
-                    </Button>
-                    <Button
-                        onClick={() => setStepNumber(prev => prev + 1)}
-                        disabled={stepNumber > 1}
-                    >
-                        {stepNumber === 1 ? "Submit" : "Next"}
-                    </Button>
-                </Box>
-            </Container>
-        </>
-    );
-};
-
-interface PublicProfileStepProps {
-    handleCredentialsChange: CredentialsChangeHandler;
-}
-
-const PublicProfileStep = ({ handleCredentialsChange }: PublicProfileStepProps) => {
-    const fields = ["Username", "First Name", "Last Name"];
-    const genderButtonLabels = ["Male", "Female", "Other"];
-
-    const [formData] = useState(new FormData());
-    const [avatarPreviewUri, setAvatarPreviewUri] = useState<string | ArrayBuffer | null>(null);
-
     const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const avatarKey = "avatar";
+        const file = e.target.files[0];
 
-        if (formData.has(avatarKey)) {
-            // replace the existing avatar key if it exists
-            formData.delete(avatarKey);
+        if (file) {
+            setAvatarPreviewUri(URL.createObjectURL(file));
+            setAvatarFile(file);
         }
-
-        const reader = new FileReader();
-        const file = e.target.files![0];
-
-        // define cb for when file is successfully read
-        reader.onload = ev => {
-            setAvatarPreviewUri(ev.target!.result);
-            // append the file to the FormData to send to the server later
-            formData.append(avatarKey, file);
-        };
-
-        // start reading the file, which will call onload on success.
-        reader.readAsDataURL(file);
     };
 
-    return (
-        <Box mt={4} display="flex" flexWrap="wrap" justifyContent="center" alignItems="center">
-            <Paper
-                elevation={3}
-                sx={{
-                    height: 240,
-                    width: 200,
-                    padding: 2,
-                    mt: 4,
-                    mx: 3,
-                    border: "4px solid #8bf84c",
-                    borderRadius: 3,
-                    display: "flex",
-                    justifyContent: "center",
-                }}
-            >
-                <Stack spacing={2}>
-                    <Container>
-                        <Avatar
-                            src={avatarPreviewUri?.toString() ?? "https://bit.ly/3qcZQsm"}
-                            sx={{
-                                ml: 2.5,
-                                width: { xs: 120, md: 150 },
-                                height: { xs: 120, md: 150 },
-                            }}
-                        />
-                        <Input
-                            id="avatar-upload"
-                            type="file"
-                            value=""
-                            onChange={handleAvatarUpload}
-                        />
-                        <InputLabel htmlFor="avatar-upload">Upload a profile picture!</InputLabel>
-                    </Container>
-                </Stack>
-            </Paper>
-            <Stack
-                spacing={2}
-                sx={{ mx: 3, justifyContent: "center", alignItems: "center", mt: 4 }}
-            >
-                {fields.map(field => (
-                    <TextField
-                        autoComplete="off"
-                        label={field}
-                        key={field}
-                        type="text"
-                        name={camelcase(field)}
-                        onChange={handleCredentialsChange}
-                    />
-                ))}
-                <FormControl>
-                    <FormLabel>Gender</FormLabel>
-                    <RadioGroup
-                        row
-                        aria-labelledby="gender-single-choice-buttons"
-                        name="radio-buttons-group"
-                    >
-                        {genderButtonLabels.map(label => (
-                            <FormControlLabel
-                                value={label.toLowerCase()}
-                                control={<Radio size="small" />}
-                                label={label}
-                            />
-                        ))}
-                    </RadioGroup>
-                </FormControl>
-            </Stack>
-        </Box>
-    );
-};
+    const collateFormData = () => {
+        const formData = new FormData();
 
-interface AccountInfoStepProps {
-    handleCredentialsChange: CredentialsChangeHandler;
-}
+        for (const [name, value] of Object.entries(userInfo)) {
+            formData.append(name, value);
+        }
 
-const AccountInfoStep = ({ handleCredentialsChange }: AccountInfoStepProps) => {
-    const [showPassword, setShowPassword] = useState(false);
+        formData.append("avatar", avatarFile);
 
-    return (
-        <Box>
-            <Grid container rowSpacing={2}>
-                <Grid item xs={6} display="flex" justifyContent="center">
-                    <TextField
-                        autoComplete="off"
-                        label="Email"
-                        type="text"
-                        name="email"
-                        onChange={handleCredentialsChange}
-                    />
-                </Grid>
-                <Grid item xs={6} display="flex" justifyContent="center">
-                    <TextField
-                        autoComplete="off"
-                        label="Address"
-                        type="text"
-                        name="address"
-                        onChange={handleCredentialsChange}
-                    />
-                </Grid>
-                <Grid item xs={6} display="flex" justifyContent="center">
-                    <TextField
-                        autoComplete="off"
-                        label="Password"
-                        type={showPassword ? "text" : "password"}
-                        name="password"
-                        onChange={handleCredentialsChange}
-                        error={!AuthHelper.isPassword(credentials.password)}
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <IconButton onClick={() => setShowPassword(!showPassword)}>
-                                        {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                                    </IconButton>
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
-                </Grid>
-                <Grid item xs={6} display="flex" justifyContent="center">
-                    <TextField label="Telephone" type="text" onChange={handleCredentialsChange} />
-                </Grid>
-            </Grid>
-        </Box>
-    );
-};
-
-interface FinishedStepProps {
-    userCredentials: UserData;
-}
-
-const FinishedStep = ({ userCredentials }: FinishedStepProps) => {
-    const dispatch = useAppDispatch();
-    const navigate = useNavigate();
-
-    const [registerUser] = useRegisterUserMutation();
+        return formData;
+    };
 
     useEffect(() => {
-        registerUser(userCredentials)
-            .unwrap()
-            .then(user => dispatch(userLoggedIn(user)))
-            .catch(console.log);
+        setIsSubmittable(() => {
+            const checks: boolean[] = [];
 
-        const redirect = setTimeout(() => {
-            navigate("/home");
-        }, 5000);
+            for (const key in userInfo) {
+                checks.push(userInfo[key].length > 0);
+            }
 
-        // clear redirect timeout if user clicked 'previous' or exited the page
-        return () => clearTimeout(redirect);
-    }, []);
+            return (
+                checks.every(check => check) &&
+                AuthHelper.isEmail(userInfo.email) &&
+                AuthHelper.isPassword(userInfo.password)
+            );
+        });
+    }, [userInfo]);
 
     return (
-        <Grow in timeout={1000}>
-            <Container
-                sx={{
-                    mt: 4,
-                    p: 2,
-                    borderRadius: 5,
-                    boxShadow: "var(--shadow-elevation-medium)",
-                    width: { xs: 250, md: "60%" },
-                    height: { xs: 260, md: 275 },
-                }}
-            >
-                <Grow in timeout={2000}>
-                    <Box sx={{ display: "flex", justifyContent: "center" }}>
-                        <Box
-                            sx={{
-                                backgroundImage: "var(--gradient)",
-                                borderRadius: "50%",
-                                mt: { xs: 5, md: 4 },
-                                width: { xs: 50, md: 75 },
-                                height: { xs: 50, md: 75 },
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                            }}
-                        >
-                            <DoneIcon
-                                sx={{ color: theme => theme.palette.common.white }}
-                                fontSize="large"
+        <Container>
+            <Typography mt={10} variant="h2" textAlign="center">
+                FindMyFood!
+            </Typography>
+            <Typography variant="h5" textAlign="center">
+                Register for a profile!
+            </Typography>
+
+            <Stack direction="row" spacing={3} mt={10}>
+                <Paper
+                    sx={{
+                        width: "100%",
+                        height: 500,
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        borderRadius: 5,
+                    }}>
+                    <Stack spacing={1}>
+                        <Avatar sx={{ width: 200, height: 200, mb: 3 }} src={avatarPreviewUri} />
+                        <InputLabel htmlFor="avatar-upload">
+                            <Input
+                                id="avatar-upload"
+                                type="file"
+                                sx={{ display: "none" }}
+                                onChange={handleAvatarUpload}
                             />
-                        </Box>
-                    </Box>
-                </Grow>
-                <Grow in timeout={2000}>
-                    <Typography sx={{ mt: 3, textAlign: "center", fontSize: { xs: 16, md: 20 } }}>
-                        Thanks for registering! You'll be redirected to the home page soon.
-                    </Typography>
-                </Grow>
-            </Container>
-        </Grow>
+                            <Button variant="contained" size="large" component="span" fullWidth>
+                                Upload Avatar
+                            </Button>
+                        </InputLabel>
+                    </Stack>
+                </Paper>
+                <Grid container columnSpacing={3}>
+                    <Grid item xs={6}>
+                        <TextField fullWidth label="First Name" name="firstName" onChange={handleFormChange} />
+                    </Grid>
+                    <Grid item xs={6}>
+                        <TextField fullWidth label="Last Name" name="lastName" onChange={handleFormChange} />
+                    </Grid>
+                    <Grid item xs={6}>
+                        <TextField fullWidth label="Username" name="username" onChange={handleFormChange} />
+                    </Grid>
+                    <Grid item xs={6}>
+                        <FormControl fullWidth>
+                            <InputLabel id="gender-select-label">Gender</InputLabel>
+                            <Select
+                                labelId="gender-select-label"
+                                id="gender-select"
+                                label="Gender"
+                                name="gender"
+                                value={userInfo.gender}
+                                onChange={handleFormChange}>
+                                <MenuItem value="Male">Male</MenuItem>
+                                <MenuItem value="Female">Female</MenuItem>
+                                <MenuItem value="Other">Other</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <TextField fullWidth label="Address" name="address" onChange={handleFormChange} />
+                    </Grid>
+                    <Grid item xs={6}>
+                        <TextField
+                            fullWidth
+                            label="Telephone"
+                            name="telephone"
+                            type="tel"
+                            onChange={handleFormChange}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            fullWidth
+                            label="Email"
+                            name="email"
+                            type="email"
+                            error={isValidEmail !== null && !isValidEmail}
+                            onChange={e => {
+                                setIsValidEmail(AuthHelper.isEmail(e.target.value));
+                                handleFormChange(e);
+                            }}
+                            helperText={
+                                isValidEmail !== null && !isValidEmail && "Please enter a valid email."
+                            }
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            fullWidth
+                            label="Password"
+                            name="password"
+                            type={showPassword ? "text" : "password"}
+                            error={isValidPassword !== null && !isValidPassword}
+                            onChange={e => {
+                                setIsValidPassword(AuthHelper.isPassword(e.target.value));
+                                handleFormChange(e);
+                            }}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton onClick={() => setShowPassword(!showPassword)}>
+                                            {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <PasswordStrengthMeter
+                            sections={[
+                                {
+                                    color: "#FF2100",
+                                    valid: AuthHelper.hasLength(userInfo.password),
+                                    criteria: "Is at least 8 characters long",
+                                },
+                                {
+                                    color: "#FF4300",
+                                    valid: AuthHelper.hasDigits(userInfo.password),
+                                    criteria: "Contains at least 2 digits",
+                                },
+                                {
+                                    color: "#FFC900",
+                                    valid: AuthHelper.hasUpperCaseLetters(userInfo.password),
+                                    criteria: "Contains at least 2 uppercase letters",
+                                },
+                                {
+                                    color: "#0DFF00",
+                                    valid: AuthHelper.hasSpecialCharacters(userInfo.password),
+                                    criteria: "Contains at least 1 special character",
+                                },
+                            ]}
+                            finalValidation={isValidPassword}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Button
+                            disabled={!isSubmittable}
+                            variant="contained"
+                            size="large"
+                            fullWidth
+                            onClick={async () => {
+                                try {
+                                    const form = collateFormData();
+                                    const user = await register(form).unwrap();
+                                    await login({ email: user.email, password: user.password }).unwrap();
+                                    dispatch(
+                                        createSnack({ message: `Welcome, ${user.username}!`, type: "success" })
+                                    );
+                                    navigate("/home");
+                                } catch (err) {
+                                    dispatch(createSnack({ message: err.data, severity: "error" }));
+                                }
+                            }}>
+                            Register
+                        </Button>
+                    </Grid>
+                </Grid>
+            </Stack>
+        </Container>
     );
 };
 
-export default RegistrationPage;
+export default RegistrationPageNew;
