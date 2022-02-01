@@ -1,5 +1,6 @@
 import { ReplyData } from "../../models/Reply";
 import api from "./api";
+import { cacher } from "../../utilities/cacher";
 
 const replies = api.injectEndpoints({
     overrideExisting: false,
@@ -10,6 +11,8 @@ const replies = api.injectEndpoints({
                 url: `/replies/${reviewId}`,
                 method: "get",
             }),
+
+            providesTags: cacher.providesList("Replies"),
         }),
 
         getReply: builder.query<ReplyData, string>({
@@ -17,6 +20,8 @@ const replies = api.injectEndpoints({
                 url: `/reply/${id}`,
                 method: "get",
             }),
+
+            providesTags: cacher.cacheByIdArg("Replies"),
         }),
 
         addReply: builder.mutation<void, Omit<ReplyData, "id" | "isEdited">>({
@@ -25,6 +30,8 @@ const replies = api.injectEndpoints({
                 method: "post",
                 body: reply,
             }),
+
+            invalidatesTags: cacher.invalidatesList("Replies"),
         }),
 
         deleteReply: builder.mutation<void, string>({
@@ -32,6 +39,8 @@ const replies = api.injectEndpoints({
                 url: `/reply/${id}`,
                 method: "delete",
             }),
+
+            invalidatesTags: cacher.invalidatesList("Replies"),
         }),
 
         editReply: builder.mutation<void, Omit<ReplyData, "userId" | "reviewId">>({
@@ -44,6 +53,8 @@ const replies = api.injectEndpoints({
                     isEdited: edited.isEdited,
                 } as Omit<ReplyData, "id" | "userId" | "reviewId">,
             }),
+
+            invalidatesTags: cacher.invalidatesList("Replies"),
         }),
     }),
 });
