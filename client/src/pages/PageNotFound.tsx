@@ -1,25 +1,17 @@
+import { Box, Typography, Container } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 
 const PageNotFound = () => {
     return (
         <>
-            <div>
-                <h1
-                    className="pnf-header"
-                    style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                    }}
-                >
-                    Whoops! Where are we?
-                </h1>
-
-                <h3>
-                    That page doesn't seem to exist. Wanna go back to the{" "}
-                    <Link to={"/examplecomponent"}>home page?</Link>
-                </h3>
-            </div>
+            <Box display="">
+                <Typography variant="h1" textAlign="center">
+                    404
+                </Typography>
+                <Typography variant="h5" textAlign="center">
+                    Whoops! We couldn't find the page you were looking for.
+                </Typography>
+            </Box>
         </>
     );
 };
