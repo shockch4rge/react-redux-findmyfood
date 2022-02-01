@@ -1,15 +1,6 @@
 import AddIcon from "@mui/icons-material/Add";
-import {
-    Card,
-    Container,
-    Box,
-    Avatar,
-    Typography,
-    Divider,
-    Rating,
-    Button,
-    Stack,
-} from "@mui/material";
+import { Card, Container, Box, Avatar, Typography, Divider, Rating, Button, Stack } from "@mui/material";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGetReviewRepliesQuery } from "../../app/services/replies";
 import { useGetUserQuery } from "../../app/services/users";
@@ -31,25 +22,9 @@ const ReviewCard = ({ review }: Props) => {
     // get the current/logged in user from the store
     const activeUser = useAppSelector(state => state.auth);
     // get the replies to this review
-    const {
-        isLoading: repliesLoading,
-        data: replies,
-        refetch: refetchReplies,
-    } = useGetReviewRepliesQuery(review.id);
+    const { data: replies } = useGetReviewRepliesQuery(review.id);
     // get the poster of this review
     const { isLoading: userLoading, data: poster } = useGetUserQuery(review.userId);
-
-    const onPost = () => {
-        refetchReplies();
-    };
-
-    const onEdit = () => {
-        refetchReplies();
-    };
-
-    const onDelete = () => {
-        refetchReplies();
-    };
 
     return (
         <>
@@ -60,8 +35,7 @@ const ReviewCard = ({ review }: Props) => {
                     height: "fit-content",
                     borderRadius: 3,
                     p: 2,
-                }}
-            >
+                }}>
                 <Container sx={{ width: "fit-content" }}>
                     <Box display="flex" justifyContent="center" alignItems="center">
                         <Avatar sx={{ width: 80, height: 80, mb: 1 }} src={poster?.avatarPath} />
@@ -75,11 +49,7 @@ const ReviewCard = ({ review }: Props) => {
                     <Typography variant="body2" fontSize={16}>
                         {review.content}
                     </Typography>
-                    <Typography
-                        m={1}
-                        textAlign="end"
-                        sx={{ fontFamily: "GalyonBook", fontStyle: "italic" }}
-                    >
+                    <Typography m={1} textAlign="end" variant="body2" fontStyle="italic">
                         {review.isEdited ? "Edited" : "Posted"} {review.timestamp}
                     </Typography>
 
@@ -87,32 +57,24 @@ const ReviewCard = ({ review }: Props) => {
                     {activeUser && review.userId !== activeUser.id ? (
                         <Box>
                             <Button
-                                variant="outlined"
                                 onClick={() => dispatch(setShowWriteReplyDialog(true))}
-                                startIcon={<AddIcon />}
-                            >
+                                startIcon={<AddIcon />}>
                                 Add Reply
                             </Button>
 
-                            <WriteReplyDialog review={review} onPost={onPost} />
+                            <WriteReplyDialog review={review} />
                         </Box>
                     ) : // active user is logged in and review is posted by them
                     activeUser && review.userId === activeUser.id ? (
-                        <Button variant="outlined" disabled={true}>
+                        <Button variant="text" disabled={true}>
                             You can't reply to your own reviews!
                         </Button>
                     ) : (
-                        <Button
-                            variant="outlined"
-                            onClick={() => dispatch(setShowLoginDialog(true))}
-                        >
-                            Sign in to reply!
-                        </Button>
+                        <Button onClick={() => dispatch(setShowLoginDialog(true))}>Sign in to reply!</Button>
                     )}
                 </Box>
             </Card>
-            {replies &&
-                replies.slice(0, 2).map(reply => <ReplyCard key={reply.id} reply={reply} />)}
+            {replies && replies.map(reply => <ReplyCard key={reply.id} reply={reply} />)}
         </>
     );
 };
