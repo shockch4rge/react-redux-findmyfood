@@ -9,9 +9,10 @@ import WriteReviewDialog from "../dialogs/review/WriteReviewDialog";
 interface Props {
     restaurant: RestaurantData;
     reviews: ReviewData[];
+    userReview: ReviewData | null;
 }
 
-const RatingsCard = ({ restaurant, reviews }: Props) => {
+const RatingsCard = ({ restaurant, reviews, userReview }: Props) => {
     const dispatch = useAppDispatch();
     const user = useAppSelector(state => state.auth);
 
@@ -28,8 +29,7 @@ const RatingsCard = ({ restaurant, reviews }: Props) => {
                     borderRadius: 5,
                     boxShadow: 3,
                     p: 1,
-                }}
-            >
+                }}>
                 <CardContent>
                     <Typography variant="h2">
                         {reviews.length >= 1 ? restaurant.averageRating : "0.0"}
@@ -44,14 +44,13 @@ const RatingsCard = ({ restaurant, reviews }: Props) => {
                             ({reviews.length} {reviews.length === 1 ? "review" : "reviews"})
                         </Typography>
                     </Box>
-                    {user && reviews.find(r => r.userId === user.id) && (
+                    {!userReview && user && (
                         <>
                             <Box display="flex" justifyContent="space-around" alignItems="center">
                                 <Button
                                     variant="contained"
                                     sx={{ borderRadius: 10, mt: 17, width: 260 }}
-                                    onClick={() => dispatch(setShowWriteReviewDialog(true))}
-                                >
+                                    onClick={() => dispatch(setShowWriteReviewDialog(true))}>
                                     Write a review
                                 </Button>
                             </Box>
