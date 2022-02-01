@@ -15,6 +15,7 @@ import {
     Input,
     Avatar,
     Button,
+    Link,
 } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
@@ -25,7 +26,10 @@ import { useAppDispatch } from "../hooks/useAppDispatch";
 import { createSnack } from "../app/slices/ui/snackbars/snack";
 import { useNavigate } from "react-router-dom";
 import { AuthHelper } from "../utilities/AuthHelper";
+import { Link as RouterLink } from "react-router-dom";
 import PasswordStrengthMeter from "../components/PasswordStrengthMeter";
+import { setShowLoginDialog } from "../app/slices/ui/dialogs/loginDialog";
+import { userLoggedIn } from "../app/slices/auth/auth";
 
 const RegistrationPageNew = () => {
     const navigate = useNavigate();
@@ -96,15 +100,14 @@ const RegistrationPageNew = () => {
             </Typography>
 
             <Stack direction="row" spacing={3} mt={10}>
-                <Paper
-                    sx={{
-                        width: "100%",
-                        height: 500,
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        borderRadius: 5,
-                    }}>
+                <Box
+                    width="100%"
+                    height={500}
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    borderRadius={5}
+                    sx={{ border: theme => `3px solid ${theme.palette.primary.main}` }}>
                     <Stack spacing={1}>
                         <Avatar sx={{ width: 200, height: 200, mb: 3 }} src={avatarPreviewUri} />
                         <InputLabel htmlFor="avatar-upload">
@@ -119,7 +122,7 @@ const RegistrationPageNew = () => {
                             </Button>
                         </InputLabel>
                     </Stack>
-                </Paper>
+                </Box>
                 <Grid container columnSpacing={3}>
                     <Grid item xs={6}>
                         <TextField fullWidth label="First Name" name="firstName" onChange={handleFormChange} />
@@ -232,10 +235,17 @@ const RegistrationPageNew = () => {
                             onClick={async () => {
                                 try {
                                     const form = collateFormData();
-                                    const user = await register(form).unwrap();
-                                    await login({ email: user.email, password: user.password }).unwrap();
+                                    await register(form).unwrap();
+                                    const user = await login({
+                                        email: userInfo.email,
+                                        password: userInfo.password,
+                                    }).unwrap();
+                                    dispatch(userLoggedIn(user));
                                     dispatch(
-                                        createSnack({ message: `Welcome, ${user.username}!`, type: "success" })
+                                        createSnack({
+                                            message: `Welcome, ${userInfo.username}!`,
+                                            severity: "success",
+                                        })
                                     );
                                     navigate("/home");
                                 } catch (err) {
@@ -244,6 +254,17 @@ const RegistrationPageNew = () => {
                             }}>
                             Register
                         </Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Typography variant="body2">
+                            Already have a profile?{" "}
+                            <Link
+                                component={RouterLink}
+                                to="/home"
+                                onClick={() => dispatch(setShowLoginDialog(true))}>
+                                Login instead.
+                            </Link>
+                        </Typography>
                     </Grid>
                 </Grid>
             </Stack>
