@@ -7,7 +7,7 @@ export default class ReplyRepository {
     public static async getReviewReplies(reviewId: string) {
         const query = `SELECT * FROM reply WHERE review_id = ?`;
         const results = await db.query(query, [reviewId]);
-        return results[0];
+        return results[0] as RowDataPacket[];
     }
 
     public static async update(

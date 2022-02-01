@@ -48,6 +48,7 @@ export default class UserRepository {
         `;
 
         const results = await db.query(query, [id]);
+        console.log(results[0] as RowDataPacket[]);
         return (results[0] as RowDataPacket[])[0];
     }
 
@@ -91,24 +92,37 @@ export default class UserRepository {
     }
 
     public static async register(user: UserData) {
-        console.log(user);
-        
-
         const salt = await bcrypt.genSalt();
         const hash = await bcrypt.hash(user.password, salt);
+
+        user.activated = true;
         user.password = hash;
 
-        const userDetails = Object.values(user);
+        const isDuplicateEmail =
+            ((await db.query(`SELECT * FROM account WHERE email = ?`, [user.email]))[0] as RowDataPacket[])
+                .length >= 1;
+
+        if (isDuplicateEmail) {
+            throw new Error("Email already in use!");
+        }
 
         try {
             await db.query(`START TRANSACTION`);
             await db.query(`INSERT INTO user VALUES (?, ?, ?, ?, ?, ?)`, [
-                ...userDetails.slice(0, 5),
-                userDetails[10]
+                user.id,
+                user.username,
+                user.firstName,
+                user.lastName,
+                user.gender,
+                user.avatarPath,
             ]);
             await db.query(`INSERT INTO account VALUES (?, ?, ?, ?, ?, ?)`, [
                 user.id,
-                ...userDetails.slice(5, 10),
+                user.email,
+                user.password,
+                user.address,
+                user.telephone,
+                user.activated,
             ]);
             await db.query(`COMMIT`);
         } catch (err) {

@@ -38,6 +38,6 @@ export default class ReviewRepository {
     public static async getRestaurantReviews(restaurantId: string) {
         const query = `SELECT * FROM review WHERE restaurant_id = ?`;
         const reviews = await db.query(query, [restaurantId]);
-        return reviews[0];
+        return reviews[0] as RowDataPacket[];
     }
 }

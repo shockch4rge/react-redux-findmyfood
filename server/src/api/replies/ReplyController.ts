@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
+import Reply from "./Reply";
 import ReplyRepository from "./ReplyRepository";
 
 export default class ReplyController {
     public static async getReviewReplies(request: Request, response: Response) {
         try {
             const replies = await ReplyRepository.getReviewReplies(request.params.reviewId);
-            response.json(replies);
+            response.json(replies.map(reply => Reply.toJSON(reply)));
         }
         catch (err) {
             response.json(err);
@@ -35,7 +36,7 @@ export default class ReplyController {
     public static async get(request: Request, response: Response) {
         try {
             const reply = await ReplyRepository.get(request.params.id);
-            response.json(reply);
+            response.json(Reply.toJSON(reply));
         }
         catch (err) {
             response.json(err);

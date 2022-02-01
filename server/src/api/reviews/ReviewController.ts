@@ -1,13 +1,14 @@
 import ReviewRepository from "./ReviewRepository";
 import { Request, Response } from "express";
+import Review from "./Review";
 
 export default class ReviewController {
     public static async get(request: Request, response: Response) {
         const id = request.params.id;
 
         try {
-            const result = await ReviewRepository.get(id);
-            response.json(result);
+            const review = await ReviewRepository.get(id);
+            response.json(Review.toJSON(review));
         } catch (err) {
             response.json(err);
         }
@@ -19,7 +20,7 @@ export default class ReviewController {
 
         try {
             const review = await ReviewRepository.getByUserAndRestaurantId(userId, restaurantId);
-            response.json(review);
+            response.json(Review.toJSON(review));
         } catch (err) {
             response.status(500).send(err);
         }
@@ -63,7 +64,7 @@ export default class ReviewController {
 
         try {
             const reviews = await ReviewRepository.getRestaurantReviews(id);
-            response.json(reviews);
+            response.json(reviews.map(review => Review.toJSON(review)));
         } catch (err) {
             response.json(err);
         }

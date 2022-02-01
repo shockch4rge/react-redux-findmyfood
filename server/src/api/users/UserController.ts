@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import User from "./User";
 import fileUpload from "express-fileupload";
 import path from "node:path";
+import { uuid } from "../../utilities/uuid";
 
 export default class UserController {
     public static async getUser(request: Request, response: Response) {
@@ -15,6 +16,8 @@ export default class UserController {
     public static async deleteUser(request: Request, response: Response) {
         const id = request.params.id;
 
+        console.log(id);
+
         try {
             await UserRepository.delete(id);
             response.json({ msg: "User deleted!" });
@@ -24,19 +27,21 @@ export default class UserController {
     }
 
     public static async registerUser(request: Request, response: Response) {
+        const id = uuid();
+
         // get the file from the body
         const file = request.files!.avatar as fileUpload.UploadedFile;
         // create a new file name with the user id: image.png -> user_id.png
-        const fileName = `${request.body.id}${path.extname(file.name)}`;
+        const fileName = `${id}${path.extname(file.name)}`;
         // create a path to the uploads folder with the file name
         const filePath = path.join(__dirname, "../../uploads", fileName);
 
         try {
             await file.mv(filePath);
-            await UserRepository.register({ ...request.body, avatarPath: fileName });
+            await UserRepository.register({ id, ...request.body, avatarPath: fileName });
             response.json({ message: "User registered!" });
         } catch (err) {
-            response.json(err);
+            response.status(500).send((err as Error).message);
         }
     }
 

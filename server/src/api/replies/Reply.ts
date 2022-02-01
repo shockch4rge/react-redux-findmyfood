@@ -14,6 +14,17 @@ export default class Reply implements ReplyData {
         this.timestamp = data.timestamp;
         this.isEdited = data.isEdited;
     }
+
+    public static toJSON(data: any) {
+        return {
+            id: data.id,
+            reviewId: data.review_id,
+            userId: data.user_id,
+            content: data.content,
+            timestamp: data.timestamp,
+            isEdited: data.is_edited,
+        } as ReplyData;
+    }
 }
 
 export interface ReplyData {

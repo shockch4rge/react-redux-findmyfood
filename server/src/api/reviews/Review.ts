@@ -18,6 +18,20 @@ export default class Review implements ReviewData {
         this.timestamp = data.timestamp;
         this.isEdited = data.isEdited;
     }
+
+    public static toJSON(data: any) {
+        // return as ReviewData from snake case
+        return {
+            id: data.id,
+            restaurantId: data.restaurant_id,
+            userId: data.user_id,
+            rating: data.rating,
+            title: data.title,
+            content: data.content,
+            timestamp: data.timestamp,
+            isEdited: data.is_edited,
+        } as ReviewData;
+    }
 }
 
 export interface ReviewData {
