@@ -21,10 +21,9 @@ import Snack from "../../common/Snack";
 
 interface Props {
     restaurantId: string;
-    onPost: () => void;
 }
 
-const WriteReviewDialog = ({ restaurantId, onPost }: Props) => {
+const WriteReviewDialog = ({ restaurantId }: Props) => {
     const dispatch = useAppDispatch();
     const [addReview] = useAddReviewMutation();
     const user = useAppSelector(state => state.auth);
@@ -38,20 +37,20 @@ const WriteReviewDialog = ({ restaurantId, onPost }: Props) => {
     const [content, setContent] = useState("");
     const [rating, setRating] = useState(1);
 
-    const [isValidTitle, setIsValidTitle] = useState(false);
-    const [isValidContent, setIsValidContent] = useState(false);
+    const [isValidTitle, setIsValidTitle] = useState<boolean | null>(null);
+    const [isValidContent, setIsValidContent] = useState<boolean | null>(null);
 
     const handleOnClose = () => {
         setTitle("");
         setContent("");
         setRating(1);
-        setIsValidContent(false);
-        setIsValidTitle(false);
+        setIsValidContent(null);
+        setIsValidTitle(null);
     };
 
     return (
         <Dialog open={open} onClose={handleOnClose} fullWidth>
-            <DialogTitle>Write a review</DialogTitle>
+            <DialogTitle>Write a Review</DialogTitle>
             <DialogContent>
                 <Stack spacing={3}>
                     <Box>
@@ -69,7 +68,7 @@ const WriteReviewDialog = ({ restaurantId, onPost }: Props) => {
                                 setTitle(value);
                                 setIsValidTitle(value.length >= 10 && value.length <= 55);
                             }}
-                            error={!isValidTitle}
+                            error={isValidTitle !== null && !isValidTitle}
                             helperText={"10-50 characters"}
                         />
                     </Box>
@@ -78,6 +77,7 @@ const WriteReviewDialog = ({ restaurantId, onPost }: Props) => {
                         <InputLabel htmlFor={contentId}>Content*</InputLabel>
                         <TextField
                             multiline
+                            rows={5}
                             id={contentId}
                             name="content"
                             fullWidth
@@ -87,7 +87,7 @@ const WriteReviewDialog = ({ restaurantId, onPost }: Props) => {
                                 setContent(value);
                                 setIsValidContent(value.length >= 20 && value.length <= 250);
                             }}
-                            error={!isValidContent}
+                            error={isValidContent !== null && !isValidContent}
                             helperText={"20-250 characters"}
                         />
                     </Box>
@@ -124,7 +124,6 @@ const WriteReviewDialog = ({ restaurantId, onPost }: Props) => {
                                     severity: "success",
                                 })
                             );
-                            onPost();
                         } catch (err) {
                             console.log(err);
                             dispatch(
@@ -134,8 +133,7 @@ const WriteReviewDialog = ({ restaurantId, onPost }: Props) => {
                                 })
                             );
                         }
-                    }}
-                >
+                    }}>
                     Post
                 </Button>
             </DialogActions>

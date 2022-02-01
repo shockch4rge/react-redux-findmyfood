@@ -21,10 +21,9 @@ import { timestamp } from "../../../utilities/timestamp";
 
 interface Props {
     reply: ReplyData;
-    onEdit: () => void;
 }
 
-const EditReplyDialog = ({ reply, onEdit }: Props) => {
+const EditReplyDialog = ({ reply }: Props) => {
     const dispatch = useAppDispatch();
     const open = useAppSelector(state => state.ui.dialogs.reply.edit.show);
     const [editReply] = useEditReplyMutation();
@@ -49,6 +48,7 @@ const EditReplyDialog = ({ reply, onEdit }: Props) => {
                         <InputLabel htmlFor={contentId}>Content*</InputLabel>
                         <TextField
                             multiline
+                            rows={4}
                             id={contentId}
                             name="content"
                             fullWidth
@@ -83,7 +83,6 @@ const EditReplyDialog = ({ reply, onEdit }: Props) => {
                                     severity: "success",
                                 })
                             );
-                            onEdit();
                         } catch (err) {
                             console.log(err);
                             dispatch(

@@ -18,13 +18,13 @@ import { useAppDispatch } from "../../../hooks/useAppDispatch";
 import { useAppSelector } from "../../../hooks/useAppSelector";
 import { ReviewData } from "../../../models/Review";
 import { timestamp } from "../../../utilities/timestamp";
+import { Nullish } from "../../../utilities/Nullable";
 
 interface Props {
     review: ReviewData;
-    onEdit: () => void;
 }
 
-const EditReviewDialog = ({ review, onEdit }: Props) => {
+const EditReviewDialog = ({ review }: Props) => {
     const dispatch = useAppDispatch();
     const open = useAppSelector(state => state.ui.dialogs.review.edit.show);
     const [editReview] = useEditReviewMutation();
@@ -37,8 +37,8 @@ const EditReviewDialog = ({ review, onEdit }: Props) => {
     const [content, setContent] = useState(review.content);
     const [rating, setRating] = useState(review.rating);
 
-    const [isValidTitle, setIsValidTitle] = useState(false);
-    const [isValidContent, setIsValidContent] = useState(false);
+    const [isValidTitle, setIsValidTitle] = useState<boolean | null>(null);
+    const [isValidContent, setIsValidContent] = useState<boolean | null>(null);
 
     const handleOnClose = () => {
         setTitle(review.title);
@@ -68,7 +68,7 @@ const EditReviewDialog = ({ review, onEdit }: Props) => {
                                 setTitle(value);
                                 setIsValidTitle(value.length >= 10 && value.length <= 55);
                             }}
-                            error={!isValidTitle}
+                            error={isValidTitle !== null && !isValidTitle}
                             helperText={"10-50 characters"}
                         />
                     </Box>
@@ -77,6 +77,7 @@ const EditReviewDialog = ({ review, onEdit }: Props) => {
                         <InputLabel htmlFor={contentId}>Content*</InputLabel>
                         <TextField
                             multiline
+                            rows={5}
                             id={contentId}
                             name="content"
                             fullWidth
@@ -86,7 +87,7 @@ const EditReviewDialog = ({ review, onEdit }: Props) => {
                                 setContent(value);
                                 setIsValidContent(value.length >= 20 && value.length <= 250);
                             }}
-                            error={!isValidContent}
+                            error={isValidContent !== null && !isValidContent}
                             helperText={"20-250 characters"}
                         />
                     </Box>
@@ -123,7 +124,6 @@ const EditReviewDialog = ({ review, onEdit }: Props) => {
                                     severity: "success",
                                 })
                             );
-                            onEdit();
                         } catch (err) {
                             console.log(err);
                             dispatch(
@@ -133,8 +133,7 @@ const EditReviewDialog = ({ review, onEdit }: Props) => {
                                 })
                             );
                         }
-                    }}
-                >
+                    }}>
                     Save
                 </Button>
             </DialogActions>

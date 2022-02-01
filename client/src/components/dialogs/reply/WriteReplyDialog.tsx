@@ -23,10 +23,9 @@ import Snack from "../../common/Snack";
 
 interface Props {
     review: ReviewData;
-    onPost: () => void;
 }
 
-const WriteReplyDialog = ({ review, onPost }: Props) => {
+const WriteReplyDialog = ({ review }: Props) => {
     const dispatch = useAppDispatch();
     const [addReply] = useAddReplyMutation();
     const user = useAppSelector(state => state.auth);
@@ -44,7 +43,7 @@ const WriteReplyDialog = ({ review, onPost }: Props) => {
 
     return (
         <Dialog open={open} onClose={handleOnClose} fullWidth>
-            <DialogTitle>Write a reply</DialogTitle>
+            <DialogTitle>Write a Reply</DialogTitle>
             <DialogContent>
                 <Stack spacing={3}>
                     <Stack spacing={2}>
@@ -65,6 +64,7 @@ const WriteReplyDialog = ({ review, onPost }: Props) => {
                         <InputLabel htmlFor={contentId}>Your reply*</InputLabel>
                         <TextField
                             multiline
+                            rows={4}
                             id={contentId}
                             name="content"
                             fullWidth
@@ -99,7 +99,6 @@ const WriteReplyDialog = ({ review, onPost }: Props) => {
                                     severity: "success",
                                 })
                             );
-                            onPost();
                         } catch (err) {
                             console.log(err);
                             dispatch(
@@ -109,8 +108,7 @@ const WriteReplyDialog = ({ review, onPost }: Props) => {
                                 })
                             );
                         }
-                    }}
-                >
+                    }}>
                     Post
                 </Button>
             </DialogActions>
