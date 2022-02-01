@@ -7,9 +7,11 @@ import {
     IconButton,
     Menu,
     MenuItem,
+    Slide,
     Toolbar,
     Tooltip,
     Typography,
+    useScrollTrigger,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
@@ -27,6 +29,17 @@ interface ButtonData {
 }
 
 const settingsButtons = ["Profile", "Settings", "Sign Out"];
+
+const HideOnScroll = (props: { children: React.ReactElement }) => {
+    const { children } = props;
+    const trigger = useScrollTrigger();
+
+    return (
+        <Slide appear={false} direction="down" in={!trigger}>
+            {children}
+        </Slide>
+    );
+};
 
 const NavBar = () => {
     const navigate = useNavigate();
@@ -72,8 +85,8 @@ const NavBar = () => {
 
     const settingsButtons = [
         {
-            label: "Profile",
-            onClick: () => navigate("/profile"),
+            label: "Manage Profile",
+            onClick: () => navigate("/manage-profile"),
         },
         {
             label: "Settings",
@@ -84,10 +97,12 @@ const NavBar = () => {
             onClick: () => {
                 handleCloseUserMenu();
                 dispatch(userLoggedOut());
-                dispatch(createSnack({
-                    message: "You have been signed out.",
-                    severity: "success",
-                }))
+                dispatch(
+                    createSnack({
+                        message: "You have been signed out.",
+                        severity: "success",
+                    })
+                );
             },
         },
     ] as ButtonData[];
@@ -105,152 +120,143 @@ const NavBar = () => {
     // #endregion
 
     return (
-        <AppBar position="sticky">
-            <Container maxWidth="xl">
-                <Toolbar>
-                    <Typography
-                        variant="h4"
-                        noWrap
-                        component="div"
-                        sx={{
-                            fontFamily: "GalyonBold",
-                            fontWeight: "bold",
-                            background: "var(--gradient)",
-                            display: { xs: "none", md: "flex" },
-                            WebkitBackgroundClip: "text",
-                            WebkitTextFillColor: "transparent",
-                        }}
-                    >
-                        FindMyFood!
-                    </Typography>
-
-                    {/* Mobile Nav */}
-                    <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-                        <IconButton
-                            size="large"
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            onClick={handleOpenNavMenu}
-                            color="inherit"
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                        <Menu
-                            id="menu-appbar"
-                            anchorEl={anchorElNav}
-                            anchorOrigin={{
-                                vertical: "bottom",
-                                horizontal: "left",
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: "top",
-                                horizontal: "left",
-                            }}
-                            open={!!anchorElNav}
-                            onClose={handleCloseNavMenu}
+        <HideOnScroll>
+            <AppBar position="sticky" sx={{ boxShadow: 0 }}>
+                <Container maxWidth="xl">
+                    <Toolbar>
+                        <Typography
+                            variant="h4"
+                            noWrap
+                            component="div"
                             sx={{
-                                display: { xs: "block", md: "none" },
-                            }}
-                        >
-                            {pageButtons.map(button => (
-                                <MenuItem key={button.label} onClick={handleCloseNavMenu}>
-                                    <Typography textAlign="center">{button.label}</Typography>
-                                </MenuItem>
-                            ))}
-                        </Menu>
-                    </Box>
-                    <Typography
-                        variant="h5"
-                        noWrap
-                        component="div"
-                        sx={{
-                            flexGrow: 1,
-                            display: { xs: "flex", md: "none" },
-                            fontFamily: "GalyonBold",
-                            fontWeight: "bold",
-                            background: "var(--gradient)",
-                            WebkitBackgroundClip: "text",
-                            WebkitTextFillColor: "transparent",
-                        }}
-                    >
-                        FindMyFood!
-                    </Typography>
+                                fontFamily: "GalyonBold",
+                                fontWeight: "bold",
+                                background: "var(--gradient)",
+                                display: { xs: "none", md: "flex" },
+                                WebkitBackgroundClip: "text",
+                                WebkitTextFillColor: "transparent",
+                            }}>
+                            FindMyFood!
+                        </Typography>
 
-                    {/* Desktop Nav */}
-                    <Box ml={10} sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-                        {pageButtons.map(button => (
-                            <Button
-                                key={button.label}
-                                onClick={() => {
-                                    handleCloseNavMenu();
-                                    button.onClick();
+                        {/* Mobile Nav */}
+                        <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+                            <IconButton
+                                size="large"
+                                aria-label="account of current user"
+                                aria-controls="menu-appbar"
+                                aria-haspopup="true"
+                                onClick={handleOpenNavMenu}
+                                color="inherit">
+                                <MenuIcon />
+                            </IconButton>
+                            <Menu
+                                id="menu-appbar"
+                                anchorEl={anchorElNav}
+                                anchorOrigin={{
+                                    vertical: "bottom",
+                                    horizontal: "left",
                                 }}
-                                sx={{ m: 2, display: "block" }}
-                            >
-                                {button.label}
-                            </Button>
-                        ))}
-                    </Box>
-
-                    <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
-                        {user ? (
-                            <>
-                                <Tooltip title="Open settings">
-                                    <IconButton
-                                        size="large"
-                                        onClick={handleOpenUserMenu}
-                                        sx={{ p: 0 }}
-                                    >
-                                        <Avatar alt="user avatar" src={user.avatarPath} />
-                                    </IconButton>
-                                </Tooltip>
-                            </>
-                        ) : (
-                            <>
-                                {loginButtons.map(button => (
-                                    <Button key={button.label} onClick={() => button.onClick()}>
-                                        {button.label}
-                                    </Button>
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: "top",
+                                    horizontal: "left",
+                                }}
+                                open={!!anchorElNav}
+                                onClose={handleCloseNavMenu}
+                                sx={{
+                                    display: { xs: "block", md: "none" },
+                                }}>
+                                {pageButtons.map(button => (
+                                    <MenuItem key={button.label} onClick={handleCloseNavMenu}>
+                                        <Typography textAlign="center">{button.label}</Typography>
+                                    </MenuItem>
                                 ))}
+                            </Menu>
+                        </Box>
+                        <Typography
+                            variant="h5"
+                            noWrap
+                            component="div"
+                            sx={{
+                                flexGrow: 1,
+                                display: { xs: "flex", md: "none" },
+                                fontFamily: "GalyonBold",
+                                fontWeight: "bold",
+                                background: "var(--gradient)",
+                                WebkitBackgroundClip: "text",
+                                WebkitTextFillColor: "transparent",
+                            }}>
+                            FindMyFood!
+                        </Typography>
 
-                                <LoginDialog />
-                            </>
-                        )}
-
-                        <Menu
-                            sx={{ mt: "45px" }}
-                            id="menu-appbar"
-                            anchorEl={anchorElUser}
-                            anchorOrigin={{
-                                vertical: "top",
-                                horizontal: "right",
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: "top",
-                                horizontal: "right",
-                            }}
-                            open={!!anchorElUser}
-                            onClose={handleCloseUserMenu}
-                        >
-                            {settingsButtons.map(button => (
-                                <MenuItem
+                        {/* Desktop Nav */}
+                        <Box ml={10} sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+                            {pageButtons.map(button => (
+                                <Button
                                     key={button.label}
                                     onClick={() => {
                                         handleCloseNavMenu();
                                         button.onClick();
                                     }}
-                                >
-                                    <Typography textAlign="center">{button.label}</Typography>
-                                </MenuItem>
+                                    sx={{ m: 2, display: "block" }}>
+                                    {button.label}
+                                </Button>
                             ))}
-                        </Menu>
-                    </Box>
-                </Toolbar>
-            </Container>
-        </AppBar>
+                        </Box>
+
+                        <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
+                            {user ? (
+                                <>
+                                    <Tooltip title="Open settings">
+                                        <IconButton size="large" onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                            <Avatar alt="user avatar" src={user.avatarPath} />
+                                        </IconButton>
+                                    </Tooltip>
+                                </>
+                            ) : (
+                                <>
+                                    {loginButtons.map(button => (
+                                        <Button key={button.label} onClick={() => button.onClick()}>
+                                            {button.label}
+                                        </Button>
+                                    ))}
+
+                                    <LoginDialog />
+                                </>
+                            )}
+
+                            <Menu
+                                sx={{ mt: "45px" }}
+                                id="menu-appbar"
+                                anchorEl={anchorElUser}
+                                anchorOrigin={{
+                                    vertical: "top",
+                                    horizontal: "right",
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: "top",
+                                    horizontal: "right",
+                                }}
+                                open={!!anchorElUser}
+                                onClose={handleCloseUserMenu}>
+                                {settingsButtons.map(button => (
+                                    <MenuItem
+                                        key={button.label}
+                                        onClick={() => {
+                                            handleCloseNavMenu();
+                                            button.onClick();
+                                        }}>
+                                        <Typography textAlign="center">{button.label}</Typography>
+                                    </MenuItem>
+                                ))}
+                            </Menu>
+                        </Box>
+                    </Toolbar>
+                </Container>
+            </AppBar>
+        </HideOnScroll>
     );
 };
 
