@@ -31,7 +31,7 @@ import PasswordStrengthMeter from "../components/PasswordStrengthMeter";
 import { setShowLoginDialog } from "../app/slices/ui/dialogs/loginDialog";
 import { userLoggedIn } from "../app/slices/auth/auth";
 
-const RegistrationPageNew = () => {
+const RegistrationPage = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
@@ -272,4 +272,4 @@ const RegistrationPageNew = () => {
     );
 };
 
-export default RegistrationPageNew;
+export default RegistrationPage;
