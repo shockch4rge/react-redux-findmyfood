@@ -20,13 +20,14 @@ const LocationCard = ({ restaurant }: Props) => {
                     borderRadius: 5,
                     boxShadow: 3,
                     p: 1,
-                }}
-            >
+                }}>
                 <CardContent>
                     <iframe
                         height={120}
                         frameBorder="0"
-                        src={`https://www.google.com/maps/embed/v1/place?key=${config.google.apis.maps}&q=${restaurant.address.replace(/\s+/, "+")}`}
+                        src={`https://www.google.com/maps/embed/v1/place?key=${
+                            config.google.apis.maps
+                        }&q=${restaurant.address.replace(/\s+/, "+")}`}
                         allowFullScreen
                         style={{ borderRadius: 8 }}
                     />
@@ -38,6 +39,7 @@ const LocationCard = ({ restaurant }: Props) => {
                         <Box>
                             <Typography>Opening Hours:</Typography>
                             <Typography variant="body2">
+                                {restaurant.availableTimes.days.join(", ")}{" "}
                                 {restaurant.availableTimes.openingHours} -{" "}
                                 {restaurant.availableTimes.closingHours}
                             </Typography>
