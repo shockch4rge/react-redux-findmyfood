@@ -29,12 +29,12 @@ export class AuthHelper {
     }
 
     public static hasDigits(password: string, quantity: number = 2) {
-        const regex = new RegExp(`((.*[0-9])${quantity})`);
+        const regex = new RegExp(`((.*[0-9]){${quantity}})`);
         return regex.test(password);
     }
 
     public static hasLowerCaseLetters(password: string, quantity: number = 3) {
-        const regex = new RegExp(`((.*[a-z])${quantity})`);
+        const regex = new RegExp(`((.*[a-z]){${quantity}})`);
         return regex.test(password);
     }
 
