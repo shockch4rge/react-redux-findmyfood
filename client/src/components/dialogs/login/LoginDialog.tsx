@@ -92,7 +92,7 @@ const LoginDialog = () => {
                     <Box>
                         <Typography variant="body2">
                             Don't have an account?{" "}
-                            <Link component={RouterLink} to="/registernew">
+                            <Link component={RouterLink} to="/register">
                                 Sign up!
                             </Link>
                         </Typography>
