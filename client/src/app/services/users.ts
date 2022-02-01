@@ -40,10 +40,11 @@ const users = api.injectEndpoints({
             invalidatesTags: cacher.invalidatesList("Users"),
         }),
 
-        updateUser: builder.mutation<UserData, UserData>({
-            query: updated => ({
-                url: `/user/${updated.id}`,
+        updateUser: builder.mutation<UserData, FormData>({
+            query: form => ({
+                url: `/user/${form.get("id")}`,
                 method: "put",
+                body: form,
             }),
         }),
 
