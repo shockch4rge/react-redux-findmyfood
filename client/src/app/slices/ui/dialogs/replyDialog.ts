@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const replyDialog = createSlice({
+const replyDialogSlice = createSlice({
     name: "reply",
 
     initialState: {
@@ -33,5 +33,5 @@ const replyDialog = createSlice({
 });
 
 export const { setShowDeleteReplyDialog, setShowEditReplyDialog, setShowWriteReplyDialog } =
-    replyDialog.actions;
-export default replyDialog;
+    replyDialogSlice.actions;
+export default replyDialogSlice;
