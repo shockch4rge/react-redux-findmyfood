@@ -1,13 +1,19 @@
-import { Box, Card, Container, Avatar, Typography, Divider, Button } from "@mui/material";
+import { Box, Card, Container, Avatar, Typography, Divider, Button, Stack } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { useGetUserQuery } from "../../app/services/users";
 import { ReplyData } from "../../models/Reply";
+import { setShowDeleteReplyDialog, setShowEditReplyDialog } from "../../app/slices/ui/dialogs/replyDialog";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import EditReplyDialog from "../dialogs/reply/EditReplyDialog";
 
 interface Props {
     reply: ReplyData;
 }
 
 const ReplyCard = ({ reply }: Props) => {
+    const dispatch = useAppDispatch();
     // get the current/logged in user from the store
     const activeUser = useAppSelector(state => state.auth);
     // get the poster of this reply
@@ -22,8 +28,7 @@ const ReplyCard = ({ reply }: Props) => {
                     height: "fit-content",
                     borderRadius: 3,
                     p: 1,
-                }}
-            >
+                }}>
                 <Container sx={{ width: "fit-content" }}>
                     <Box display="flex" justifyContent="center" alignItems="center">
                         <Avatar sx={{ width: 50, height: 50, mb: 1 }} src={poster?.avatarPath} />
@@ -41,17 +46,28 @@ const ReplyCard = ({ reply }: Props) => {
                         sx={{
                             fontFamily: "GalyonBook",
                             fontStyle: "italic",
-                        }}
-                    >
+                        }}>
                         {reply.isEdited ? "Edited" : "Posted"} {reply.timestamp}
                     </Typography>
 
                     {/* active user is logged in and reply is posted by them */}
                     {activeUser && reply.userId === activeUser.id && (
-                        <Box>
-                            <Button>Edit Reply</Button>
-                            <Button>Delete Reply</Button>
-                        </Box>
+                        <Stack direction="row" spacing={2}>
+                            <Button
+                                size="small"
+                                onClick={() => dispatch(setShowEditReplyDialog(true))}
+                                startIcon={<EditIcon />}>
+                                Edit Reply
+                            </Button>
+                            <Button
+                                size="small"
+                                onClick={() => dispatch(setShowDeleteReplyDialog(true))}
+                                startIcon={<DeleteIcon />}>
+                                Delete Reply
+                            </Button>
+
+                            <EditReplyDialog reply={reply} />
+                        </Stack>
                     )}
                 </Box>
             </Card>
