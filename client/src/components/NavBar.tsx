@@ -19,16 +19,14 @@ import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../hooks/useAppSelector";
 import { userLoggedOut } from "../app/slices/auth/auth";
 import { useAppDispatch } from "../hooks/useAppDispatch";
-import { setShowLoginDialog } from "../app/slices/ui/dialogs/loginDialog";
-import LoginDialog from "./dialogs/login/LoginDialog";
+import { setShowLoginDialog } from "../app/slices/ui/dialogs/userDialog";
+import LoginDialog from "./dialogs/user/LoginDialog";
 import { createSnack } from "../app/slices/ui/snackbars/snack";
 
 interface ButtonData {
     label: string;
     onClick: (value?: string) => void;
 }
-
-const settingsButtons = ["Profile", "Settings", "Sign Out"];
 
 const HideOnScroll = (props: { children: React.ReactElement }) => {
     const { children } = props;
@@ -87,10 +85,6 @@ const NavBar = () => {
         {
             label: "Manage Profile",
             onClick: () => navigate("/manage-profile"),
-        },
-        {
-            label: "Settings",
-            onClick: () => navigate("/settings"),
         },
         {
             label: "Sign Out",
