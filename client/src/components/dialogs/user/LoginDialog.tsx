@@ -17,7 +17,7 @@ import { useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useAppSelector } from "../../../hooks/useAppSelector";
-import { setShowLoginDialog } from "../../../app/slices/ui/dialogs/loginDialog";
+import { setShowLoginDialog } from "../../../app/slices/ui/dialogs/userDialog";
 import { useAppDispatch } from "../../../hooks/useAppDispatch";
 import { useLazyLoginUserQuery } from "../../../app/services/users";
 import { userLoggedIn } from "../../../app/slices/auth/auth";
@@ -26,7 +26,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { AuthHelper } from "../../../utilities/AuthHelper";
 
 const LoginDialog = () => {
-    const open = useAppSelector(state => state.ui.dialogs.login.show);
+    const open = useAppSelector(state => state.ui.dialogs.user.login.show);
     const dispatch = useAppDispatch();
 
     const [email, setEmail] = useState("");

@@ -2,7 +2,7 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authSlice from "./slices/auth/auth";
 import replyDialogSlice from "./slices/ui/dialogs/replyDialog";
 import reviewDialogSlice from "./slices/ui/dialogs/reviewDialog";
-import loginDialogSlice from "./slices/ui/dialogs/loginDialog";
+import userDialogSlice   from "./slices/ui/dialogs/userDialog";
 import endpointTester from "./middleware/endpointTester";
 import api from "./services/api";
 import snackSlice from "./slices/ui/snackbars/snack";
@@ -10,7 +10,7 @@ import snackSlice from "./slices/ui/snackbars/snack";
 const dialogs = combineReducers({
     [replyDialogSlice.name]: replyDialogSlice.reducer,
     [reviewDialogSlice.name]: reviewDialogSlice.reducer,
-    [loginDialogSlice.name]: loginDialogSlice.reducer,
+    [userDialogSlice.name]: userDialogSlice.reducer,
 });
 
 const uiReducer = combineReducers({
