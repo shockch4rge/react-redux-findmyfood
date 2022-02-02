@@ -126,7 +126,7 @@ const LoginDialog = () => {
                             dispatch(userLoggedIn(user));
                             dispatch(setShowLoginDialog(false));
                             dispatch(
-                                createSnack({ message: `Hello, ${user.username}!`, severity: "success" })
+                                createSnack({ message: `Welcome back, ${user.username}!`, severity: "success" })
                             );
                         } catch (err) {
                             dispatch(createSnack({ message: err.data, severity: "error" }));

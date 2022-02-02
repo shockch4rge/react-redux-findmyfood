@@ -243,7 +243,7 @@ const RegistrationPage = () => {
                                     dispatch(userLoggedIn(user));
                                     dispatch(
                                         createSnack({
-                                            message: `Welcome, ${userInfo.username}!`,
+                                            message: `Welcome to FindMyFood, ${userInfo.username}!`,
                                             severity: "success",
                                         })
                                     );
