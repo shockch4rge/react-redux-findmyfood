@@ -28,7 +28,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthHelper } from "../utilities/AuthHelper";
 import { Link as RouterLink } from "react-router-dom";
 import PasswordStrengthMeter from "../components/PasswordStrengthMeter";
-import { setShowLoginDialog } from "../app/slices/ui/dialogs/loginDialog";
+import { setShowLoginDialog } from "../app/slices/ui/dialogs/userDialog";
 import { userLoggedIn } from "../app/slices/auth/auth";
 
 const RegistrationPage = () => {

@@ -40,7 +40,7 @@ import {
 import DeleteReviewDialog from "../components/dialogs/review/DeleteReviewDialog";
 import Footer from "../components/Footer";
 import RestaurantPageSkeleton from "../components/skeletons/RestaurantPageSkeleton";
-import { setShowLoginDialog } from "../app/slices/ui/dialogs/loginDialog";
+import { setShowLoginDialog } from "../app/slices/ui/dialogs/userDialog";
 
 const RestaurantPage = () => {
     const navigate = useNavigate();

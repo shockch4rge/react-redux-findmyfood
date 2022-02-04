@@ -40,8 +40,6 @@ export default class ReviewController {
     public static async update(request: Request, response: Response) {
         const id = request.params.id;
 
-        console.log(request.body);
-
         try {
             await ReviewRepository.update(id, { ...request.body });
             response.json({ msg: "Successfully updated!" });
