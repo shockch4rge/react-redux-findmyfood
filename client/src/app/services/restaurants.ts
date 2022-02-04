@@ -1,4 +1,5 @@
 import { RestaurantData } from "../../models/Restaurant";
+import { cacher } from "../../utilities/cacher";
 import api from "./api";
 
 const restaurants = api.injectEndpoints({
@@ -10,6 +11,8 @@ const restaurants = api.injectEndpoints({
                 url: "/restaurant",
                 method: "get",
             }),
+
+            providesTags: cacher.providesList("Restaurants"),
         }),
 
         getRestaurant: builder.query<RestaurantData, string>({
@@ -17,6 +20,8 @@ const restaurants = api.injectEndpoints({
                 url: `/restaurant/${id}`,
                 method: "get",
             }),
+
+            providesTags: cacher.cacheByIdArg("Restaurants"),
         }),
 
         updateRestaurantRating: builder.mutation<void, { id: string; rating: number }>({
@@ -27,8 +32,11 @@ const restaurants = api.injectEndpoints({
                     rating,
                 },
             }),
+
+            invalidatesTags: cacher.invalidatesList("Restaurants"),
         }),
     }),
 });
 
-export const { useGetAllRestaurantsQuery, useGetRestaurantQuery, useUpdateRestaurantRatingMutation } = restaurants;
+export const { useGetAllRestaurantsQuery, useGetRestaurantQuery, useUpdateRestaurantRatingMutation } =
+    restaurants;
