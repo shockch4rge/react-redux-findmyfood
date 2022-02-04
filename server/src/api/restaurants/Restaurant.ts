@@ -8,6 +8,7 @@ export default class Restaurant implements RestaurantData {
     public cuisines: Cuisine[];
     public telephone: string;
     public address: string;
+    public costScale: number;
     public availableTimes: AvailableTimesData;
     public imageUrl: string;
 
@@ -16,6 +17,7 @@ export default class Restaurant implements RestaurantData {
         this.name = data.name;
         this.description = data.description;
         this.averageRating = data.averageRating;
+        this.costScale = data.costScale;
         this.cuisines = data.cuisines;
         this.telephone = data.telephone;
         this.address = data.address;
@@ -28,6 +30,7 @@ export default class Restaurant implements RestaurantData {
             name: faker.company.companyName(),
             description: faker.lorem.paragraph(4),
             address: faker.address.streetAddress(),
+            costScale: faker.random.number({ min: 1, max: 4 }),
             averageRating: faker.random.float({ min: 1, max: 5, precision: 0.5 }),
             availableTimes: {
                 days: faker.random.arrayElements(
@@ -37,21 +40,7 @@ export default class Restaurant implements RestaurantData {
                 closingHours: String(faker.random.number({ min: 13, max: 23 })),
                 openingHours: String(faker.random.number({ min: 0, max: 12 })),
             },
-            cuisines: faker.random.arrayElements(
-                [
-                    "Italian",
-                    "Chinese",
-                    "Japanese",
-                    "Thai",
-                    "Indian",
-                    "Mexican",
-                    "American",
-                    "French",
-                    "Spanish",
-                    "German",
-                ],
-                4
-            ),
+            cuisines: faker.random.arrayElements([...Object.values(CUISINES)], 4),
             imageUrl: "https://cdn.pixabay.com/photo/2016/11/18/14/05/brick-wall-1834784__340.jpg",
             telephone: faker.phone.phoneNumber("91234567"),
         } as Omit<RestaurantData, "id">;
@@ -82,6 +71,7 @@ export interface RestaurantData {
     description: string;
     address: string;
     telephone: string;
+    costScale: number;
     averageRating: number;
     cuisines: Cuisine[];
     availableTimes: AvailableTimesData;
