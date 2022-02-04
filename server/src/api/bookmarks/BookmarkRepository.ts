@@ -4,7 +4,7 @@ import { BookmarkData } from "./Bookmark";
 import { uuid } from "../../utilities/uuid";
 
 export default class BookmarkRepository {
-    public static async getAllUserBookmarks(userId: string) {
+    public static async getUserBookmarks(userId: string) {
         const query = `SELECT * FROM bookmark WHERE user_id = ?`;
         const results = await db.query(query, [userId]);
         return results[0] as RowDataPacket[];
