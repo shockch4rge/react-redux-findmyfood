@@ -1,31 +1,19 @@
-import nm from "nodemailer"
-import Mail from "nodemailer/lib/mailer"
-import SMTPTransport from "nodemailer/lib/smtp-transport";
-// import oauth from "../oauth"
+import sendgrid, { MailDataRequired } from "@sendgrid/mail";
+import config from "../../config.json";
 
 class Emailer {
-    // public readonly transporter: nm.Transporter;
-
     public constructor() {
-        //     this.transporter = nm.createTransport({
-        //         //@ts-ignore
-        //         service: "gmail",
-        //         auth: {
-        //             type: "OAuth2",
-        //             user: "favouriteteo@gmail.com",
-        //             clientId: oauth._clientId,
-        //             clientSecret: oauth._clientSecret,
-        //             refreshToken: oauth.credentials.refresh_token,
-        //             accessToken: oauth.credentials.access_token,
-        //         },
-        //     } as SMTPTransport.Options);
+        sendgrid.setApiKey(config.sendgrid.apiKey);
+    }
 
-        // }
-
-        // public async send(mail: Mail.Options) {
-        //     await this.transporter.sendMail(mail);
-        // }
+    public async send(mail: MailDataRequired) {
+        try {
+            await sendgrid.send(mail);
+        } catch (err) {
+            console.log((err as any).response.body.errors);
+            throw new Error("Failed to send email.")
+        }
     }
 }
 
-export default new Emailer
+export default new Emailer();
