@@ -22,19 +22,6 @@ export default class Review implements ReviewData {
         this.isEdited = data.isEdited;
     }
 
-    public static getMockReview() {
-        return new Review({
-            id: "review-id",
-            restaurantId: "restaurant-id",
-            userId: "user-id",
-            rating: 4.4,
-            title: "My review of this restaurant",
-            content: "This restaurant is great!",
-            timestamp: timestamp(),
-            isEdited: false,
-        });
-    }
-
     public static getEmpty(restaurantId: string, userId: string) {
         return {
             id: uuid(),

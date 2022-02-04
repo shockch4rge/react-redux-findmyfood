@@ -16,17 +16,6 @@ export default class Reply implements ReplyData {
         this.timestamp = data.timestamp;
         this.isEdited = data.isEdited;
     }
-
-    public static getMockReply() {
-        return new Reply({
-            id: "reply-id",
-            reviewId: "review-id",
-            userId: "user-id",
-            content: "I agree with this great review!",
-            timestamp: timestamp(),
-            isEdited: false,
-        })
-    }
 }
 
 export interface ReplyData {

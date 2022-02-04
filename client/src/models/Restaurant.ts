@@ -20,27 +20,6 @@ export default class Restaurant implements RestaurantData {
         this.availableTimes = data.availableTimes;
         this.imageUrl = data.imageUrl;
     }
-
-    public static getMockRestaurant() {
-        return new Restaurant({
-            id: "restaurant-id",
-            name: "Mock Dining",
-            description: `Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                Tenetur voluptatibus similique vel ipsa beatae eum ratione
-                aliquam atque inventore in sed nulla, voluptatem illo
-                consectetur culpa facere assumenda soluta. Iure?`,
-            averageRating: 4.3,
-            cuisines: ["Asian", "Chinese", "Halal"],
-            address: "Mock Street 42",
-            telephone: "91234567",
-            availableTimes: {
-                openingHours: "12:00",
-                closingHours: "23:59",
-                days: ["Monday", "Tuesday"],
-            },
-            imageUrl: "https://restaurant_url.com",
-        });
-    }
 }
 
 export interface RestaurantData {
