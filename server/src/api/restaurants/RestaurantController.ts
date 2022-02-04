@@ -31,8 +31,6 @@ export default class RestaurantController {
     }
 
     public static async updateRating(request: Request, response: Response) {
-        console.log(request.body);
-
         try {
             await RestaurantRepository.updateRating(request.params.id, request.body.rating);
             response.json("Updated restaurant rating!");

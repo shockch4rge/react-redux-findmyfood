@@ -7,6 +7,7 @@ import { ReplyData } from "../../models/Reply";
 import { setShowDeleteReplyDialog, setShowEditReplyDialog } from "../../app/slices/ui/dialogs/replyDialog";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import EditReplyDialog from "../dialogs/reply/EditReplyDialog";
+import DeleteReplyDialog from "../dialogs/reply/DeleteReplyDialog";
 
 interface Props {
     reply: ReplyData;
@@ -27,7 +28,7 @@ const ReplyCard = ({ reply }: Props) => {
                     display: "flex",
                     height: "fit-content",
                     borderRadius: 3,
-                    p: 1,
+                    p: 3,
                 }}>
                 <Container sx={{ width: "fit-content" }}>
                     <Box display="flex" justifyContent="center" alignItems="center">
@@ -40,13 +41,7 @@ const ReplyCard = ({ reply }: Props) => {
                     <Typography variant="body2" fontSize={16}>
                         {reply.content}
                     </Typography>
-                    <Typography
-                        m={1}
-                        textAlign="end"
-                        sx={{
-                            fontFamily: "GalyonBook",
-                            fontStyle: "italic",
-                        }}>
+                    <Typography mt={5} textAlign="end" variant="body2" fontStyle="italic">
                         {reply.isEdited ? "Edited" : "Posted"} {reply.timestamp}
                     </Typography>
 
@@ -59,14 +54,15 @@ const ReplyCard = ({ reply }: Props) => {
                                 startIcon={<EditIcon />}>
                                 Edit Reply
                             </Button>
+                            <EditReplyDialog reply={reply} />
+
                             <Button
                                 size="small"
                                 onClick={() => dispatch(setShowDeleteReplyDialog(true))}
                                 startIcon={<DeleteIcon />}>
                                 Delete Reply
                             </Button>
-
-                            <EditReplyDialog reply={reply} />
+                            <DeleteReplyDialog replyId={reply.id} />
                         </Stack>
                     )}
                 </Box>

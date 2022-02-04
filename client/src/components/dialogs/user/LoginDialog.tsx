@@ -23,6 +23,7 @@ import { useLazyLoginUserQuery } from "../../../app/services/users";
 import { userLoggedIn } from "../../../app/slices/auth/auth";
 import { createSnack } from "../../../app/slices/ui/snackbars/snack";
 import { Link as RouterLink } from "react-router-dom";
+import { useSendEmailMutation } from "../../../app/services/emails";
 import { AuthHelper } from "../../../utilities/AuthHelper";
 
 const LoginDialog = () => {
@@ -31,6 +32,7 @@ const LoginDialog = () => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [sendEmail] = useSendEmailMutation();
     const [showPassword, setShowPassword] = useState(false);
 
     /**
@@ -96,7 +98,6 @@ const LoginDialog = () => {
                                 Sign up!
                             </Link>
                         </Typography>
-                        {/* TODO: Create forgot-password redirect and get nodemailer working */}
                         <Typography variant="body2">
                             <Link component={RouterLink} to="/forgot-password">
                                 Forgot password?

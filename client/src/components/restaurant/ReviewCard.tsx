@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGetReviewRepliesQuery } from "../../app/services/replies";
 import { useGetUserQuery } from "../../app/services/users";
-import { setShowLoginDialog } from "../../app/slices/ui/dialogs/loginDialog";
+import { setShowLoginDialog } from "../../app/slices/ui/dialogs/userDialog";
 import { setShowWriteReplyDialog } from "../../app/slices/ui/dialogs/replyDialog";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { useAppSelector } from "../../hooks/useAppSelector";
@@ -34,7 +34,7 @@ const ReviewCard = ({ review }: Props) => {
                     display: "flex",
                     height: "fit-content",
                     borderRadius: 3,
-                    p: 2,
+                    p: 3,
                 }}>
                 <Container sx={{ width: "fit-content" }}>
                     <Box display="flex" justifyContent="center" alignItems="center">

@@ -1,11 +1,4 @@
-import {
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    CircularProgress,
-} from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, CircularProgress } from "@mui/material";
 import { setShowDeleteReviewDialog } from "../../../app/slices/ui/dialogs/reviewDialog";
 import { useDeleteReviewMutation } from "../../../app/services/reviews";
 import { useAppSelector } from "../../../hooks/useAppSelector";
@@ -17,9 +10,9 @@ interface Props {
 }
 
 const DeleteReviewDialog = ({ reviewId }: Props) => {
-    const [deleteReview, { isLoading }] = useDeleteReviewMutation();
-    const open = useAppSelector(state => state.ui.dialogs.review.delete.show);
     const dispatch = useAppDispatch();
+    const open = useAppSelector(state => state.ui.dialogs.review.delete.show);
+    const [deleteReview, { isLoading }] = useDeleteReviewMutation();
 
     return (
         <Dialog open={open} fullWidth>
@@ -48,8 +41,7 @@ const DeleteReviewDialog = ({ reviewId }: Props) => {
                                 })
                             );
                         }
-                    }}
-                >
+                    }}>
                     Delete
                 </Button>
             </DialogActions>
