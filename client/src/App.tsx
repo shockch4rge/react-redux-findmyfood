@@ -3,16 +3,16 @@ import theme from "./theme";
 import store from "./app/store";
 import { Provider } from "react-redux";
 import { Navigate, useRoutes } from "react-router-dom";
+import { ThemeProvider } from "@mui/material";
+import ScrollToTop from "./components/ScrollToTop";
+import Snack from "./components/common/Snack";
+import RestaurantPage from "./pages/RestaurantPage";
+import ForgotPasswordPage from "./pages/password/ForgotPasswordPage";
+import ManageProfilePage from "./pages/ManageProfilePage";
 import PageNotFound from "./pages/PageNotFound";
 import RegistrationPage from "./pages/RegistrationPage";
 import AboutPage from "./pages/AboutPage";
 import HomePage from "./pages/HomePage";
-import { ThemeProvider } from "@mui/material";
-import RestaurantPage from "./pages/RestaurantPage";
-import ScrollToTop from "./utilities/ScrollToTop";
-import HomePageSkeleton from "./components/skeletons/HomePageSkeleton";
-import RestaurantPageSkeleton from "./components/skeletons/RestaurantPageSkeleton";
-import Snack from "./components/common/Snack";
 
 function App() {
     const routes = useRoutes([
@@ -20,6 +20,16 @@ function App() {
             path: "register",
             caseSensitive: true,
             element: <RegistrationPage />,
+        },
+        {
+            path: "manage-profile",
+            caseSensitive: true,
+            element: <ManageProfilePage />,
+        },
+        {
+            path: "forgot-password",
+            caseSensitive: true,
+            element: <ForgotPasswordPage />,
         },
         {
             path: "home",
@@ -35,11 +45,6 @@ function App() {
             path: "restaurant/:restaurantId",
             caseSensitive: true,
             element: <RestaurantPage />,
-        },
-        {
-            path: "skeleton",
-            caseSensitive: true,
-            element: <RestaurantPageSkeleton />,
         },
         {
             path: "/",
