@@ -1,9 +1,10 @@
 import UserRepository from "./UserRepository";
 import { Request, Response } from "express";
+import { uuid } from "../../utilities/uuid";
 import User from "./User";
 import fileUpload from "express-fileupload";
 import path from "node:path";
-import { uuid } from "../../utilities/uuid";
+import fs from "node:fs/promises";
 
 export default class UserController {
     public static async getUser(request: Request, response: Response) {
@@ -16,10 +17,12 @@ export default class UserController {
     public static async deleteUser(request: Request, response: Response) {
         const id = request.params.id;
 
-        console.log(id);
-
         try {
+            const avatar = await UserRepository.getAvatar(id);
+            console.log("avatar", avatar);
+            const filePath = path.join(__dirname, "../../uploads", avatar);
             await UserRepository.delete(id);
+            await fs.unlink(filePath);
             response.json({ msg: "User deleted!" });
         } catch (err) {
             response.json(err);
@@ -29,15 +32,12 @@ export default class UserController {
     public static async registerUser(request: Request, response: Response) {
         const id = uuid();
 
-        // get the file from the body
-        const file = request.files!.avatar as fileUpload.UploadedFile;
-        // create a new file name with the user id: image.png -> user_id.png
-        const fileName = `${id}${path.extname(file.name)}`;
-        // create a path to the uploads folder with the file name
+        const avatarFile = request.files!.avatar as fileUpload.UploadedFile;
+        const fileName = `${id}${path.extname(avatarFile.name)}`;
         const filePath = path.join(__dirname, "../../uploads", fileName);
 
         try {
-            await file.mv(filePath);
+            await avatarFile.mv(filePath);
             await UserRepository.register({ id, ...request.body, avatarPath: fileName });
             response.json({ message: "User registered!" });
         } catch (err) {
@@ -53,17 +53,29 @@ export default class UserController {
             const result = await UserRepository.login(email, password);
             response.json(User.toJSON(result));
         } catch (err) {
-            console.log(err);
             response.status(500).send((err as Error).message);
         }
     }
 
     public static async updateUser(request: Request, response: Response) {
+        const file = request.files?.avatar as fileUpload.UploadedFile;
+        const fileName = request.body.avatarPath;
+
+        const filePath = path.join(__dirname, "../../uploads", fileName);
+
         try {
-            await UserRepository.update(request.params.userId, request.body);
+            await fs.unlink(filePath);
+            await file.mv(filePath);
+        } catch (err) {
+            response.status(500).send((err as Error).message);
+            return;
+        }
+
+        try {
+            await UserRepository.update(request.params.userId, { ...request.body, avatarPath: fileName });
             response.json({ msg: "User updated!" });
         } catch (err) {
-            response.status(500).json(err);
+            response.status(500).send((err as Error).message);
         }
     }
 

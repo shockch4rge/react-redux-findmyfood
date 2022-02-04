@@ -1,12 +1,16 @@
 import { UserData } from "./User";
 import db from "../../db";
 import { RowDataPacket } from "mysql2";
-import { uuid } from "../../utilities/uuid";
 import bcrypt from "bcrypt";
 
 export default class UserRepository {
-    public static async update(id: string, data: Omit<UserData, "id">) {
-        const values = Object.values(data);
+    public static async update(id: string, user: UserData) {
+        const salt = await bcrypt.genSalt();
+        const hash = await bcrypt.hash(user.password, salt);
+
+        console.log("before hash", user.password);
+        user.password = hash;
+        console.log("after hash", user.password);
 
         const query = `
         UPDATE user u
@@ -24,7 +28,18 @@ export default class UserRepository {
             a.activated = ?
         WHERE u.id = ?    
         `;
-        await db.query(query, [values, id]);
+        await db.query(query, [
+            user.username,
+            user.firstName,
+            user.lastName,
+            user.gender,
+            user.email,
+            user.password,
+            user.address,
+            user.telephone,
+            user.activated,
+            id,
+        ]);
     }
 
     public static async delete(id: string) {
@@ -48,7 +63,6 @@ export default class UserRepository {
         `;
 
         const results = await db.query(query, [id]);
-        console.log(results[0] as RowDataPacket[]);
         return (results[0] as RowDataPacket[])[0];
     }
 
@@ -86,8 +100,6 @@ export default class UserRepository {
         `;
 
         const results = await db.query(query, [email, _password]);
-        console.log(results[0]);
-
         return (results[0] as RowDataPacket[])[0];
     }
 
@@ -95,8 +107,8 @@ export default class UserRepository {
         const salt = await bcrypt.genSalt();
         const hash = await bcrypt.hash(user.password, salt);
 
-        user.activated = true;
         user.password = hash;
+        user.activated = true;
 
         const isDuplicateEmail =
             ((await db.query(`SELECT * FROM account WHERE email = ?`, [user.email]))[0] as RowDataPacket[])
@@ -133,5 +145,14 @@ export default class UserRepository {
     public static async updatePassword(id: string, password: string) {
         const query = `UPDATE user SET password = ? WHERE id = ?`;
         await db.query(query, [password, id]);
+    }
+
+    public static async getAvatar(id: string) {
+        const query = `
+        SELECT avatar_path FROM user WHERE id = ?
+        `;
+        const results = await db.query(query, [id]);
+        console.log(results[0]);
+        return (results[0] as RowDataPacket[])[0].avatar_path;
     }
 }
