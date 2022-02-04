@@ -17,7 +17,6 @@ import { createSnack } from "../../../app/slices/ui/snackbars/snack";
 import { useAppDispatch } from "../../../hooks/useAppDispatch";
 import { useAppSelector } from "../../../hooks/useAppSelector";
 import { timestamp } from "../../../utilities/timestamp";
-import Snack from "../../common/Snack";
 
 interface Props {
     restaurantId: string;

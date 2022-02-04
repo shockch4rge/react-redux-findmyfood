@@ -1,11 +1,4 @@
-import {
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    CircularProgress,
-} from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, CircularProgress } from "@mui/material";
 import { setShowDeleteReplyDialog } from "../../../app/slices/ui/dialogs/replyDialog";
 import { useDeleteReplyMutation } from "../../../app/services/replies";
 import { useAppSelector } from "../../../hooks/useAppSelector";
@@ -14,13 +7,12 @@ import { createSnack } from "../../../app/slices/ui/snackbars/snack";
 
 interface Props {
     replyId: string;
-    onDelete: () => void;
 }
 
-const DeleteReviewDialog = ({ replyId, onDelete }: Props) => {
+const DeleteReplyDialog = ({ replyId }: Props) => {
     const dispatch = useAppDispatch();
-    const [deleteReply, { isLoading }] = useDeleteReplyMutation();
     const open = useAppSelector(state => state.ui.dialogs.reply.delete.show);
+    const [deleteReply, { isLoading }] = useDeleteReplyMutation();
 
     return (
         <Dialog open={open} fullWidth>
@@ -32,7 +24,7 @@ const DeleteReviewDialog = ({ replyId, onDelete }: Props) => {
                     color="error"
                     onClick={async () => {
                         try {
-                            await deleteReply(replyId);
+                            await deleteReply(replyId).unwrap();
                             dispatch(setShowDeleteReplyDialog(false));
                             dispatch(
                                 createSnack({
@@ -40,7 +32,6 @@ const DeleteReviewDialog = ({ replyId, onDelete }: Props) => {
                                     severity: "success",
                                 })
                             );
-                            onDelete();
                         } catch (err) {
                             console.log(err);
                             dispatch(
@@ -50,8 +41,7 @@ const DeleteReviewDialog = ({ replyId, onDelete }: Props) => {
                                 })
                             );
                         }
-                    }}
-                >
+                    }}>
                     Delete
                 </Button>
             </DialogActions>
@@ -59,4 +49,4 @@ const DeleteReviewDialog = ({ replyId, onDelete }: Props) => {
     );
 };
 
-export default DeleteReviewDialog;
+export default DeleteReplyDialog;
