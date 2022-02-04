@@ -22,6 +22,9 @@ import Restaurant, { RestaurantData } from "../models/Restaurant";
 import { DesktopSearchBar, MobileSearchBar } from "../components/SearchBar";
 import { useNavigate } from "react-router-dom";
 import { useGetAllRestaurantsQuery } from "../app/services/restaurants";
+import HomePageSkeleton from "../components/skeletons/HomePageSkeleton";
+import { useEffect, useMemo, useState } from "react";
+import { useDebounce } from "../hooks/useDebounce";
 
 interface ButtonData {
     label: string;
@@ -29,9 +32,9 @@ interface ButtonData {
 }
 
 const HomePage = () => {
-    const { data: restaurants, isLoading: restaurantsLoading, error } = useGetAllRestaurantsQuery();
-    const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const { data: restaurants, isLoading: restaurantsLoading, error } = useGetAllRestaurantsQuery();
 
     // #region Buttons
     const filterButtons = [
@@ -54,17 +57,14 @@ const HomePage = () => {
     ] as ButtonData[];
     // #endregion
 
-    //TODO: Change into skeleton loader
-    if (!restaurants) return <h1>Hello!</h1>;
-
-    console.log(restaurants);
+    if (!restaurants) return <HomePageSkeleton />;
 
     return (
         <>
             {error ? (
                 <>Something went wrong</>
             ) : restaurantsLoading ? (
-                <>Loading...</>
+                <HomePageSkeleton />
             ) : (
                 <>
                     <NavBar />
@@ -85,9 +85,8 @@ const HomePage = () => {
                                 background:
                                     "linear-gradient(to top, #161616, transparent), url(https://picsum.photos/seed/picsum/536/354) center center no-repeat",
                                 backgroundSize: "cover",
-                            }}
-                        >
-                            <DesktopSearchBar />
+                            }}>
+                            <DesktopSearchBar restaurants={restaurants} />
                         </Card>
 
                         <MobileSearchBar />
@@ -96,18 +95,13 @@ const HomePage = () => {
                             Filters
                         </Typography>
 
-                        <Stack
-                            spacing={1}
-                            direction="row"
-                            sx={{ display: { xs: "none", md: "flex" }, mb: 8 }}
-                        >
+                        <Stack spacing={1} direction="row" sx={{ display: { xs: "none", md: "flex" }, mb: 8 }}>
                             {filterButtons.map(button => (
                                 <Button
                                     key={`${Math.random()}_${button.label}`}
                                     onClick={() => button.onClick()}
                                     endIcon={<ExpandMoreIcon />}
-                                    sx={{ boxShadow: 1 }}
-                                >
+                                    sx={{ boxShadow: 1 }}>
                                     {button.label}
                                 </Button>
                             ))}
@@ -121,16 +115,12 @@ const HomePage = () => {
                                 sx={{ display: { xs: "none", md: "flex" } }}
                                 container
                                 rowSpacing={4}
-                                columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-                            >
+                                columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                                 {restaurants.map(restaurant => (
                                     <Grid item xs={4} key={`grid_${restaurant.id}`}>
                                         <Card elevation={3}>
                                             <CardActionArea
-                                                onClick={() =>
-                                                    navigate(`/restaurant/${restaurant.id}`)
-                                                }
-                                            >
+                                                onClick={() => navigate(`/restaurant/${restaurant.id}`)}>
                                                 <CardMedia
                                                     component="img"
                                                     height={180}
@@ -149,22 +139,16 @@ const HomePage = () => {
                                                         value={+restaurant.averageRating}
                                                         size="small"
                                                     />
-                                                    <Stack
-                                                        direction="row"
-                                                        spacing={0.5}
-                                                        sx={{ mt: 1 }}
-                                                    >
-                                                        {restaurant.cuisines
-                                                            .slice(0, 3)
-                                                            .map(cuisine => (
-                                                                <Chip
-                                                                    key={`${Math.random()}_${cuisine}`}
-                                                                    color="success"
-                                                                    label={cuisine}
-                                                                    size="small"
-                                                                    variant="outlined"
-                                                                />
-                                                            ))}
+                                                    <Stack direction="row" spacing={0.5} sx={{ mt: 1 }}>
+                                                        {restaurant.cuisines.slice(0, 3).map(cuisine => (
+                                                            <Chip
+                                                                key={`${Math.random()}_${cuisine}`}
+                                                                color="success"
+                                                                label={cuisine}
+                                                                size="small"
+                                                                variant="outlined"
+                                                            />
+                                                        ))}
                                                     </Stack>
                                                 </CardContent>
                                             </CardActionArea>
@@ -176,18 +160,13 @@ const HomePage = () => {
 
                         <Stack spacing={2.5} sx={{ display: { md: "none" } }}>
                             {restaurants.map(restaurant => (
-                                <Card
-                                    key={`list_${restaurant.id}`}
-                                    elevation={3}
-                                    sx={{ height: 120 }}
-                                >
+                                <Card key={`list_${restaurant.id}`} elevation={3} sx={{ height: 120 }}>
                                     <CardActionArea
                                         sx={{
                                             display: "flex",
                                             justifyContent: "flex-end",
                                             height: "inherit",
-                                        }}
-                                    >
+                                        }}>
                                         <CardContent sx={{ flexGrow: 1 }}>
                                             <Typography>{restaurant.name}</Typography>
                                             <Rating
@@ -200,7 +179,7 @@ const HomePage = () => {
                                         <CardMedia
                                             component="img"
                                             sx={{ width: 151, height: "inherit" }}
-                                            image={"https://bit.ly/3qODNbU"}
+                                            image={restaurant.imageUrl}
                                         />
                                     </CardActionArea>
                                 </Card>

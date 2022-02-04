@@ -1,22 +1,21 @@
-import {
-    IconButton,
-    Paper,
-    Divider,
-    Typography,
-    TextField,
-    Input,
-    SxProps,
-    Theme,
-    Container,
-} from "@mui/material";
+import { IconButton, Paper, Input, Autocomplete, TextField, InputAdornment } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import SearchIcon from "@mui/icons-material/Search";
+import { RestaurantData } from "../models/Restaurant";
 
 interface DesktopSearchBarProps {
-    onQueryChange: (value: string) => void;
+    restaurants: RestaurantData[];
 }
 
-export const DesktopSearchBar = ({ onQueryChange }: DesktopSearchBarProps) => {
+export const DesktopSearchBar = ({ restaurants }: DesktopSearchBarProps) => {
+    const navigate = useNavigate();
+
+    const handleSearchQueryChange = (_: React.SyntheticEvent, value: string) => {
+        const restaurantId = restaurants.find(r => r.name === value)!.id;
+        navigate(`/restaurant/${restaurantId}`);
+    };
+
     return (
         <Paper
             component="form"
@@ -27,16 +26,29 @@ export const DesktopSearchBar = ({ onQueryChange }: DesktopSearchBarProps) => {
                 display: "flex",
                 alignItems: "center",
                 borderRadius: 3,
-            }}
-        >
-            <IconButton>
-                <SearchIcon />
-            </IconButton>
-            <Input
-                disableUnderline
+            }}>
+            <Autocomplete
+                sx={{ border: "none" }}
+                disablePortal
                 fullWidth
-                placeholder={"Search for a restaurant here...."}
-                onChange={e => onQueryChange(e.target.value)}
+                placeholder="Search for a restaurant here!"
+                options={restaurants.map(r => r.name)}
+                onChange={handleSearchQueryChange}
+                renderInput={params => (
+                    <TextField
+                        {...params}
+                        InputProps={{
+                            ...params.InputProps,
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <IconButton>
+                                        <SearchIcon />
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+                )}
             />
         </Paper>
     );
