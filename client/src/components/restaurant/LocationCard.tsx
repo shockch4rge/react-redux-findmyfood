@@ -14,23 +14,25 @@ const LocationCard = ({ restaurant }: Props) => {
             </Typography>
             <Card
                 sx={{
-                    minWidth: 300,
-                    width: "fit-content",
                     height: 300,
                     borderRadius: 5,
                     boxShadow: 3,
                     p: 1,
                 }}>
                 <CardContent>
-                    <iframe
-                        height={120}
-                        frameBorder="0"
-                        src={`https://www.google.com/maps/embed/v1/place?key=${
-                            config.google.apis.maps
-                        }&q=${restaurant.address.replace(/\s+/, "+")}`}
-                        allowFullScreen
-                        style={{ borderRadius: 8 }}
-                    />
+                    <Box sx={{ width: { xs: 200, sm: 230, md: 270 } }}>
+                        <iframe
+                            width="100%"
+                            height={120}
+                            frameBorder="0"
+                            src={`https://www.google.com/maps/embed/v1/place?key=${
+                                config.google.apis.maps
+                            }&q=${restaurant.address.replace(/\s+/, "+")}`}
+                            allowFullScreen
+                            style={{ borderRadius: 8 }}
+                        />
+                    </Box>
+
                     <Stack spacing={1} mt={1}>
                         <Box>
                             <Typography>Location:</Typography>

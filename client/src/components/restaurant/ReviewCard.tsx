@@ -30,14 +30,16 @@ const ReviewCard = ({ review }: Props) => {
         <>
             <Card
                 sx={{
-                    width: "100%",
                     display: "flex",
                     height: "fit-content",
                     borderRadius: 3,
                     p: 3,
                 }}>
                 <Container sx={{ width: "fit-content" }}>
-                    <Box display="flex" justifyContent="center" alignItems="center">
+                    <Box
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center">
                         <Avatar sx={{ width: 80, height: 80, mb: 1 }} src={poster?.avatarPath} />
                     </Box>
                     <Typography textAlign="center">{poster?.username}</Typography>
@@ -46,11 +48,16 @@ const ReviewCard = ({ review }: Props) => {
                 <Box width="100%">
                     <Typography variant="h5">{review.title}</Typography>
                     <Rating readOnly value={+review.rating} precision={0.5} sx={{ my: 1 }} />
-                    <Typography variant="body2" fontSize={16}>
+                    <Typography mb={2} variant="body2" fontSize={16}>
                         {review.content}
                     </Typography>
-                    <Typography m={1} textAlign="end" variant="body2" fontStyle="italic">
-                        {review.isEdited ? "Edited" : "Posted"} {review.timestamp}
+                    <Typography
+                        m={1}
+                        textAlign="end"
+                        variant="body2"
+                        display={{ xs: "none", md: "block" }}
+                        sx={{ position: "relative", top: 40, right: 10 }}>
+                        {review.isEdited ? "Edited" : "Posted"} on {review.timestamp.split("T")[0]}
                     </Typography>
 
                     {/* active user is logged in and review isn't posted by them */}

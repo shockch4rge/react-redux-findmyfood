@@ -13,8 +13,7 @@ const DetailsCard = ({ restaurant }: Props) => {
             </Typography>
             <Card
                 sx={{
-                    minWidth: 300,
-                    width: "fit-content",
+                    width: 300,
                     height: 300,
                     borderRadius: 5,
                     boxShadow: 3,
