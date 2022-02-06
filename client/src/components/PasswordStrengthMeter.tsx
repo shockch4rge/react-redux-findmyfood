@@ -1,7 +1,8 @@
-import { Stack, Box, Typography } from "@mui/material";
+import { Stack, Box, Typography, SxProps, BoxProps } from "@mui/material";
 import { useState, useEffect } from "react";
 
 interface Props {
+    props?: BoxProps;
     sections: {
         color: string;
         valid: boolean;
@@ -10,7 +11,7 @@ interface Props {
     finalValidation: boolean;
 }
 
-const PasswordStrengthMeter = ({ sections, finalValidation }: Props) => {
+const PasswordStrengthMeter = ({ sections, finalValidation, props }: Props) => {
     const [strength, setStrength] = useState(0);
 
     useEffect(() => {
@@ -22,7 +23,7 @@ const PasswordStrengthMeter = ({ sections, finalValidation }: Props) => {
     }, [sections]);
 
     return (
-        <>
+        <Box {...props}>
             <Stack direction="row" spacing={0.5} justifyContent="space-between" mb={1}>
                 {sections.map(({ color, valid }) => (
                     <Box
@@ -39,7 +40,7 @@ const PasswordStrengthMeter = ({ sections, finalValidation }: Props) => {
             <Typography variant="body2" color={finalValidation ? "success" : "error"}>
                 {finalValidation ? "Password is strong!" : `Password Criteria: ${sections[strength].criteria}`}
             </Typography>
-        </>
+        </Box>
     );
 };
 
