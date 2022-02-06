@@ -2,13 +2,23 @@ import api from "./api";
 
 const emails = api.injectEndpoints({
     endpoints: builder => ({
-        sendEmail: builder.mutation<void, string>({
+        sendResetPasswordEmail: builder.mutation<void, string>({
             query: email => ({
-                url: `/send/${email}`,
+                url: `/reset-password/${email}`,
                 method: "post",
+            }),
+        }),
+
+        sendFeedbackEmail: builder.mutation<void, { email: string; feedback: string }>({
+            query: ({ email, feedback }) => ({
+                url: `/send-feedback/${email}`,
+                method: "post",
+                body: {
+                    feedback
+                }
             }),
         }),
     }),
 });
 
-export const { useSendEmailMutation } = emails;
+export const { useSendResetPasswordEmailMutation, useSendFeedbackEmailMutation } = emails;

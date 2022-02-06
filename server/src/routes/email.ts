@@ -3,8 +3,13 @@ import { RouteSchema } from "../classes/RouteManager";
 
 module.exports = [
     {
-        uri: "/send/:email",
+        uri: "/reset-password/:email",
         method: "post",
-        proc: emails.sendEmail,
+        proc: emails.sendResetPassword,
     },
+    {
+        uri: "/send-feedback/:email",
+        method: "post",
+        proc: emails.sendFeedback,
+    }
 ] as RouteSchema[];
