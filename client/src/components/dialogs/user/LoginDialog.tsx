@@ -23,7 +23,6 @@ import { useLazyLoginUserQuery } from "../../../app/services/users";
 import { userLoggedIn } from "../../../app/slices/auth/auth";
 import { createSnack } from "../../../app/slices/ui/snackbars/snack";
 import { Link as RouterLink } from "react-router-dom";
-import { useSendEmailMutation } from "../../../app/services/emails";
 import { AuthHelper } from "../../../utilities/AuthHelper";
 
 const LoginDialog = () => {
@@ -32,7 +31,6 @@ const LoginDialog = () => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [sendEmail] = useSendEmailMutation();
     const [showPassword, setShowPassword] = useState(false);
 
     /**
@@ -127,7 +125,10 @@ const LoginDialog = () => {
                             dispatch(userLoggedIn(user));
                             dispatch(setShowLoginDialog(false));
                             dispatch(
-                                createSnack({ message: `Welcome back, ${user.username}!`, severity: "success" })
+                                createSnack({
+                                    message: `Welcome back, ${user.username}!`,
+                                    severity: "success",
+                                })
                             );
                         } catch (err) {
                             dispatch(createSnack({ message: err.data, severity: "error" }));
