@@ -72,8 +72,8 @@ const NavBar = () => {
             onClick: () => navigate("/home"),
         },
         {
-            label: "About",
-            onClick: () => navigate("/about"),
+            label: "Contact",
+            onClick: () => navigate("/contact"),
         },
         {
             label: "Bookmarks",
@@ -84,7 +84,7 @@ const NavBar = () => {
     const settingsButtons = [
         {
             label: "Manage Profile",
-            onClick: () => navigate("/manage-profile"),
+            onClick: () => navigate(`/manage-profile/${user.id}`),
         },
         {
             label: "Sign Out",
