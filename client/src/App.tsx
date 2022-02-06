@@ -1,17 +1,17 @@
 import "./assets/styles/App.css";
-import theme from "./theme";
-import store from "./app/store";
 import { Provider } from "react-redux";
 import { Navigate, useRoutes } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
-import ScrollToTop from "./components/ScrollToTop";
+import theme from "./theme";
+import store from "./app/store";
 import Snack from "./components/common/Snack";
+import ScrollToTop from "./components/ScrollToTop";
 import RestaurantPage from "./pages/RestaurantPage";
 import ForgotPasswordPage from "./pages/password/ForgotPasswordPage";
 import ManageProfilePage from "./pages/ManageProfilePage";
 import PageNotFound from "./pages/PageNotFound";
 import RegistrationPage from "./pages/RegistrationPage";
-import AboutPage from "./pages/AboutPage";
+import ContactPage from "./pages/ContactPage";
 import HomePage from "./pages/HomePage";
 
 function App() {
@@ -22,7 +22,7 @@ function App() {
             element: <RegistrationPage />,
         },
         {
-            path: "manage-profile",
+            path: "manage-profile/:userId",
             caseSensitive: true,
             element: <ManageProfilePage />,
         },
@@ -37,9 +37,9 @@ function App() {
             element: <HomePage />,
         },
         {
-            path: "about",
+            path: "contact",
             caseSensitive: true,
-            element: <AboutPage />,
+            element: <ContactPage />,
         },
         {
             path: "restaurant/:restaurantId",
