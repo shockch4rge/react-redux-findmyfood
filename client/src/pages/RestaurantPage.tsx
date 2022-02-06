@@ -52,7 +52,7 @@ const RestaurantPage = () => {
     const { isLoading: reviewsLoading, data: reviews } = useGetRestaurantReviewsQuery(restaurantId);
 
     const [updateRestaurantRating] = useUpdateRestaurantRatingMutation();
-    const [fetchUserReview, { data: userReview }] = useLazyGetReviewByUserAndRestaurantIdQuery();
+    const [fetchUserReview, { data: userReview,  }] = useLazyGetReviewByUserAndRestaurantIdQuery();
 
     // user logged in
     useEffect(() => {
@@ -67,7 +67,7 @@ const RestaurantPage = () => {
             fetchUserReview({ userId: user?.id, restaurantId });
             updateRestaurantRating({
                 id: restaurantId,
-                rating: reviews!.reduce((acc, review) => +acc + +review.rating, 0) / reviews.length,
+                rating: reviews.reduce((acc, review) => +acc + +review.rating, 0) / reviews.length,
             });
         }
     }, [reviews]);
@@ -104,12 +104,21 @@ const RestaurantPage = () => {
                             </Typography>
                         </Card>
 
+                        <Typography
+                            mt={4}
+                            variant="h3"
+                            textAlign="center"
+                            sx={{ display: { xs: "block", md: "none" } }}>
+                            {restaurant.name}
+                        </Typography>
+
                         <Divider sx={{ my: 5 }}>DETAILS</Divider>
 
                         <Stack
                             direction={{ xs: "column", md: "row" }}
                             justifyContent="space-between"
-                            spacing={{ xs: 1 }}
+                            alignItems="center"
+                            spacing={{ xs: 4 }}
                             mb={7}>
                             <RatingsCard restaurant={restaurant} reviews={reviews} userReview={userReview} />
                             <WriteReviewDialog restaurantId={restaurant.id} />
@@ -117,16 +126,20 @@ const RestaurantPage = () => {
                             <LocationCard restaurant={restaurant} />
                         </Stack>
 
-                        <Typography mb={2} variant="h5">
+                        <Typography mb={2} variant="h5" sx={{ textAlign: { xs: "center", md: "left" } }}>
                             About the restaurant:
                         </Typography>
-                        <Typography mb={2} fontSize={18} fontFamily="GalyonBook">
+                        <Typography
+                            mb={2}
+                            fontSize={{ xs: 14, md: 18 }}
+                            variant="body2"
+                            textAlign={{ xs: "center", md: "left" }}>
                             {restaurant.description}
                         </Typography>
 
                         <Divider sx={{ my: 10 }}>REVIEWS</Divider>
 
-                        <Typography mb={2} variant="h4">
+                        <Typography mb={2} variant="h4" textAlign={{ xs: "center", md: "left" }}>
                             Your Review
                         </Typography>
                         <Box mb={10} display="flex" justifyContent="center" alignItems="center">
@@ -236,7 +249,7 @@ const RestaurantPage = () => {
                         </Box>
 
                         <Box>
-                            <Typography mb={5} variant="h4">
+                            <Typography mb={5} variant="h4" textAlign={{ xs: "center", md: "left" }}>
                                 User Reviews
                             </Typography>
 
@@ -246,7 +259,7 @@ const RestaurantPage = () => {
 
                                 {reviews.length <= 0 && (
                                     <Box mb={10} display="flex" justifyContent="center" alignItems="center">
-                                        <Typography fontSize={16} variant="body2">
+                                        <Typography fontSize={16} variant="body2" textAlign={{ xs: "center" }}>
                                             There are no reviews for this restaurant yet... you can be the
                                             first!
                                         </Typography>
