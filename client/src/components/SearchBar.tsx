@@ -1,4 +1,4 @@
-import { IconButton, Paper, Input, Autocomplete, TextField, InputAdornment } from "@mui/material";
+import { IconButton, Paper, Input, Autocomplete, TextField, InputAdornment, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import SearchIcon from "@mui/icons-material/Search";
@@ -11,29 +11,20 @@ interface DesktopSearchBarProps {
 export const DesktopSearchBar = ({ restaurants }: DesktopSearchBarProps) => {
     const navigate = useNavigate();
 
-    const handleSearchQueryChange = (_: React.SyntheticEvent, value: string) => {
+    const handleSearchQuerySelect = (_: React.SyntheticEvent, value: string) => {
         const restaurantId = restaurants.find(r => r.name === value)!.id;
         navigate(`/restaurant/${restaurantId}`);
     };
 
     return (
-        <Paper
-            component="form"
-            elevation={0}
-            sx={{
-                width: "60%",
-                height: "fit-content",
-                display: "flex",
-                alignItems: "center",
-                borderRadius: 3,
-            }}>
             <Autocomplete
-                sx={{ border: "none" }}
+                sx={{ border: "none", width: "60%", backgroundColor: "white", borderRadius: 1 }}
                 disablePortal
                 fullWidth
+                autoHighlight
                 placeholder="Search for a restaurant here!"
                 options={restaurants.map(r => r.name)}
-                onChange={handleSearchQueryChange}
+                onChange={handleSearchQuerySelect}
                 renderInput={params => (
                     <TextField
                         {...params}
@@ -50,24 +41,49 @@ export const DesktopSearchBar = ({ restaurants }: DesktopSearchBarProps) => {
                     />
                 )}
             />
-        </Paper>
     );
 };
 
-export const MobileSearchBar = () => {
+interface MobileSearchBarProps {
+    restaurants: RestaurantData[];
+}
+
+export const MobileSearchBar = ({ restaurants }: MobileSearchBarProps) => {
+    const navigate = useNavigate();
+
+    const handleSearchQuerySelect = (_: React.SyntheticEvent, value: string) => {
+        const restaurantId = restaurants.find(r => r.name === value)!.id;
+        navigate(`/restaurant/${restaurantId}`);
+    };
+
     return (
-        <Paper component="form" sx={{ px: 1, display: { xs: "flex", md: "none" }, mt: 3 }}>
-            <IconButton onClick={() => {}} sx={{ mr: 1.5 }}>
-                <SearchIcon />
-            </IconButton>
-            <Input
+        <Stack mt={5} direction="row" spacing={2} sx={{ display: { xs: "flex", md: "none" } }}>
+            <Autocomplete
+                disablePortal
                 fullWidth
-                placeholder={"Search for a restaurant here...."}
-                sx={{ fontFamily: theme => theme.typography.body2 }}
+                autoHighlight
+                placeholder="Search for a restaurant here!"
+                options={restaurants.map(r => r.name)}
+                onChange={handleSearchQuerySelect}
+                renderInput={params => (
+                    <TextField
+                        {...params}
+                        InputProps={{
+                            ...params.InputProps,
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <IconButton>
+                                        <SearchIcon />
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+                )}
             />
             <IconButton onClick={() => {}}>
                 <FilterListIcon />
             </IconButton>
-        </Paper>
+        </Stack>
     );
 };
