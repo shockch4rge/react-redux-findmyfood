@@ -14,7 +14,7 @@ import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { AuthHelper } from "../../utilities/AuthHelper";
 import DoneIcon from "@mui/icons-material/Done";
-import { useSendEmailMutation } from "../../app/services/emails";
+import { useSendResetPasswordEmailMutation } from "../../app/services/emails";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { createSnack } from "../../app/slices/ui/snackbars/snack";
 import { useEffect } from "react";
@@ -25,7 +25,7 @@ const ForgotPasswordPage = () => {
     const [email, setEmail] = useState("");
     const [isValidEmail, setIsValidEmail] = useState<boolean | null>(null);
     const [showSentEmail, setShowSentEmail] = useState(false);
-    const [sendEmail, { isLoading: emailSending, isSuccess: emailSent }] = useSendEmailMutation();
+    const [sendEmail, { isLoading: emailSending, isSuccess: emailSent }] = useSendResetPasswordEmailMutation();
 
     const handleEmailChange = ({ target: { value } }: any) => {
         setEmail(value);
