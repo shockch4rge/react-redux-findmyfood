@@ -10,7 +10,7 @@ import {
     DialogActions,
     Button,
 } from "@mui/material";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useEditReviewMutation } from "../../../app/services/reviews";
 import { setShowEditReviewDialog } from "../../../app/slices/ui/dialogs/reviewDialog";
 import { createSnack } from "../../../app/slices/ui/snackbars/snack";
@@ -46,6 +46,34 @@ const EditReviewDialog = ({ review }: Props) => {
         setRating(review.rating);
         setIsValidContent(false);
         setIsValidTitle(false);
+    };
+
+    const onEditButtonClick = async () => {
+        try {
+            await editReview({
+                id: review.id,
+                content,
+                title,
+                rating,
+                timestamp: timestamp(),
+                isEdited: true,
+            }).unwrap();
+            dispatch(setShowEditReviewDialog(false));
+            dispatch(
+                createSnack({
+                    message: "Review edited!",
+                    severity: "success",
+                })
+            );
+        } catch (err) {
+            console.log(err);
+            dispatch(
+                createSnack({
+                    message: "Error editing review.",
+                    severity: "error",
+                })
+            );
+        }
     };
 
     return (
@@ -105,35 +133,7 @@ const EditReviewDialog = ({ review }: Props) => {
             </DialogContent>
             <DialogActions>
                 <Button onClick={() => dispatch(setShowEditReviewDialog(false))}>Cancel</Button>
-                <Button
-                    disabled={!isValidTitle || !isValidContent}
-                    onClick={async () => {
-                        try {
-                            await editReview({
-                                id: review.id,
-                                content,
-                                title,
-                                rating,
-                                timestamp: timestamp(),
-                                isEdited: true,
-                            }).unwrap();
-                            dispatch(setShowEditReviewDialog(false));
-                            dispatch(
-                                createSnack({
-                                    message: "Review edited!",
-                                    severity: "success",
-                                })
-                            );
-                        } catch (err) {
-                            console.log(err);
-                            dispatch(
-                                createSnack({
-                                    message: "Error editing review.",
-                                    severity: "error",
-                                })
-                            );
-                        }
-                    }}>
+                <Button disabled={!isValidTitle || !isValidContent} onClick={onEditButtonClick}>
                     Save
                 </Button>
             </DialogActions>

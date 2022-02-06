@@ -10,7 +10,7 @@ import {
     DialogActions,
     Button,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useAddReviewMutation } from "../../../app/services/reviews";
 import { setShowWriteReviewDialog } from "../../../app/slices/ui/dialogs/reviewDialog";
 import { createSnack } from "../../../app/slices/ui/snackbars/snack";
@@ -45,6 +45,34 @@ const WriteReviewDialog = ({ restaurantId }: Props) => {
         setRating(1);
         setIsValidContent(null);
         setIsValidTitle(null);
+    };
+
+    const onWriteButtonClick = async () => {
+        try {
+            await addReview({
+                restaurantId,
+                userId: user!.id,
+                rating,
+                title,
+                content,
+                timestamp: timestamp(),
+            }).unwrap();
+            dispatch(setShowWriteReviewDialog(false));
+            dispatch(
+                createSnack({
+                    message: "Review posted!",
+                    severity: "success",
+                })
+            );
+        } catch (err) {
+            console.log(err);
+            dispatch(
+                createSnack({
+                    message: "Error posting review.",
+                    severity: "error",
+                })
+            );
+        }
     };
 
     return (
@@ -104,35 +132,7 @@ const WriteReviewDialog = ({ restaurantId }: Props) => {
             </DialogContent>
             <DialogActions>
                 <Button onClick={() => dispatch(setShowWriteReviewDialog(false))}>Cancel</Button>
-                <Button
-                    disabled={!isValidTitle || !isValidContent}
-                    onClick={async () => {
-                        try {
-                            await addReview({
-                                restaurantId,
-                                userId: user!.id,
-                                rating,
-                                title,
-                                content,
-                                timestamp: timestamp(),
-                            }).unwrap();
-                            dispatch(setShowWriteReviewDialog(false));
-                            dispatch(
-                                createSnack({
-                                    message: "Review posted!",
-                                    severity: "success",
-                                })
-                            );
-                        } catch (err) {
-                            console.log(err);
-                            dispatch(
-                                createSnack({
-                                    message: "Error posting review.",
-                                    severity: "error",
-                                })
-                            );
-                        }
-                    }}>
+                <Button disabled={!isValidTitle || !isValidContent} onClick={onWriteButtonClick}>
                     Post
                 </Button>
             </DialogActions>

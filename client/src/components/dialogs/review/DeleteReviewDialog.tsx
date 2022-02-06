@@ -14,34 +14,34 @@ const DeleteReviewDialog = ({ reviewId }: Props) => {
     const open = useAppSelector(state => state.ui.dialogs.review.delete.show);
     const [deleteReview, { isLoading }] = useDeleteReviewMutation();
 
+    const onDeleteButtonClick = async () => {
+        try {
+            await deleteReview(reviewId).unwrap();
+            dispatch(setShowDeleteReviewDialog(false));
+            dispatch(
+                createSnack({
+                    message: "Review deleted!",
+                    severity: "success",
+                })
+            );
+        } catch (err) {
+            console.log(err);
+            dispatch(
+                createSnack({
+                    message: "Error deleting review.",
+                    severity: "error",
+                })
+            );
+        }
+    };
+
     return (
         <Dialog open={open} fullWidth>
             <DialogTitle>Are you sure you want to delete this review?</DialogTitle>
             <DialogContent>{isLoading && <CircularProgress />}</DialogContent>
             <DialogActions>
                 <Button onClick={() => dispatch(setShowDeleteReviewDialog(false))}>Cancel</Button>
-                <Button
-                    color="error"
-                    onClick={async () => {
-                        try {
-                            await deleteReview(reviewId).unwrap();
-                            dispatch(setShowDeleteReviewDialog(false));
-                            dispatch(
-                                createSnack({
-                                    message: "Review deleted!",
-                                    severity: "success",
-                                })
-                            );
-                        } catch (err) {
-                            console.log(err);
-                            dispatch(
-                                createSnack({
-                                    message: "Error deleting review.",
-                                    severity: "error",
-                                })
-                            );
-                        }
-                    }}>
+                <Button color="error" onClick={onDeleteButtonClick}>
                     Delete
                 </Button>
             </DialogActions>
