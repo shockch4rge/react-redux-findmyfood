@@ -52,7 +52,7 @@ const RestaurantPage = () => {
     const { isLoading: reviewsLoading, data: reviews } = useGetRestaurantReviewsQuery(restaurantId);
 
     const [updateRestaurantRating] = useUpdateRestaurantRatingMutation();
-    const [fetchUserReview, { data: userReview,  }] = useLazyGetReviewByUserAndRestaurantIdQuery();
+    const [fetchUserReview, { data: userReview }] = useLazyGetReviewByUserAndRestaurantIdQuery();
 
     // user logged in
     useEffect(() => {
@@ -216,14 +216,17 @@ const RestaurantPage = () => {
                                             precision={0.5}
                                             sx={{ my: 1 }}
                                         />
-                                        <Typography variant="body2" fontSize={16}>
+                                        <Typography mb={2} variant="body2" fontSize={16}>
                                             {userReview.content}
                                         </Typography>
                                         <Typography
                                             m={1}
                                             textAlign="end"
-                                            sx={{ fontFamily: "GalyonBook", fontStyle: "italic" }}>
-                                            {userReview.timestamp}
+                                            variant="body2"
+                                            display={{ xs: "none", md: "block" }}
+                                            sx={{ position: "relative", top: 40, right: 10 }}>
+                                            {userReview.isEdited ? "Edited" : "Posted"} on{" "}
+                                            {userReview.timestamp.split("T")[0]}
                                         </Typography>
 
                                         <Stack direction="row" spacing={3}>
