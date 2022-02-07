@@ -40,9 +40,9 @@ const users = api.injectEndpoints({
             invalidatesTags: cacher.invalidatesList("Users"),
         }),
 
-        updateUser: builder.mutation<UserData, FormData>({
-            query: form => ({
-                url: `/user/${form.get("id")}`,
+        updateUser: builder.mutation<void, { id: string; form: FormData }>({
+            query: ({ id, form }) => ({
+                url: `/user/${id}`,
                 method: "put",
                 body: form,
             }),
@@ -56,6 +56,16 @@ const users = api.injectEndpoints({
 
             keepUnusedDataFor: 1,
         }),
+
+        resetPassword: builder.mutation<void, { email: string; password: string }>({
+            query: ({ email, password }) => ({
+                url: `/reset-password/${email}`,
+                method: "put",
+                body: {
+                    password,
+                },
+            }),
+        }),
     }),
 });
 
@@ -65,4 +75,5 @@ export const {
     useRegisterUserMutation,
     useUpdateUserMutation,
     useLazyLoginUserQuery,
+    useResetPasswordMutation,
 } = users;
