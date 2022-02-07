@@ -1,5 +1,3 @@
-import { uuid } from "../utilities/uuid";
-
 export default class User implements UserData {
     public id: string;
     public username: string;

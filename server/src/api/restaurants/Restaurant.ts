@@ -46,7 +46,7 @@ export default class Restaurant implements RestaurantData {
         } as Omit<RestaurantData, "id">;
     }
 
-    public static toJSON(data: any) {
+    public static toJSON(data: any): RestaurantData {
         return {
             id: data.id,
             name: data.name,
@@ -54,14 +54,15 @@ export default class Restaurant implements RestaurantData {
             address: data.address,
             telephone: data.telephone,
             averageRating: data.rating,
-            cuisines: String(data.cuisine).split(", "),
+            costScale: data.costScale,
+            cuisines: String(data.cuisine).split(", ") as Cuisine[],
             availableTimes: {
                 days: String(data.days).split(", "),
                 openingHours: data.opening_hours,
                 closingHours: data.closing_hours,
             },
             imageUrl: data.image_url,
-        } as RestaurantData;
+        }
     }
 }
 

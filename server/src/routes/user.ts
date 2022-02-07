@@ -28,7 +28,7 @@ module.exports = [
         proc: users.deleteUser,
     },
     {
-        uri: "/user/:id/password",
+        uri: "/reset-password/:email",
         method: "put",
         proc: users.updatePassword
     }

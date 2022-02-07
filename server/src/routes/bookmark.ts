@@ -17,9 +17,9 @@ module.exports = [
         method: "delete",
         proc: bookmarks.deleteBookmark,
     },
-    // {
-    //     uri: "/bookmarks/:userId",
-    //     method: "get",
-    //     proc: bookmarks.get
-    // }
+    {
+        uri: "/bookmarks/:userId",
+        method: "get",
+        proc: bookmarks.getUserBookmarks,
+    },
 ] as RouteSchema[];
