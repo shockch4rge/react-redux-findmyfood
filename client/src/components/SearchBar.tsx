@@ -17,30 +17,30 @@ export const DesktopSearchBar = ({ restaurants }: DesktopSearchBarProps) => {
     };
 
     return (
-            <Autocomplete
-                sx={{ border: "none", width: "60%", backgroundColor: "white", borderRadius: 1 }}
-                disablePortal
-                fullWidth
-                autoHighlight
-                placeholder="Search for a restaurant here!"
-                options={restaurants.map(r => r.name)}
-                onChange={handleSearchQuerySelect}
-                renderInput={params => (
-                    <TextField
-                        {...params}
-                        InputProps={{
-                            ...params.InputProps,
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <IconButton>
-                                        <SearchIcon />
-                                    </IconButton>
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
-                )}
-            />
+        <Autocomplete
+            sx={{ border: "none", width: "60%", backgroundColor: "white", borderRadius: 1 }}
+            disablePortal
+            fullWidth
+            autoHighlight
+            options={restaurants.map(r => r.name)}
+            onChange={handleSearchQuerySelect}
+            renderInput={params => (
+                <TextField
+                    {...params}
+                    placeholder="Search for a restaurant here!"
+                    InputProps={{
+                        ...params.InputProps,
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <IconButton>
+                                    <SearchIcon />
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            )}
+        />
     );
 };
 
