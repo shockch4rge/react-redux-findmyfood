@@ -9,7 +9,7 @@ export default class EmailController {
                 from: config.sendgrid.senderEmail,
                 to: request.params.email,
                 subject: "Password Reset for FindMyFood!",
-                html: `<h1>Reset your password <a href='http://localhost:3000/home'>here!</a></h1>`,
+                html: `<h1>Reset your password <a href='http://localhost:3000/reset-password'>here!</a></h1>`,
             });
 
             response.json({ msg: "Email sent!" });
