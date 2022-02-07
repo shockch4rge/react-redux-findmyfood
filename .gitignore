@@ -28,3 +28,4 @@ __tests__
 babel.config.json
 jest.config.ts
 config.json
+googlesites.txt
