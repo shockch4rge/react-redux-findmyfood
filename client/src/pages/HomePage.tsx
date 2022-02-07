@@ -18,13 +18,11 @@ import {
 } from "@mui/material";
 import NavBar from "../components/NavBar";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Restaurant, { RestaurantData } from "../models/Restaurant";
 import { DesktopSearchBar, MobileSearchBar } from "../components/SearchBar";
 import { useNavigate } from "react-router-dom";
 import { useGetAllRestaurantsQuery } from "../app/services/restaurants";
 import HomePageSkeleton from "../components/skeletons/HomePageSkeleton";
-import { useEffect, useMemo, useState } from "react";
-import { useDebounce } from "../hooks/useDebounce";
+import { useEffect } from "react";
 
 interface ButtonData {
     label: string;
@@ -36,26 +34,7 @@ const HomePage = () => {
     const dispatch = useAppDispatch();
     const { data: restaurants, isLoading: restaurantsLoading, error } = useGetAllRestaurantsQuery();
 
-    // #region Buttons
-    const filterButtons = [
-        {
-            label: "Rating",
-            onClick: () => restaurants?.sort(restaurant => restaurant.averageRating),
-        },
-        {
-            label: "Cost",
-            onClick: () => {},
-        },
-        {
-            label: "Cuisine",
-            onClick: () => {},
-        },
-        {
-            label: "Location",
-            onClick: () => {},
-        },
-    ] as ButtonData[];
-    // #endregion
+    useEffect(() => {}, [restaurants]);
 
     if (!restaurants) return <HomePageSkeleton />;
 
@@ -89,25 +68,9 @@ const HomePage = () => {
                             <DesktopSearchBar restaurants={restaurants} />
                         </Card>
 
-                        <MobileSearchBar />
+                        <MobileSearchBar restaurants={restaurants} />
 
-                        <Typography variant="h5" mb={2}>
-                            Filters
-                        </Typography>
-
-                        <Stack spacing={1} direction="row" sx={{ display: { xs: "none", md: "flex" }, mb: 8 }}>
-                            {filterButtons.map(button => (
-                                <Button
-                                    key={`${Math.random()}_${button.label}`}
-                                    onClick={() => button.onClick()}
-                                    endIcon={<ExpandMoreIcon />}
-                                    sx={{ boxShadow: 1 }}>
-                                    {button.label}
-                                </Button>
-                            ))}
-                        </Stack>
-
-                        <Typography variant="h5" mb={2}>
+                        <Typography variant="h5" my={2}>
                             Featured
                         </Typography>
                         <Fade in timeout={{ enter: 1400 }}>
