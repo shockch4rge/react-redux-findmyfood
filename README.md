@@ -19,3 +19,4 @@ A restaurant lookup & review full-stack app.
 - TypeScript
 - node-mysql/mysql2
 
+### This website is my submission for my polytechnic's Semester 2 Project.
