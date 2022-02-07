@@ -19,3 +19,6 @@ A restaurant lookup & review full-stack app.
 - TypeScript
 - node-mysql/mysql2
 
+
+# FindMyFood! | Restaurant Review Website
+This application is my submission for my Year 1 Semester 2 project in Polytechnic.
