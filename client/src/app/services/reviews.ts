@@ -23,17 +23,13 @@ const reviews = api.injectEndpoints({
             providesTags: cacher.cacheByIdArg("Reviews"),
         }),
 
-        getReviewByUserAndRestaurantId: builder.query<
-            ReviewData,
-            { userId: string; restaurantId: string }
-        >({
+        getReviewByUserAndRestaurantId: builder.query<ReviewData, { userId: string; restaurantId: string }>({
             query: ({ userId, restaurantId }) => ({
                 url: `/review/user/${userId}/restaurant/${restaurantId}`,
                 method: "get",
             }),
 
-            providesTags: review =>
-                review ? [{ type: "Reviews", id: review.id }] : [{ type: "Reviews" }],
+            providesTags: review => (review ? [{ type: "Reviews", id: review.id }] : [{ type: "Reviews" }]),
         }),
 
         addReview: builder.mutation<void, Omit<ReviewData, "id" | "isEdited">>({
@@ -49,7 +45,7 @@ const reviews = api.injectEndpoints({
         editReview: builder.mutation<ReviewData, Omit<ReviewData, "userId" | "restaurantId">>({
             query: edited => ({
                 url: `/review/${edited.id}`,
-                method: "post",
+                method: "put",
                 body: {
                     content: edited.content,
                     title: edited.title,
@@ -77,7 +73,7 @@ export const {
     useAddReviewMutation,
     useDeleteReviewMutation,
     useEditReviewMutation,
-    useGetRestaurantReviewsQuery, 
+    useGetRestaurantReviewsQuery,
     useGetReviewQuery,
     useLazyGetReviewByUserAndRestaurantIdQuery,
 } = reviews;
