@@ -13,6 +13,7 @@ import PageNotFound from "./pages/PageNotFound";
 import RegistrationPage from "./pages/RegistrationPage";
 import ContactPage from "./pages/ContactPage";
 import HomePage from "./pages/HomePage";
+import ResetPasswordPage from "./pages/password/ResetPasswordPage";
 
 function App() {
     const routes = useRoutes([
@@ -30,6 +31,11 @@ function App() {
             path: "forgot-password",
             caseSensitive: true,
             element: <ForgotPasswordPage />,
+        },
+        {
+            path: "reset-password",
+            caseSensitive: true,
+            element: <ResetPasswordPage />,
         },
         {
             path: "home",
