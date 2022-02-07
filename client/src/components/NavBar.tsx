@@ -75,11 +75,8 @@ const NavBar = () => {
             label: "Contact",
             onClick: () => navigate("/contact"),
         },
-        {
-            label: "Bookmarks",
-            onClick: () => navigate("/bookmarks"),
-        },
     ] as ButtonData[];
+    // #endregion
 
     const settingsButtons = [
         {
