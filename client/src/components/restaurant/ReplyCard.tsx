@@ -41,8 +41,13 @@ const ReplyCard = ({ reply }: Props) => {
                     <Typography variant="body2" fontSize={16}>
                         {reply.content}
                     </Typography>
-                    <Typography mt={5} textAlign="end" variant="body2" fontStyle="italic">
-                        {reply.isEdited ? "Edited" : "Posted"} {reply.timestamp}
+                    <Typography
+                        m={1}
+                        textAlign="end"
+                        variant="body2"
+                        display={{ xs: "none", md: "block" }}
+                        sx={{ position: "relative", top: 40, right: 10 }}>
+                        {reply.isEdited ? "Edited" : "Posted"} on {reply.timestamp.split("T")[0]}
                     </Typography>
 
                     {/* active user is logged in and reply is posted by them */}
