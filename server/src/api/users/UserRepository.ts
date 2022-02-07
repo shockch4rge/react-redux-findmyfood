@@ -5,13 +5,6 @@ import bcrypt from "bcrypt";
 
 export default class UserRepository {
     public static async update(id: string, user: UserData) {
-        const salt = await bcrypt.genSalt();
-        const hash = await bcrypt.hash(user.password, salt);
-
-        console.log("before hash", user.password);
-        user.password = hash;
-        console.log("after hash", user.password);
-
         const query = `
         UPDATE user u
         JOIN account a
@@ -22,10 +15,8 @@ export default class UserRepository {
             u.last_name = ?,
             u.gender = ?,
             a.email = ?,
-            a.password = ?,
             a.address = ?,
-            a.telephone = ?,
-            a.activated = ?
+            a.telephone = ?
         WHERE u.id = ?    
         `;
         await db.query(query, [
@@ -34,11 +25,9 @@ export default class UserRepository {
             user.lastName,
             user.gender,
             user.email,
-            user.password,
             user.address,
             user.telephone,
-            user.activated,
-            id,
+           id,
         ]);
     }
 
@@ -142,9 +131,21 @@ export default class UserRepository {
         }
     }
 
-    public static async updatePassword(id: string, password: string) {
-        const query = `UPDATE user SET password = ? WHERE id = ?`;
-        await db.query(query, [password, id]);
+    public static async updatePassword(email: string, password: string) {
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        const emailExists =
+            ((await db.query(`SELECT * FROM account WHERE email = ?`, [email]))[0] as RowDataPacket[])
+                .length >= 1;
+
+        if (!emailExists) {
+            throw new Error("Email does not exist!");
+        }
+
+        const query = `UPDATE account SET password = ? WHERE email = ?`;
+
+        await db.query(query, [hashedPassword, email]);
     }
 
     public static async getAvatar(id: string) {

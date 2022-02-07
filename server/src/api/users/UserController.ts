@@ -58,35 +58,38 @@ export default class UserController {
     }
 
     public static async updateUser(request: Request, response: Response) {
-        const file = request.files?.avatar as fileUpload.UploadedFile;
-        const fileName = request.body.avatarPath;
+        const avatarFile = request.files!.avatar as fileUpload.UploadedFile;
 
+        const fileName = `${request.params.id}${path.extname(avatarFile.name)}`;
         const filePath = path.join(__dirname, "../../uploads", fileName);
 
         try {
             await fs.unlink(filePath);
-            await file.mv(filePath);
+            await avatarFile.mv(filePath);
         } catch (err) {
+            console.log((err as Error).message);
             response.status(500).send((err as Error).message);
             return;
         }
 
         try {
-            await UserRepository.update(request.params.userId, { ...request.body, avatarPath: fileName });
+            await UserRepository.update(request.params.id, { ...request.body, avatarPath: fileName });
             response.json({ msg: "User updated!" });
         } catch (err) {
+            console.log(err);
             response.status(500).send((err as Error).message);
         }
     }
 
     public static async updatePassword(request: Request, response: Response) {
-        const userId = request.params.userId;
+        const email = request.params.email;
+        const password = request.body.password;
 
         try {
-            await UserRepository.updatePassword(request.body.password, userId);
-            response.json({ msg: `Password updated for user: ${userId}` });
+            await UserRepository.updatePassword(email, password);
+            response.json({ msg: `Password updated for user: ${email}` });
         } catch (err) {
-            response.json(err);
+            response.status(500).send((err as Error).message);
         }
     }
 }
