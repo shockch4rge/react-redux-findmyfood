@@ -29,27 +29,36 @@ import { AuthHelper } from "../utilities/AuthHelper";
 import { Link as RouterLink } from "react-router-dom";
 import PasswordStrengthMeter from "../components/PasswordStrengthMeter";
 import { setShowDeleteUserDialog, setShowLoginDialog } from "../app/slices/ui/dialogs/userDialog";
-import { userLoggedIn } from "../app/slices/auth/auth";
+import { userLoggedIn, userLoggedOut } from "../app/slices/auth/auth";
+import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
+import { UserData } from "../models/User";
+import DeleteAccountDialog from "../components/dialogs/user/DeleteAccountDialog";
 
 const ManageProfilePage = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
     const user = useAppSelector(state => state.auth);
-    const [userInfo, setUserInfo] = useState(user);
+    const [userInfo, setUserInfo] = useState<Omit<UserData, "id" | "password" | "activated">>({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        telephone: user.telephone,
+        address: user.address,
+        gender: user.gender,
+        avatarPath: user.avatarPath,
+        username: user.username,
+    });
 
     const [avatarPreviewUri, setAvatarPreviewUri] = useState(userInfo.avatarPath);
 
-    const [showPassword, setShowPassword] = useState(false);
     const [isValidEmail, setIsValidEmail] = useState<boolean | null>(null);
-    const [isValidPassword, setIsValidPassword] = useState<boolean | null>(null);
     const [isSubmittable, setIsSubmittable] = useState(false);
 
     const [avatarFile, setAvatarFile] = useState<File | null>(null);
 
-    const [update] = useUpdateUserMutation();
-    const [login] = useLazyLoginUserQuery();
+    const [updateUser] = useUpdateUserMutation();
 
     const handleFormChange = ({ target: { name, value } }: any) => {
         setUserInfo(prev => ({ ...prev, [name]: value }));
@@ -84,11 +93,7 @@ const ManageProfilePage = () => {
                 checks.push(userInfo[key].length > 0);
             }
 
-            return (
-                checks.every(check => check) &&
-                AuthHelper.isEmail(userInfo.email) &&
-                AuthHelper.isPassword(userInfo.password)
-            );
+            return checks.every(check => check) && AuthHelper.isEmail(userInfo.email);
         });
     }, [userInfo]);
 
@@ -96,7 +101,7 @@ const ManageProfilePage = () => {
         <>
             <NavBar />
             <Container>
-                <Typography mt={10} variant="h2" textAlign="center">
+                <Typography mt={6} variant="h2" textAlign="center">
                     FindMyFood!
                 </Typography>
                 <Typography variant="h5" textAlign="center">
@@ -106,7 +111,7 @@ const ManageProfilePage = () => {
                 <Stack direction="row" spacing={3} mt={10}>
                     <Box
                         width="100%"
-                        height={500}
+                        height={600}
                         display="flex"
                         justifyContent="center"
                         alignItems="center"
@@ -207,55 +212,7 @@ const ManageProfilePage = () => {
                                 }
                             />
                         </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                label="Password"
-                                name="password"
-                                type={showPassword ? "text" : "password"}
-                                error={isValidPassword !== null && !isValidPassword}
-                                onChange={e => {
-                                    setIsValidPassword(AuthHelper.isPassword(e.target.value));
-                                    handleFormChange(e);
-                                }}
-                                InputProps={{
-                                    endAdornment: (
-                                        <InputAdornment position="end">
-                                            <IconButton onClick={() => setShowPassword(!showPassword)}>
-                                                {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                                            </IconButton>
-                                        </InputAdornment>
-                                    ),
-                                }}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <PasswordStrengthMeter
-                                sections={[
-                                    {
-                                        color: "#FF2100",
-                                        valid: AuthHelper.hasLength(userInfo.password),
-                                        criteria: "Is at least 8 characters long",
-                                    },
-                                    {
-                                        color: "#FF4300",
-                                        valid: AuthHelper.hasDigits(userInfo.password),
-                                        criteria: "Contains at least 2 digits",
-                                    },
-                                    {
-                                        color: "#FFC900",
-                                        valid: AuthHelper.hasUpperCaseLetters(userInfo.password),
-                                        criteria: "Contains at least 2 uppercase letters",
-                                    },
-                                    {
-                                        color: "#0DFF00",
-                                        valid: AuthHelper.hasSpecialCharacters(userInfo.password),
-                                        criteria: "Contains at least 1 special character",
-                                    },
-                                ]}
-                                finalValidation={isValidPassword}
-                            />
-                        </Grid>
+
                         <Grid item xs={7}>
                             <Button
                                 disabled={!isSubmittable}
@@ -265,19 +222,15 @@ const ManageProfilePage = () => {
                                 onClick={async () => {
                                     try {
                                         const form = collateFormData();
-                                        await update(form).unwrap();
-                                        const user = await login({
-                                            email: userInfo.email,
-                                            password: userInfo.password,
-                                        }).unwrap();
-                                        dispatch(userLoggedIn(user));
+                                        await updateUser({ id: user.id, form }).unwrap();
                                         dispatch(
                                             createSnack({
-                                                message: `Welcome, ${userInfo.username}!`,
+                                                message: `Profile updated! Please login again.`,
                                                 severity: "success",
                                             })
                                         );
                                         navigate("/home");
+                                        dispatch(userLoggedOut());
                                     } catch (err) {
                                         dispatch(createSnack({ message: err.data, severity: "error" }));
                                     }
@@ -297,18 +250,21 @@ const ManageProfilePage = () => {
                         </Grid>
                         <Grid item xs={12}>
                             <Typography variant="body2">
-                                Already have a profile?{" "}
+                                Not supposed to be here? Return to the{" "}
                                 <Link
                                     component={RouterLink}
                                     to="/home"
                                     onClick={() => dispatch(setShowLoginDialog(true))}>
-                                    Login instead.
+                                    home page.
                                 </Link>
                             </Typography>
+
+                            <DeleteAccountDialog userId={user.id}/>
                         </Grid>
                     </Grid>
                 </Stack>
             </Container>
+            <Footer />
         </>
     );
 };
