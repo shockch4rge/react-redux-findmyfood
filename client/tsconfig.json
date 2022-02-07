@@ -18,8 +18,9 @@
 
     "baseUrl": "./src",
     "paths": {
-      "@hooks/*": ["./hooks/*"],
-      "@components/*": ["./components/*"],
+      "@/hooks/*": ["./hooks/*"],
+      "@/components/*": ["./components/*"],
+      "@/models/*": ["./models/*"],
     }
   },
   "include": ["./src/**/*.ts"],
