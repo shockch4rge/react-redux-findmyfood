@@ -21,8 +21,6 @@ const DetailsCard = ({ restaurant }: Props) => {
                 }}
             >
                 <CardContent>
-                    <Typography>Cost:</Typography>
-                    <Typography></Typography>
                     <Typography>Cuisines:</Typography>
                     <Typography fontFamily="GalyonBook">
                         {restaurant.cuisines.join(", ")}
